@@ -109,20 +109,28 @@ public class SpellCaster : MonoBehaviour {
         // Pay stamina before firing.
         if (stamina != null && !stamina.TrySpend(spell.Data.staminaCost)) return;
 
-        Vector2 origin = castPoint.position;
-        Vector2 aim = GetAimDirection(origin);
+        Vector3 origin = castPoint.position;
+        Vector3 aim = GetAimDirection(origin);
 
         spell.Cast(this, transform, origin, aim);
     }
-    private Vector2 GetAimDirection(Vector2 origin) {
+    private Vector3 GetAimDirection(Vector3 origin) {
 
         var mouse = Mouse.current;
         var cam = Camera.main;
 
-        if (mouse == null || cam == null) return transform.localScale.x >= 0f ? Vector2.right : Vector2.left;
+        if (mouse == null || cam == null) return transform.forward;
 
-        Vector2 world = cam.ScreenToWorldPoint(mouse.position.ReadValue());
-        Vector2 dir = world - origin;
-        return dir.sqrMagnitude > 0.0001f ? dir.normalized : Vector2.right;
+        Plane groundPlane = new Plane(Vector3.up, origin);
+        Ray ray = cam.ScreenPointToRay(mouse.position.ReadValue());
+
+        if (groundPlane.Raycast(ray, out float rayDistance)) {
+
+            Vector3 worldPoint = ray.GetPoint(rayDistance);
+            Vector3 direction = worldPoint - origin;
+
+            return direction.sqrMagnitude > 0.0001f ? direction.normalized : transform.forward;
+        }
+        return transform.forward;
     }
 }

@@ -22,7 +22,7 @@ MonoBehaviour:
   hitLayers:
     serializedVersion: 2
     m_Bits: 0
-  projectilePrefab: {fileID: 0}
+  projectilePrefab: {fileID: 3642334240869692671, guid: 281ed31ef61427a4c810e90a8c82b39b, type: 3}
   projectileSpeed: 12
   projectileLifetime: 4
   arcGravityScale: 2
