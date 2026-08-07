@@ -1,6 +1,10 @@
-using System;
 using UnityEngine;
 
+/// <summary>
+/// 
+/// Handles character death events by subscribing to the health component's death action.
+/// 
+/// </summary>
 [RequireComponent(typeof(IHealth))]
 public class DeathHandler : MonoBehaviour {
 

@@ -1,10 +1,18 @@
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// 
+/// Represents a UI component that displays and updates the player's health bar based on changes in health.
+/// 
+/// </summary>
+/// <remarks>
+/// Requires a GameObject with an IHealth component assigned to function correctly.
+/// </remarks>
 public class HealthBarUI : MonoBehaviour {
 
     [Header("Target & Components")]
-    [Tooltip("Health target is the parent gameObject , so Enemy or Player.")]
+    [Tooltip("Health target is the Player.")]
     [SerializeField] private GameObject healthTarget;
     [SerializeField] private Slider healthSlider;
 
