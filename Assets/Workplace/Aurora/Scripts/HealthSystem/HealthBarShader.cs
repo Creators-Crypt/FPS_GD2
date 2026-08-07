@@ -18,20 +18,26 @@ public class HealthBarShader : MonoBehaviour {
     [SerializeField] private GameObject target;
 
     [Header("Material Settings")]
-    [SerializeField] private Renderer renderer;
-    [SerializeField] private string shaderPropertyName = "_HealthPercent";
+    [SerializeField] private new Renderer renderer;
+    [SerializeField] private string shaderPropertyName = "_BarPercent";
     [SerializeField] private float smoothSpeed = 5f;
 
     private IHealth healthSystem;
-    private MaterialPropertyBlock propertyBlock;
-    private int propertyID;
-    private float targetPercent = 1f;
-    private float currentPercent = 1f;
+    private MaterialPropertyBlock _propertyBlock;
+    private int _propertyID;
+    [SerializeField] private float targetPercent = 1f;
+    [SerializeField] private float currentPercent = 1f;
 
     private void Awake() {
         
-        propertyID = Shader.PropertyToID(shaderPropertyName);
-        propertyBlock = new MaterialPropertyBlock();
+        _propertyID = Shader.PropertyToID(shaderPropertyName);
+        _propertyBlock = new MaterialPropertyBlock();
+
+        if (renderer == null) renderer = GetComponent<Renderer>();
+        if (target == null) {
+            Debug.LogError($" Target is missing HealthSystem {gameObject.name}");
+            return;
+        }
 
         if (target.TryGetComponent<IHealth>(out var health)) healthSystem = health;
     }
@@ -49,19 +55,23 @@ public class HealthBarShader : MonoBehaviour {
     }
 
     private void UpdateHealthBar(float currentHealth, float maxHealth) {
+
+        if (maxHealth <= 0) return;
+        
         targetPercent = currentHealth / maxHealth;
+
+        Debug.Log($"[Health bar] Recieved Event! HP : {currentHealth}/{maxHealth}. Target Percent: {targetPercent}");
     }
     private void Update() {
 
-        if (renderer != null) return;
-
-        currentPercent = Mathf.MoveTowards(currentPercent, targetPercent, smoothSpeed);
+        currentPercent = Mathf.MoveTowards(currentPercent, targetPercent, smoothSpeed * Time.deltaTime);
+        
         ApplyShaderChange(currentPercent);
     }
     private void ApplyShaderChange(float value) {
 
-        renderer.GetPropertyBlock(propertyBlock);
-        propertyBlock.SetFloat(propertyID, value);
-        renderer.SetPropertyBlock(propertyBlock);
+        renderer.GetPropertyBlock(_propertyBlock);
+        _propertyBlock.SetFloat(_propertyID, value);
+        renderer.SetPropertyBlock(_propertyBlock);
     }
 }
