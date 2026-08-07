@@ -27,4 +27,12 @@ public class PlayerStats : ScriptableObject {
     public float dodgeStaminaCost = 20f;
     public float sprintStaminaCost = 12f;
     public float sprintStaminaRegen = 4f;
+
+    [Header("Health Settings")]
+    [Tooltip("The maximum health the player may have.")]
+    [Range(5f, 100f)] public float maxHealth = 50;
+    [Range(.1f, 5f)] public float invincibleTime = 1f;
+    public bool canTakeDamage = false;
+
+    public float MaxHealth => maxHealth;
 }
