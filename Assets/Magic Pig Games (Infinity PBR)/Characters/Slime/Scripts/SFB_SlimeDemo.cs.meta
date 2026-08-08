@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: 50c284e94e7a14a41ab90ef49a9ba238
+timeCreated: 1514159540
+licenseType: Store
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 57835
+  packageName: Slime RPG Character Monster - Fantasy RPG
+  packageVersion: 4.3.2
+  assetPath: Assets/Magic Pig Games (Infinity PBR)/Characters/Slime/Scripts/SFB_SlimeDemo.cs
+  uploadId: 934100
