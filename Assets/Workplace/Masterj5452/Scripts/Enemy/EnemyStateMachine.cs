@@ -1,0 +1,37 @@
+using JetBrains.Annotations;
+using UnityEngine;
+
+public class EnemyStateMachine
+{
+    public IEnemyState currentState;
+
+    public void Initialize(IEnemyState startingState)
+    {
+        currentState = startingState;
+        currentState.Enter();
+    }
+
+    public void ChangeState(IEnemyState newState)
+    {
+        if (newState == currentState) return;
+        if(currentState != null)
+        {
+            currentState.Exit();
+        }
+        currentState = newState;
+        currentState.Enter();
+    }
+
+    public void Tick()
+    {
+        if(currentState != null)
+        {
+            currentState.Tick();
+        }
+    }
+
+    public void FixedTick()
+    {
+        if (currentState != null) { currentState.FixedTick(); }
+    }
+}
