@@ -30,8 +30,5 @@ public class EnemyStateMachine
         }
     }
 
-    public void FixedTick()
-    {
-        if (currentState != null) { currentState.FixedTick(); }
-    }
+   
 }

@@ -3,6 +3,11 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "EnemyStatsSO", menuName = "Scriptable Objects/EnemyStatsSO")]
 public class EnemyStatsSO : ScriptableObject
 {
+   
+    public enum EnemyType { Melee,Ranged,Bomber};
+
+    [Header("Type")]
+    public EnemyType enemyType = EnemyType.Melee;
     [Header("Health")]
     [SerializeField] float maxHealth = 10f;
 
@@ -22,6 +27,14 @@ public class EnemyStatsSO : ScriptableObject
     [Header("Attack")]
     public float attackRange = 1.5f;
     public float attackCooldown = 1.2f;
-    public float attackDamage = 5f;    
+    public float attackDamage = 5f;
+
+    [Header("Ranged Attack")]
+    public GameObject projectilePrefab;
+    public float projectileSpeed = 10f;
+
+    [Header("Bomber Attack")]
+    public float explosionRadius = 3f;
+   
     
 }
