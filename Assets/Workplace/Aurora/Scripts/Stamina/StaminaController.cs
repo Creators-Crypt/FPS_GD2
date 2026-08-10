@@ -3,24 +3,41 @@ using UnityEngine;
 public class StaminaController : MonoBehaviour, IStamina {
     
     [SerializeField] private PlayerStats stats;
+    [SerializeField] private float currentStamina;
+    [SerializeField, Range(3f, 25f)] private float fallBackRegenRate = 5f;
 
-    public float Current {  get; private set; }
-    public float Ratio => stats ? Current / stats.maxStamina : 0f;
+    public float Current => currentStamina;
+    public float Ratio => stats ? currentStamina / stats.maxStamina : 0f;
+    public bool IsConsuming {  get; set; }
+    private void Awake() {
+        currentStamina = stats.maxStamina;
+    }
+    private void OnDisable() {
+        Debug.LogWarning($"[LIFECYCLE ALERT] StaminaController component was DISABLED on GameObject '{gameObject.name}'!");
+    }
+    private void OnDestroy() {
+        Debug.LogError($"[LIFECYCLE ALERT] StaminaController was DESTROYED on '{gameObject.name}'!\n" +
+                       $"Stack Trace Source: {System.Environment.StackTrace}");
+    }
     public bool TrySpend(float cost) {
         
-        if (stats == null) return false;
+        //if (stats == null) return false;
         
-        if (Current >= cost) {
-            Current -= cost;
+        if (currentStamina >= cost) {
+            currentStamina -= cost;
             return true;
         }
         return false;
     }
     private void Update() {
-        
-        if (stats == null) return;
-        
-        Current = Mathf.Clamp(Current + stats.staminaRegenRate * Time.deltaTime, 0f, stats.maxStamina);
+
+        //if (stats == null) return;
+        float regenRate = (stats != null && stats.staminaRegenRate > 0) ? stats.staminaRegenRate : fallBackRegenRate;
+        if (!IsConsuming) {
+
+            currentStamina = Mathf.Clamp(currentStamina + (regenRate * Time.deltaTime), 0f, stats.maxStamina);
+
+        }
     }
 
     /// <summary>
@@ -30,8 +47,15 @@ public class StaminaController : MonoBehaviour, IStamina {
     /// </summary>
     public void Regen(float amount) {
         
-        if (stats == null) return;
+        //if (stats == null) return;
         
-        Current = Mathf.Clamp(Current + amount * Time.deltaTime, 0f, stats.maxStamina);
+        currentStamina = Mathf.Clamp(currentStamina + amount * Time.deltaTime, 0f, stats.maxStamina);
+        
+    }
+
+    public void ContinousSpent(float amount) {
+
+       
+        currentStamina = Mathf.Clamp(currentStamina - amount * Time.deltaTime, 0f, stats.maxStamina);
     }
 }
