@@ -17,9 +17,9 @@ public class playerController : MonoBehaviour
     [Range(1, 10)][SerializeField] int jumpMax = 1;
     [SerializeField, Range(1, 10)] int gravity = 10;
 
-    [Header("Arm Control")]
-    [SerializeField] Transform armAim;
-    [SerializeField] private float armRotateSpeed = 30f;
+    [Header("Animation")]
+    [SerializeField] private Transform armAimTarget;
+    [SerializeField] private Animator animator;
 
     [Header("Player State")]
     [SerializeField] private PlayerState currentState;
@@ -57,7 +57,6 @@ public class playerController : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-     
         controller = GetComponent<CharacterController>();
        
         healthSystem = GetComponent<HealthSystem>();
@@ -66,11 +65,16 @@ public class playerController : MonoBehaviour
        
         currentSpeed = stats.walkSpeed;
 
+        if(animator == null)
+        {
+            animator = GetComponentInChildren<Animator>();
+        }
+
     }
     // Update is called once per frame
     void Update()
     {
-        rotateArm();
+        
         stamina = staminaController.Current;
         isPlayerSprinting = Input.GetKey(KeyCode.LeftShift) && (staminaController.Current > stats.sprintStaminaCost);
         staminaController.IsConsuming = isPlayerSprinting;
@@ -85,10 +89,14 @@ public class playerController : MonoBehaviour
             dodgeCooldownTimer -= Time.deltaTime;
         }
         
-        dodge();
-        movement();
-        updateState();
-       
+       dodge();
+       movement();
+       updateState();
+       updateAnimator();
+    }
+    private void LateUpdate()
+    {
+        updateAimTarget();
     }
 
     void movement()
@@ -156,17 +164,37 @@ public class playerController : MonoBehaviour
         }
     }
 
-    void rotateArm()
-    {
-        Vector3 screenCenter = new Vector3(Screen.width / 2f, Screen.height / 2f, 10f);
+    //void rotateArm()
+    //{
+    //    Vector3 screenCenter = new Vector3(Screen.width / 2f, Screen.height / 2f, 10f);
 
-        Vector3 worldPosition = Camera.main.ScreenToWorldPoint(screenCenter);
-        Vector3 direction = (worldPosition - armAim.position).normalized;
-        Quaternion rot = Quaternion.FromToRotation(armAim.right, direction) * armAim.rotation;
-        armAim.rotation = Quaternion.Lerp(armAim.rotation, rot, armRotateSpeed * Time.deltaTime);
+    //    Vector3 worldPosition = Camera.main.ScreenToWorldPoint(screenCenter);
+    //    Vector3 direction = (worldPosition - armAim.position).normalized;
+    //    Vector3 localDirection = armAim.parent.InverseTransformDirection(direction);
+    //    Quaternion rot = Quaternion.FromToRotation(Vector3.right, localDirection);
+    //    armAim.localRotation = Quaternion.Lerp(armAim.localRotation, rot * armBaseRotation, armRotateSpeed * Time.deltaTime);
         
-    }
+    //}
 
+   Vector3 getAimPoint()
+    {
+        Camera cam = Camera.main;
+
+        if(cam == null)
+            return transform.position + transform.forward * 100f;
+
+        Ray ray = new Ray( cam.transform.position, cam.transform.forward );
+
+        if(Physics.Raycast(ray, out RaycastHit hit, 100f))
+        {
+            return hit.point;
+        }
+        return ray.GetPoint(100f);
+    }
+    void updateAimTarget()
+    {
+        armAimTarget.position = getAimPoint();
+    }
     void updateState()
     {
         if (healthSystem.IsDead)
@@ -199,4 +227,12 @@ public class playerController : MonoBehaviour
         currentState = PlayerState.Idle;
     }
 
+    void updateAnimator()
+    {
+        Debug.Log("Animator: " + animator.name);
+        animator.SetFloat("Speed", moveDir.magnitude);
+        animator.SetBool("Sprint", isPlayerSprinting);
+        animator.SetBool("Grounded", controller.isGrounded);
+        animator.SetFloat("VerticalSpeed", playerVel.y);
+    }
 }
