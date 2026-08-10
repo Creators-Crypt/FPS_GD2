@@ -23,6 +23,7 @@ public class PlayerStats : ScriptableObject {
 
     [Header("Stamina Settings")]
     public float maxStamina = 100f;
+    public float currentStamina = 1f;
     public float staminaRegenRate = 18f;
     public float dodgeStaminaCost = 20f;
     public float sprintStaminaCost = 12f;

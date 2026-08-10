@@ -23,9 +23,10 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 0
   maxStamina: 100
-  staminaRegenRate: 18
+  currentStamina: 51.32952
+  staminaRegenRate: 0
   dodgeStaminaCost: 20
-  sprintStaminaCost: 12
+  sprintStaminaCost: 20
   sprintStaminaRegen: 4
   maxHealth: 50
   invincibleTime: 1
