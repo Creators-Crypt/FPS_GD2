@@ -19,6 +19,7 @@ public class playerController : MonoBehaviour
 
     [Header("Arm Control")]
     [SerializeField] Transform armAim;
+    [SerializeField] private float armRotateSpeed = 30f;
 
     //Jumps
     int jumpCount;
@@ -41,10 +42,6 @@ public class playerController : MonoBehaviour
 
     [SerializeField] private float dodgeSpeed;
 
-    private void Awake()
-    {
-        DontDestroyOnLoad(this);
-    }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -150,9 +147,12 @@ public class playerController : MonoBehaviour
 
     void rotateArm()
     {
-        Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        Quaternion rot = Quaternion.LookRotation(worldPosition);
-        armAim.rotation = Quaternion.Lerp(armAim.rotation, rot, 100);
+        Vector3 screenCenter = new Vector3(Screen.width / 2f, Screen.height / 2f, 10f);
+
+        Vector3 worldPosition = Camera.main.ScreenToWorldPoint(screenCenter);
+        Vector3 direction = worldPosition - armAim.position;
+        Quaternion rot = Quaternion.LookRotation(direction);
+        armAim.rotation = Quaternion.Lerp(armAim.rotation, rot, 10f * Time.deltaTime);
         
     }
 
