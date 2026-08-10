@@ -21,6 +21,8 @@ public class VideoSettingsUI : MonoBehaviour
         frameRateDropdown.RefreshShownValue();
         displayModeDropdown.value = PlayerPrefs.GetInt("DisplayMode", 1); // Default to Borderless Fullscreen
         displayModeDropdown.RefreshShownValue();
+        brightnessSlider.value = PlayerPrefs.GetFloat("Brightness", 100f); // Default to 100% brightness
+        brightnessValue.text = Mathf.RoundToInt(brightnessSlider.value) + "%";
 
         resolutionDropdown.onValueChanged.AddListener(SetResolution);
         displayModeDropdown.onValueChanged.AddListener(SetDisplayMode);
@@ -119,5 +121,6 @@ public class VideoSettingsUI : MonoBehaviour
     public void SetBrightness(float value)
     {
         brightnessValue.text = Mathf.RoundToInt(value) + "%";
+        PlayerPrefs.SetFloat("Brightness", value);
     }   
 }
