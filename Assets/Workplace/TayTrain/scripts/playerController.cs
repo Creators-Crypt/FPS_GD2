@@ -21,6 +21,9 @@ public class playerController : MonoBehaviour
     [SerializeField] Transform armAim;
     [SerializeField] private float armRotateSpeed = 30f;
 
+    [Header("Player State")]
+    [SerializeField] private PlayerState currentState;
+
     //Jumps
     int jumpCount;
     
@@ -40,7 +43,16 @@ public class playerController : MonoBehaviour
     float dodgeCooldownTimer;
     Vector3 dodgeDirection;
 
-    [SerializeField] private float dodgeSpeed;
+    // PlayerState
+    public enum PlayerState
+    {
+        Idle,
+        Walk,
+        Sprint,
+        Jump,
+        Dodge,
+        Dead
+    }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -51,8 +63,6 @@ public class playerController : MonoBehaviour
         healthSystem = GetComponent<HealthSystem>();
 
         staminaController = GetComponent<StaminaController>();
-
-        dodgeSpeed = stats.dodgeSpeedMultiplier;
        
         currentSpeed = stats.walkSpeed;
 
@@ -77,15 +87,16 @@ public class playerController : MonoBehaviour
         
         dodge();
         movement();
+        updateState();
        
     }
 
     void movement()
     {
-        if(controller.isGrounded)
+        if(controller.isGrounded && playerVel.y <0)
         {
             jumpCount = 0;
-            playerVel.y = 0;
+            playerVel.y = -2f;
         }
 
         moveDir = Input.GetAxis("Horizontal") * transform.right +
@@ -150,10 +161,42 @@ public class playerController : MonoBehaviour
         Vector3 screenCenter = new Vector3(Screen.width / 2f, Screen.height / 2f, 10f);
 
         Vector3 worldPosition = Camera.main.ScreenToWorldPoint(screenCenter);
-        Vector3 direction = worldPosition - armAim.position;
-        Quaternion rot = Quaternion.LookRotation(direction);
-        armAim.rotation = Quaternion.Lerp(armAim.rotation, rot, 10f * Time.deltaTime);
+        Vector3 direction = (worldPosition - armAim.position).normalized;
+        Quaternion rot = Quaternion.FromToRotation(armAim.right, direction) * armAim.rotation;
+        armAim.rotation = Quaternion.Lerp(armAim.rotation, rot, armRotateSpeed * Time.deltaTime);
         
+    }
+
+    void updateState()
+    {
+        if (healthSystem.IsDead)
+        {
+            currentState = PlayerState.Dead;
+            return;
+        }
+
+        if(isDodging)
+        {
+            currentState = PlayerState.Dodge;
+            return;
+        }
+
+        if(!controller.isGrounded)
+        {
+            currentState = PlayerState.Jump;
+            return;
+        }
+        if(isPlayerSprinting && moveDir.sqrMagnitude > 0.01f)
+        {
+            currentState = PlayerState.Sprint;
+            return;
+        }
+        if(moveDir.sqrMagnitude > 0.01f)
+        {
+            currentState = PlayerState.Walk;
+            return;
+        }
+        currentState = PlayerState.Idle;
     }
 
 }
