@@ -24,12 +24,18 @@ public class EnemyIdleState : IEnemyState
     {
         if (enemy.CanSeePlayer())
         {
-            enemy.stateMachine.ChangeState(enemy.ChaseState);
+            enemy.stateMachine.ChangeState(enemy.chaseState);
             return;
         }
+
         idleTimer = Time.deltaTime;
-        if(idleTimer >= idleDuration) { enemy.stateMachine.ChangeState(enemy.PatrolState);
+        if (idleTimer >= idleDuration)
+        {
+            enemy.stateMachine.ChangeState(enemy.patrolState);
+        }
     }
+            
+    
 
 
     public void Exit()
@@ -51,19 +57,20 @@ public class EnemyPatrolState: IEnemyState
         enemy.agent.speed = enemy.stats.patrolSpeed;
         SetNewPatrolDestineation();
     }
-   
+
     public void Tick()
     {
         if (enemy.CanSeePlayer())
         {
-            enemy.stateMachine.ChangeState(enemy.ChaseState);
+            enemy.stateMachine.ChangeState(enemy.chaseState);
             return;
-
-            if (!enemy.agent.pathPending && enemy.agent.remainingDistance <= enemy.agent.stoppingDistance)
-            {
-                enemy.stateMachine.ChangeState(enemy.idleState);
-            }
         }
+
+        if (!enemy.agent.pathPending && enemy.agent.remainingDistance <= enemy.agent.stoppingDistance)
+        {
+            enemy.stateMachine.ChangeState(enemy.idleState);
+        }
+
     }
     private void SetNewPatrolDestineation()
     {
@@ -102,11 +109,14 @@ public class EnemyChaseState : IEnemyState
         enemy.agent.isStopped = false;
         enemy.agent.speed = enemy.stats.chaseSpeed;
     }
+
+    
+
     public void Tick()
     {
         if(enemy.playerTarget == null)
         {
-            enemy.stateMachine.ChangeState(enemy.PatrolState);
+            enemy.stateMachine.ChangeState(enemy.patrolState);
             return;
         }
 
@@ -114,13 +124,70 @@ public class EnemyChaseState : IEnemyState
 
         if (!canSee)
         {
-            enemy.addsitt
+            enemy.AddSightLossTime();
         }
+
+        if (enemy.IsPlayerInAttackRange())
+        {
+            enemy.stateMachine.ChangeState(enemy.attackState);
+            return;
+        }
+
+        if(!canSee && enemy.timeSinceLastSawPlayer >= enemy.stats.lostSightTime)
+        {
+            enemy.stateMachine.ChangeState(enemy.patrolState);
+            return;
+        }
+        enemy.agent.SetDestination(enemy.playerTarget.position);
+    }
+
+    public void Exit()
+    {
+
     }
 
 
 
 
+}
 
+public class EnemyAttackState : IEnemyState
+{
+    private EnemyAI enemy;
 
+    public EnemyAttackState(EnemyAI _enemy)
+    {
+        enemy = _enemy;
+    }
+
+    public void Enter()
+    {
+        enemy.agent.isStopped = true;
+        enemy.agent.velocity = Vector3.zero;
+    }   
+
+    public void Tick()
+    {
+        if(enemy.playerTarget == null)
+        {
+            enemy.stateMachine.ChangeState(enemy.patrolState);
+            return;
+        }
+        if (!enemy.IsPlayerInAttackRange())
+        {
+            enemy.stateMachine.ChangeState(enemy.chaseState);
+            return;
+        }
+
+        enemy.FacePlayer();
+        if (enemy.CanAttack())
+        {
+            enemy.PreformAttack();
+        }
+    }
+
+    public void Exit()
+    {
+        enemy.agent.isStopped=false;
+    }
 }

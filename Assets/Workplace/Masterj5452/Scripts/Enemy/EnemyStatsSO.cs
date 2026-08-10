@@ -4,12 +4,12 @@ using UnityEngine;
 public class EnemyStatsSO : ScriptableObject
 {
    
-    public enum EnemyType { Melee,Ranged,Bomber};
+    public enum EnemyType { Melee,Ranged,Bomber, Boss};
 
     [Header("Type")]
-    public EnemyType enemyType = EnemyType.Melee;
+    public EnemyType enemyType;
     [Header("Health")]
-    [SerializeField] float maxHealth = 10f;
+    public float maxHealth = 10f;
 
     [Header("Movement")]
     public float patrolSpeed = 2f;
