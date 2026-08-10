@@ -16,6 +16,14 @@ public class VideoSettingsUI : MonoBehaviour
     private void Start()
     {
         SetupResolution();
+        int savedResolution = PlayerPrefs.GetInt("Resolution", resolutionDropdown.value);
+
+        if (savedResolution >= 0 && savedResolution < resolutions.Length)
+        {
+            resolutionDropdown.value = savedResolution;
+            resolutionDropdown.RefreshShownValue();
+        }
+        
         vSyncToggle.isOn = PlayerPrefs.GetInt("VSync", 1) == 1; // Default to VSync enabled
         frameRateDropdown.value = PlayerPrefs.GetInt("FrameRate", -1); // Default to platform's default frame rate
         frameRateDropdown.RefreshShownValue();
@@ -65,6 +73,8 @@ public class VideoSettingsUI : MonoBehaviour
             resolution.width,
             resolution.height,
             Screen.fullScreenMode);
+
+        PlayerPrefs.SetInt("Resolution", index);
     }
 
     public void SetDisplayMode(int index)
