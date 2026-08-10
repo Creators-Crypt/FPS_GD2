@@ -4,7 +4,7 @@ public class StaminaController : MonoBehaviour, IStamina {
     
     [SerializeField] private PlayerStats stats;
 
-    public float Current { get; private set; }
+    public float Current {  get; private set; }
     public float Ratio => stats ? Current / stats.maxStamina : 0f;
     public bool TrySpend(float cost) {
         
