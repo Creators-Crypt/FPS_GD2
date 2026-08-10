@@ -229,7 +229,6 @@ public class playerController : MonoBehaviour
 
     void updateAnimator()
     {
-        Debug.Log("Animator: " + animator.name);
         animator.SetFloat("Speed", moveDir.magnitude);
         animator.SetBool("Sprint", isPlayerSprinting);
         animator.SetBool("Grounded", controller.isGrounded);
