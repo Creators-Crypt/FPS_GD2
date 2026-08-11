@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  version: 10
+  version: 5
 --- !u!21 &2100000
 Material:
   serializedVersion: 8
@@ -21,12 +21,11 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: M_Barnacle_C
-  m_Shader: {fileID: -6465566751694194690, guid: c094c3da695cadd4bac3caea502e4978, type: 3}
-  m_Parent: {fileID: 0}
-  m_ModifiedSerializedProperties: 0
-  m_ValidKeywords: []
-  m_InvalidKeywords:
+  m_Shader: {fileID: -6465566751694194690, guid: c094c3da695cadd4bac3caea502e4978,
+    type: 3}
+  m_ValidKeywords:
   - _DISABLE_SSR_TRANSPARENT
+  m_InvalidKeywords:
   - _EMISSIVE_COLOR_MAP
   - _NORMALMAP
   - _NORMALMAP_TANGENT_SPACE
@@ -34,15 +33,13 @@ Material:
   m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: 2225
-  stringTagMap:
-    RenderType: Opaque
+  stringTagMap: {}
   disabledShaderPasses:
   - TransparentDepthPrepass
   - TransparentDepthPostpass
   - TransparentBackface
   - RayTracingPrepass
   - MOTIONVECTORS
-  m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -146,10 +143,6 @@ Material:
         m_Texture: {fileID: 2800000, guid: abc00000000008372182510346437023, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _SubGWorldAlignedTexture_f1f9acccd6d34e779a61f30a0a06cf6d_Texture2D74783799d0be4fe68f261378c4b8ad79_1068583441_Texture2D:
-        m_Texture: {fileID: 2800000, guid: abc00000000008372182510346437023, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
     - _SubsurfaceMaskMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -201,10 +194,7 @@ Material:
     - _AlphaToMask: 0
     - _AlphaToMaskInspectorValue: 0
     - _Anisotropy: 0
-    - _Blend: 0
     - _BlendMode: 0
-    - _BlendModePreserveSpecular: 0
-    - _CastShadows: 1
     - _CoatMask: 0
     - _ConservativeDepthOffsetEnable: 0
     - _Contrast: 1
@@ -225,7 +215,6 @@ Material:
     - _DoubleSidedGIMode: 0
     - _DoubleSidedNormalMode: 1
     - _DstBlend: 0
-    - _DstBlendAlpha: 0
     - _EmissiveColorMode: 1
     - _EmissiveExposureWeight: 1
     - _EmissiveIntensity: 1
@@ -263,10 +252,7 @@ Material:
     - _PPDMinSamples: 5
     - _PPDPrimitiveLength: 1
     - _PPDPrimitiveWidth: 1
-    - _QueueControl: 1
-    - _QueueOffset: 0
     - _RayTracing: 0
-    - _ReceiveShadows: 1
     - _ReceivesSSR: 1
     - _ReceivesSSRTransparent: 0
     - _RefractionModel: 0
@@ -281,7 +267,6 @@ Material:
     - _SpecularAAThreshold: 0.2
     - _SpecularOcclusionMode: 1
     - _SrcBlend: 1
-    - _SrcBlendAlpha: 1
     - _StencilRef: 0
     - _StencilRefDepth: 8
     - _StencilRefDistortionVec: 4
@@ -316,13 +301,10 @@ Material:
     - _UseMask: 0
     - _UseOpacity: 0
     - _UseShadowThreshold: 0
-    - _WorkflowMode: 1
-    - _ZTest: 4
     - _ZTestDepthEqualForOpaque: 3
     - _ZTestGBuffer: 4
     - _ZTestTransparent: 4
     - _ZWrite: 1
-    - _ZWriteControl: 0
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _BaseColorMap_MipInfo: {r: 0, g: 0, b: 0, a: 0}
@@ -345,7 +327,6 @@ Material:
     - _UVMappingMask: {r: 1, g: 0, b: 0, a: 0}
     - _UVMappingMaskEmissive: {r: 1, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
-  m_AllowLocking: 1
 --- !u!114 &1300239877550701642
 MonoBehaviour:
   m_ObjectHideFlags: 11
