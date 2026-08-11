@@ -116,7 +116,6 @@ public class EnemyAI : MonoBehaviour
                 PerformMeleeAttack();
                 break;
             case EnemyType.Ranged:
-                PreformRangedAttack();
                 break;
             case EnemyType.Bomber:
                 break;
@@ -125,26 +124,6 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
-    private void PreformRangedAttack()
-    {
-        if(playerTarget == null || stats.projectilePrefab == null) return;
-
-        Vector3 dir = playerTarget.position - firePoint.position;
-        dir.Normalize();
-
-        GameObject projectileObj = Instantiate(stats.projectilePrefab,firePoint.position, Quaternion.LookRotation(dir));
-
-        Projectile projectile = projectileObj.GetComponent<Projectile>();
-        if(projectile != null)
-        {
-            projectile.Fire(dir, stats.projectileSpeed, stats.attackDamage);
-        }
-        else
-        {
-            Debug.LogWarning("PLEASE CHECK THE PROJECTILE PREFAB IN THE ENEMY SCRIPTED OBJECT IS NOT EMPTY");
-        }
-       
-    }
     private void PerformMeleeAttack()
     {
         if (playerTarget == null) return;
