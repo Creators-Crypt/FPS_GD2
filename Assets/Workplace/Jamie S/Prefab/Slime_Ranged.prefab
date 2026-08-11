@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 851286152945277625}
-  - component: {fileID: 1229596800668017843}
+  - component: {fileID: 7590755403110092228}
   - component: {fileID: 8853291060289645}
   - component: {fileID: 7386351353437340852}
   - component: {fileID: 2602865175891156592}
@@ -42,7 +42,7 @@ Transform:
   - {fileID: 3078258636878766781}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1229596800668017843
+--- !u!114 &7590755403110092228
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -51,18 +51,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 1287332823282865865}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 14d700cd6d16c4449892a346ca6a05f1, type: 3}
+  m_Script: {fileID: 11500000, guid: d3f739a5649b1ab479ab1aababf7eb57, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyAI
-  stats: {fileID: 11400000, guid: 114c4dce878eeae489a661103cdcf476, type: 2}
+  stats: {fileID: 11400000, guid: 926041115f516c743ae0a781105031dd, type: 2}
   firePoint: {fileID: 3078258636878766781}
   agent: {fileID: 7386351353437340852}
   playerTarget: {fileID: 0}
   spawnPostion: {x: 0, y: 0, z: 0}
-  currentHealth: 20
-  faceTargetRotSpeed: 20
-  timeSinceLastSawPlayer: 1
-  lastAttackTime: 1
+  currentHealth: 0
+  faceTargetRotSpeed: 10
+  timeSinceLastSawPlayer: 0
+  lastAttackTime: 0
 --- !u!95 &8853291060289645
 Animator:
   serializedVersion: 7

@@ -523,7 +523,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4798729194234949380}
-  - component: {fileID: 4803681227513482878}
+  - component: {fileID: 70173062524959747}
   - component: {fileID: 2465582576490915417}
   - component: {fileID: 152201418958783638}
   - component: {fileID: 7242434049416401185}
@@ -556,7 +556,7 @@ Transform:
   - {fileID: 230003085462281643}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4803681227513482878
+--- !u!114 &70173062524959747
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -565,7 +565,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 4862841050284946198}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 14d700cd6d16c4449892a346ca6a05f1, type: 3}
+  m_Script: {fileID: 11500000, guid: d3f739a5649b1ab479ab1aababf7eb57, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyAI
   stats: {fileID: 11400000, guid: b1e63495490e60942a4bd426a6a0766d, type: 2}
@@ -573,10 +573,10 @@ MonoBehaviour:
   agent: {fileID: 152201418958783638}
   playerTarget: {fileID: 0}
   spawnPostion: {x: 0, y: 0, z: 0}
-  currentHealth: 20
+  currentHealth: 0
   faceTargetRotSpeed: 10
-  timeSinceLastSawPlayer: 1
-  lastAttackTime: 1
+  timeSinceLastSawPlayer: 0
+  lastAttackTime: 0
 --- !u!95 &2465582576490915417
 Animator:
   serializedVersion: 7
