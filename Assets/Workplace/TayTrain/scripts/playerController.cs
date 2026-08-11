@@ -1,99 +1,142 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.InputSystem.LowLevel;
+using Unity.VisualScripting.Antlr3.Runtime.Misc;
+using UnityEngine.UIElements;
 
-public class playerController : MonoBehaviour, IDamage
+public class playerController : MonoBehaviour
 {
+    [Header("References")]
     [SerializeField] CharacterController controller;
-    [SerializeField] LayerMask ignoreLayer;
+    [SerializeField] PlayerStats stats;
+    [SerializeField] HealthSystem healthSystem;
+    [SerializeField] StaminaController staminaController;
 
-    //Player stats
-    [Range(1,10)][SerializeField] int HP;
-    [Range(1, 10)][SerializeField] int speed;
-    [Range(1, 10)][SerializeField] int sprintMod;
-    [Range(1, 10)][SerializeField] int dodgeMod;
-    [Range(1, 10)][SerializeField] int dodgeMax;
-    [Range(1, 10)][SerializeField] int jumpSpeed;
-    [Range(1, 10)][SerializeField] int jumpMax;
-    [Range(1, 10)][SerializeField] int gravity;
+    [Header("Jump")]
+    [Range(1, 10)][SerializeField] int jumpSpeed = 5;
+    [Range(1, 10)][SerializeField] int jumpMax = 1;
+    [SerializeField, Range(1, 10)] int gravity = 10;
 
-    //Spell stats
-    [Range(1, 10)][SerializeField] int spellDamage;
-    [Range(1, 10)][SerializeField] int spellDist;
-    [Range(1, 10)][SerializeField] int spellFireRate;
+    [Header("Arm Control")]
+    [SerializeField] Transform armAim;
 
+    //Jumps
     int jumpCount;
-    int HPOrig;
-    int dodgeCount;
-
-    float spellTimer;
-
+    
+    //Movement
     Vector3 moveDir;
     Vector3 playerVel;
 
+    //speed
+    [SerializeField] float currentSpeed;
+    [SerializeField] private bool isPlayerSprinting = false;
+    [SerializeField] float staminaTimer;
+    [SerializeField] float stamina;
+
+    //Dodge
+    bool isDodging;
+    float dodgeTimer;
+    float dodgeCooldownTimer;
+    Vector3 dodgeDirection;
+
+    [SerializeField] private float dodgeSpeed;
+
+    private void Awake()
+    {
+        DontDestroyOnLoad(this);
+    }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        HPOrig = HP;
+     
+        controller = GetComponent<CharacterController>();
        
-    }
+        healthSystem = GetComponent<HealthSystem>();
 
+        staminaController = GetComponent<StaminaController>();
+
+        dodgeSpeed = stats.dodgeSpeedMultiplier;
+       
+        currentSpeed = stats.walkSpeed;
+
+    }
     // Update is called once per frame
     void Update()
     {
-        movement();
-        sprint();
-        dodge();
+        rotateArm();
+        stamina = staminaController.Current;
+        isPlayerSprinting = Input.GetKey(KeyCode.LeftShift) && (staminaController.Current > stats.sprintStaminaCost);
+        staminaController.IsConsuming = isPlayerSprinting;
+        currentSpeed = (isPlayerSprinting) ? stats.sprintSpeed : stats.walkSpeed;
+        if(isPlayerSprinting)
+        {
+            staminaController.ContinousSpent(stats.sprintStaminaCost);
+        }
 
+            if (dodgeCooldownTimer > 0)
+        {
+            dodgeCooldownTimer -= Time.deltaTime;
+        }
+        
+        dodge();
+        movement();
+       
     }
 
     void movement()
     {
-        Debug.DrawRay(Camera.main.transform.position, Camera.main.transform.forward * spellDist, Color.green);
-
-        spellTimer += Time.deltaTime; 
-
         if(controller.isGrounded)
         {
             jumpCount = 0;
             playerVel.y = 0;
         }
 
-        moveDir = Input.GetAxis("Horizontal") * transform.right + Input.GetAxis("Vertical") * transform.forward;
+        moveDir = Input.GetAxis("Horizontal") * transform.right +
+            Input.GetAxis("Vertical") * transform.forward;
 
-        controller.Move(moveDir.normalized * speed * Time.deltaTime);
+        controller.Move(moveDir.normalized * currentSpeed * Time.deltaTime);
 
         jump();
+
         controller.Move(playerVel * Time.deltaTime);
+
         playerVel.y -= gravity * Time.deltaTime;
 
-        if(Input.GetButton("Fire1") && spellTimer > spellFireRate)
-        {
-            castSpell();
-        }
-
-    }
-
-    void sprint()
-    {
-        if(Input.GetButtonDown("Sprint"))
-        {
-            speed *= sprintMod;
-        }
-        else if(Input.GetButtonUp("Sprint"))
-        {
-            speed /= sprintMod;
-        }
     }
 
     void dodge()
     {
-        if(Input.GetButtonDown("Dodge") && dodgeCount < dodgeMax)
+       
+
+       if(Input.GetButtonDown("Dodge") && dodgeCooldownTimer <= 0 && staminaController.TrySpend(stats.dodgeStaminaCost))
         {
-            dodgeCount++;
-            speed *= dodgeMod;
-            //Lerp from one position or translate player very fast during specific time
+            isDodging = true;
+
+            dodgeTimer = stats.dodgeDuration;
+            dodgeCooldownTimer = stats.dodgeCooldown;
+
+            dodgeDirection = moveDir.normalized;
+
+            if(dodgeDirection == Vector3.zero)
+            {
+                dodgeDirection = transform.forward;
+            }
         }
-      
+
+       if(isDodging)
+        {
+            controller.Move(dodgeDirection *
+                stats.walkSpeed *
+                stats.dodgeSpeedMultiplier *
+                Time.deltaTime);
+        }
+
+        dodgeTimer -= Time.deltaTime;
+
+        if(dodgeTimer <= 0)
+        {
+            isDodging = false;
+        }
     }
 
     void jump()
@@ -105,34 +148,12 @@ public class playerController : MonoBehaviour, IDamage
         }
     }
 
-    void castSpell()
+    void rotateArm()
     {
-        spellTimer = 0;
-
-        RaycastHit hit;
-
-        if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward,
-            out hit, spellDist, ~ignoreLayer))
-        {
-            Debug.Log(hit.collider.name);
-            IDamage dmg = hit.collider.GetComponent<IDamage>();
-            if (dmg != null)
-            {
-                dmg.takeDamage(spellDamage);
-            }
-        }
+        Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Quaternion rot = Quaternion.LookRotation(worldPosition);
+        armAim.rotation = Quaternion.Lerp(armAim.rotation, rot, 100);
+        
     }
 
-    public void takeDamage(int amount)
-    {
-        HP -= amount;
-    }
 }
-
- 
-       
-       
-        
-
-        
-   
