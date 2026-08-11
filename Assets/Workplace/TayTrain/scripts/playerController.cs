@@ -11,6 +11,9 @@ public class playerController : MonoBehaviour
     [SerializeField] PlayerStats stats;
     [SerializeField] HealthSystem healthSystem;
     [SerializeField] StaminaController staminaController;
+    [SerializeField] SpellCaster spellCaster;
+    [SerializeField] DeathHandler deathHandler;
+
 
     [Header("Jump")]
     [Range(1, 10)][SerializeField] int jumpSpeed = 5;
@@ -64,6 +67,10 @@ public class playerController : MonoBehaviour
         staminaController = GetComponent<StaminaController>();
        
         currentSpeed = stats.walkSpeed;
+
+        deathHandler = GetComponent<DeathHandler>();
+
+        spellCaster = GetComponent<SpellCaster>();
 
         if(animator == null)
         {
