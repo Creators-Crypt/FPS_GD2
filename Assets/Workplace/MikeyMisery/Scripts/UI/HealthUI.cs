@@ -8,13 +8,11 @@ public class HealthUI : MonoBehaviour
     private float maxHealth = 100f;
     private float currentHealth = 25f;
 
-    private void Start()
-    {
+    private void Start() {
         UpdateHealthUI();
     }
 
-    private void UpdateHealthUI()
-    {
+    private void UpdateHealthUI() {
         healthFill.fillAmount = currentHealth / maxHealth;
     }
 }

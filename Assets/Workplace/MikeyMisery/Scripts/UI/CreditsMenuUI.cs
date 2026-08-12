@@ -3,8 +3,7 @@ using UnityEngine.SceneManagement;
 
 public class CreditsMenuUI : MonoBehaviour
 {
-    public void BackToMainMenu()
-    {
+    public void BackToMainMenu() {
         SceneManager.LoadScene("MainMenu");
     }
 }

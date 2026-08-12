@@ -8,17 +8,15 @@ public class SpellDisplayUI : MonoBehaviour
     [SerializeField] private Outline spellSlot3Outline;
     [SerializeField] private Outline spellSlot4Outline;
 
-    private void Start()
-    {
+    private void Start() {
         // Initialize the first spell slot as selected
         SelectSpell(0);
     }
 
-    private void Update()
-    {
+    private void Update() {
         if (Input.GetKeyDown(KeyCode.Alpha1))
             SelectSpell(0);
-        
+
         if (Input.GetKeyDown(KeyCode.Alpha2))
             SelectSpell(1);
 
@@ -29,8 +27,7 @@ public class SpellDisplayUI : MonoBehaviour
             SelectSpell(3);
     }
 
-    private void SelectSpell(int selectedSlot)
-    {
+    private void SelectSpell(int selectedSlot) {
         spellSlot1Outline.enabled = selectedSlot == 0;
         spellSlot2Outline.enabled = selectedSlot == 1;
         spellSlot3Outline.enabled = selectedSlot == 2;
