@@ -1,7 +1,12 @@
 fileFormatVersion: 2
+<<<<<<< HEAD:Assets/Workplace/TayTrain/StylizedCharacterPack/Animations.meta
 guid: c3b2c55917acc874cabe9400baa6e6f9
 folderAsset: yes
 DefaultImporter:
+=======
+guid: b1e63495490e60942a4bd426a6a0766d
+NativeFormatImporter:
+>>>>>>> parent of ab0f382a (Small update):Assets/Workplace/Jamie S/Scriptable Objects/Slime.asset.meta
   externalObjects: {}
   userData: 
   assetBundleName: 

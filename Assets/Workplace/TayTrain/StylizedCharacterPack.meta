@@ -1,8 +1,15 @@
 fileFormatVersion: 2
+<<<<<<< HEAD:Assets/Workplace/TayTrain/StylizedCharacterPack.meta
 guid: 3f39e87228cec42f19fdc551ac7f43a6
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}
+=======
+guid: 4bbedbd38e9aed2469972d66d0d35fd8
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+>>>>>>> parent of ab0f382a (Small update):Assets/Workplace/Jamie S/Materials/PlaceFiller.mat.meta
   userData: 
   assetBundleName: 
   assetBundleVariant: 
