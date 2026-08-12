@@ -30,7 +30,12 @@ public class AudioSettingUI : MonoBehaviour
         UpdateSFX(sfxSlider.value);
 
     }
-
+    /*
+     private void OnDisable() {
+        
+    Add a RemoveListener for each AddListenenr
+    } 
+    */
     private 
         void UpdateMaster(float value)
     {

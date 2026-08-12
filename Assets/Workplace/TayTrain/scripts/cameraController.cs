@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class cameraController : MonoBehaviour
+public class CameraController : MonoBehaviour
 {
     [SerializeField] int sens;
     [SerializeField] int lockVertMin, lockVertMax; // stops over rotate
@@ -9,24 +9,21 @@ public class cameraController : MonoBehaviour
     float camRotX; // camera x axis rotation
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
+    void Start() {
         //control the start view of the camera
         camRotX = transform.localEulerAngles.x;
-        if(camRotX > 180)
-        {
+        if (camRotX > 180) {
             camRotX -= 360f;
         }
 
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
-        
+
     }
 
     // Update is called once per frame
-    void Update()
-    {
-        
+    void Update() {
+
         //  only need x and y because mouse only moves in two directions
         float mouseX = Input.GetAxisRaw("Mouse X") * sens;
         float mouseY = Input.GetAxisRaw("Mouse Y") * sens;

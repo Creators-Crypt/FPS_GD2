@@ -1,10 +1,6 @@
 using UnityEngine;
-using System.Collections;
-using UnityEngine.InputSystem.LowLevel;
-using Unity.VisualScripting.Antlr3.Runtime.Misc;
-using UnityEngine.UIElements;
 
-public class playerController : MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] CharacterController controller;
@@ -29,7 +25,7 @@ public class playerController : MonoBehaviour
 
     //Jumps
     int jumpCount;
-    
+
     //Movement
     Vector3 moveDir;
     Vector3 playerVel;
@@ -47,8 +43,7 @@ public class playerController : MonoBehaviour
     Vector3 dodgeDirection;
 
     // PlayerState
-    public enum PlayerState
-    {
+    public enum PlayerState {
         Idle,
         Walk,
         Sprint,
@@ -58,58 +53,50 @@ public class playerController : MonoBehaviour
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
+    void Start() {
         controller = GetComponent<CharacterController>();
-       
+
         healthSystem = GetComponent<HealthSystem>();
 
         staminaController = GetComponent<StaminaController>();
-       
+
         currentSpeed = stats.walkSpeed;
 
         deathHandler = GetComponent<DeathHandler>();
 
         spellCaster = GetComponent<SpellCaster>();
 
-        if(animator == null)
-        {
+        if (animator == null) {
             animator = GetComponentInChildren<Animator>();
         }
 
     }
     // Update is called once per frame
-    void Update()
-    {
-        
+    void Update() {
+
         stamina = staminaController.Current;
         isPlayerSprinting = Input.GetKey(KeyCode.LeftShift) && (staminaController.Current > stats.sprintStaminaCost);
         staminaController.IsConsuming = isPlayerSprinting;
         currentSpeed = (isPlayerSprinting) ? stats.sprintSpeed : stats.walkSpeed;
-        if(isPlayerSprinting)
-        {
+        if (isPlayerSprinting) {
             staminaController.ContinousSpent(stats.sprintStaminaCost);
         }
 
-            if (dodgeCooldownTimer > 0)
-        {
+        if (dodgeCooldownTimer > 0) {
             dodgeCooldownTimer -= Time.deltaTime;
         }
-        
-       dodge();
-       movement();
-       updateState();
-       updateAnimator();
+
+        dodge();
+        movement();
+        updateState();
+        updateAnimator();
     }
-    private void LateUpdate()
-    {
+    private void LateUpdate() {
         updateAimTarget();
     }
 
-    void movement()
-    {
-        if(controller.isGrounded && playerVel.y <0)
-        {
+    void movement() {
+        if (controller.isGrounded && playerVel.y < 0) {
             jumpCount = 0;
             playerVel.y = -2f;
         }
@@ -127,12 +114,10 @@ public class playerController : MonoBehaviour
 
     }
 
-    void dodge()
-    {
-       
+    void dodge() {
 
-       if(Input.GetButtonDown("Dodge") && dodgeCooldownTimer <= 0 && staminaController.TrySpend(stats.dodgeStaminaCost))
-        {
+
+        if (Input.GetButtonDown("Dodge") && dodgeCooldownTimer <= 0 && staminaController.TrySpend(stats.dodgeStaminaCost)) {
             isDodging = true;
 
             dodgeTimer = stats.dodgeDuration;
@@ -140,14 +125,12 @@ public class playerController : MonoBehaviour
 
             dodgeDirection = moveDir.normalized;
 
-            if(dodgeDirection == Vector3.zero)
-            {
+            if (dodgeDirection == Vector3.zero) {
                 dodgeDirection = transform.forward;
             }
         }
 
-       if(isDodging)
-        {
+        if (isDodging) {
             controller.Move(dodgeDirection *
                 stats.walkSpeed *
                 stats.dodgeSpeedMultiplier *
@@ -156,16 +139,13 @@ public class playerController : MonoBehaviour
 
         dodgeTimer -= Time.deltaTime;
 
-        if(dodgeTimer <= 0)
-        {
+        if (dodgeTimer <= 0) {
             isDodging = false;
         }
     }
 
-    void jump()
-    {
-        if(Input.GetButtonDown("Jump") && jumpCount < jumpMax)
-        {
+    void jump() {
+        if (Input.GetButtonDown("Jump") && jumpCount < jumpMax) {
             jumpCount++;
             playerVel.y = jumpSpeed;
         }
@@ -180,62 +160,52 @@ public class playerController : MonoBehaviour
     //    Vector3 localDirection = armAim.parent.InverseTransformDirection(direction);
     //    Quaternion rot = Quaternion.FromToRotation(Vector3.right, localDirection);
     //    armAim.localRotation = Quaternion.Lerp(armAim.localRotation, rot * armBaseRotation, armRotateSpeed * Time.deltaTime);
-        
+
     //}
 
-   Vector3 getAimPoint()
-    {
+    Vector3 getAimPoint() {
         Camera cam = Camera.main;
 
-        if(cam == null)
+        if (cam == null)
             return transform.position + transform.forward * 100f;
 
-        Ray ray = new Ray( cam.transform.position, cam.transform.forward );
+        Ray ray = new Ray(cam.transform.position, cam.transform.forward);
 
-        if(Physics.Raycast(ray, out RaycastHit hit, 100f))
-        {
+        if (Physics.Raycast(ray, out RaycastHit hit, 100f)) {
             return hit.point;
         }
         return ray.GetPoint(100f);
     }
-    void updateAimTarget()
-    {
+    void updateAimTarget() {
         armAimTarget.position = getAimPoint();
     }
-    void updateState()
-    {
-        if (healthSystem.IsDead)
-        {
+    void updateState() {
+        if (healthSystem.IsDead) {
             currentState = PlayerState.Dead;
             return;
         }
 
-        if(isDodging)
-        {
+        if (isDodging) {
             currentState = PlayerState.Dodge;
             return;
         }
 
-        if(!controller.isGrounded)
-        {
+        if (!controller.isGrounded) {
             currentState = PlayerState.Jump;
             return;
         }
-        if(isPlayerSprinting && moveDir.sqrMagnitude > 0.01f)
-        {
+        if (isPlayerSprinting && moveDir.sqrMagnitude > 0.01f) {
             currentState = PlayerState.Sprint;
             return;
         }
-        if(moveDir.sqrMagnitude > 0.01f)
-        {
+        if (moveDir.sqrMagnitude > 0.01f) {
             currentState = PlayerState.Walk;
             return;
         }
         currentState = PlayerState.Idle;
     }
 
-    void updateAnimator()
-    {
+    void updateAnimator() {
         animator.SetFloat("Speed", moveDir.magnitude);
         animator.SetBool("Sprint", isPlayerSprinting);
         animator.SetBool("Grounded", controller.isGrounded);
