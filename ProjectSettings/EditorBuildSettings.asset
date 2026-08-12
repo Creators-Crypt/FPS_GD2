@@ -8,7 +8,20 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/MainScene.unity
     guid: 99c9720ab356a0642a771bea13969a05
-
-  m_configObjects:
-    com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  - enabled: 1
+    path: Assets/Workplace/MikeyMisery/Scenes/MainMenu.unity
+    guid: 8a9da9b0d9ae079418a5d6ec5fb472ed
+  - enabled: 1
+    path: Assets/Workplace/MikeyMisery/Scenes/LoadingScreen.unity
+    guid: dcae406032cede54c8006a734e4482f5
+  - enabled: 1
+    path: Assets/Workplace/MikeyMisery/Scenes/GameScene.unity
+    guid: 93543f854968b1b41a33d0c61057e255
+  - enabled: 1
+    path: Assets/Workplace/MikeyMisery/Scenes/SettingsMenu.unity
+    guid: 0dcd2563f5a673d429518c16e9e55b2e
+  - enabled: 1
+    path: Assets/Workplace/MikeyMisery/Scenes/CreditsMenu.unity
+    guid: 858c372164b3106489c482c9b8b177de
+  m_configObjects: {}
   m_UseUCBPForAssetBundles: 0
