@@ -34,6 +34,7 @@ public class SpellData : ScriptableObject {
     [Header("Core Stats")]
     public float damage = 15f;
     public float staminaCost = 10f;
+    public float concentrationCost = 25f;
     public float cooldown = 0.75f;
     [Tooltip("Layers this spell can hit (enemies, props...). Exclude the Player layer.")]
     public LayerMask hitLayers;

@@ -35,5 +35,8 @@ public class PlayerStats : ScriptableObject {
     [Range(.1f, 5f)] public float invincibleTime = 1f;
     public bool canTakeDamage = false;
 
+    [Header("Concentration Settings")]
+    //public float 
+
     public float MaxHealth => maxHealth;
 }
