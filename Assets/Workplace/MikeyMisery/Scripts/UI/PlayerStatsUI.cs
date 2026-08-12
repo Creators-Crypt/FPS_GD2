@@ -12,8 +12,7 @@ public class PlayerStatsUI : MonoBehaviour
     private float maxMana = 100f;
     private float currentMana = 50f;
 
-    private void Start()
-    {
+    private void Start() {
         staminaFill.fillAmount = (currentStamina / maxStamina) * 0.5f; // Start with half stamina
         manaFill.fillAmount = (currentMana / maxMana) * 0.5f; // Start with half mana
     }

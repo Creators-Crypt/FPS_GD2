@@ -3,25 +3,17 @@ using UnityEngine.SceneManagement;
 
 public class MainMenuUI : MonoBehaviour
 {
-
-    public void NewGame()
-    {
+    public void NewGame() {
         SceneManager.LoadScene("LoadingScreen");
     }
-
-    public void OpenSettings()
-    {
+    public void OpenSettings() {
         SceneManager.LoadScene("SettingsMenu");
     }
-
-    public void QuitGame()
-    {
+    public void QuitGame() {
         Debug.Log("Quit Game");
         Application.Quit();
     }
-
-    public void OpenCredits()
-    {
+    public void OpenCredits() {
         SceneManager.LoadScene("CreditsMenu");
     }
 }
