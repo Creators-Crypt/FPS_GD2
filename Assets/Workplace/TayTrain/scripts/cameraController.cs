@@ -32,14 +32,18 @@ public class CameraController : MonoBehaviour
         camRotX -= mouseY;
         // need to clamp the rotation max so we dont go to far down or back
         camRotX = Mathf.Clamp(camRotX, lockVertMin, lockVertMax);
-        transform.localRotation = Quaternion.Euler(camRotX, 0, 0);
+        transform.localRotation = Quaternion.Euler(camRotX, 0f, 0f);
 
         //The camera is dragged under the player so parent will target the player
         //transform.parent.transform.localRotation = Quaternion.Euler(0, mouseX, 0);
 
         //Vector3.up is a short cut for 0, 1, 0
         //transform.parent.Rotate(Vector3.up * mouseX);
-        cameraTarget.transform.parent.Rotate(Vector3.up * mouseX);
+        if(cameraTarget != null)
+        {
+            cameraTarget.transform.parent.Rotate(Vector3.up * mouseX);
+        }
+      
         //player.transform.Rotate(Vector3.up * mouseX);
 
 
