@@ -16,7 +16,7 @@ public class LoadingScreenUI : MonoBehaviour
     private IEnumerator LoadGame() {
         yield return new WaitForSeconds(1.5f); // Wait for a moment before starting the loading
 
-        AsyncOperation operation = SceneManager.LoadSceneAsync("GameScene");
+        AsyncOperation operation = SceneManager.LoadSceneAsync("main");
 
         while (!operation.isDone) {
             float progress = Mathf.Clamp01(operation.progress / 0.9f);

@@ -15,13 +15,13 @@ EditorBuildSettings:
     path: Assets/Workplace/MikeyMisery/Scenes/LoadingScreen.unity
     guid: dcae406032cede54c8006a734e4482f5
   - enabled: 1
-    path: Assets/Workplace/MikeyMisery/Scenes/GameScene.unity
-    guid: 93543f854968b1b41a33d0c61057e255
-  - enabled: 1
     path: Assets/Workplace/MikeyMisery/Scenes/SettingsMenu.unity
     guid: 0dcd2563f5a673d429518c16e9e55b2e
   - enabled: 1
     path: Assets/Workplace/MikeyMisery/Scenes/CreditsMenu.unity
     guid: 858c372164b3106489c482c9b8b177de
+  - enabled: 1
+    path: Assets/_Project/Scenes/main.unity
+    guid: 6b1dda3b5ebad454c9c8f276623106cf
   m_configObjects: {}
   m_UseUCBPForAssetBundles: 0
