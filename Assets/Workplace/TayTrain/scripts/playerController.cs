@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -12,16 +13,21 @@ public class PlayerController : MonoBehaviour
 
 
     [Header("Jump")]
-    [Range(1, 10)][SerializeField] int jumpSpeed = 5;
+    [Range(1, 30)][SerializeField] int jumpSpeed = 5;
     [Range(1, 10)][SerializeField] int jumpMax = 1;
     [SerializeField, Range(1, 10)] int gravity = 10;
 
     [Header("Animation")]
-    [SerializeField] private Transform armAimTarget;
-    [SerializeField] private Animator animator;
+    [SerializeField] private Transform armPivot;
+    [SerializeField] private float armRotateSpeed = 10f;
 
     [Header("Player State")]
     [SerializeField] private PlayerState currentState;
+
+    [Header("Teleport")]
+    [Range(0.05f, 10f)][SerializeField] float teleportDuration = .12f;
+    [Range(0.1f, 3f)][SerializeField] float teleportCooldown = 1.0f;
+    [Range(1f, 20f)][SerializeField] float teleportDistance = 6f;
 
     //Jumps
     int jumpCount;
@@ -31,7 +37,7 @@ public class PlayerController : MonoBehaviour
     Vector3 playerVel;
 
     //speed
-    [SerializeField] float currentSpeed;
+    [SerializeField] float currentSpeed;  
     [SerializeField] private bool isPlayerSprinting = false;
     [SerializeField] float staminaTimer;
     [SerializeField] float stamina;
@@ -42,6 +48,18 @@ public class PlayerController : MonoBehaviour
     float dodgeCooldownTimer;
     Vector3 dodgeDirection;
 
+    //Teleport
+    bool isTeleporting;
+    float teleportTimer;
+    float teleportCooldownTimer;
+    Vector3 teleportDirection;
+
+    //Player size
+    Vector3 originalScale;
+
+    // Animation for arm
+    Quaternion armBaseRotation;
+
     // PlayerState
     public enum PlayerState {
         Idle,
@@ -49,6 +67,7 @@ public class PlayerController : MonoBehaviour
         Sprint,
         Jump,
         Dodge,
+        Teleport,
         Dead
     }
 
@@ -66,9 +85,7 @@ public class PlayerController : MonoBehaviour
 
         spellCaster = GetComponent<SpellCaster>();
 
-        if (animator == null) {
-            animator = GetComponentInChildren<Animator>();
-        }
+        originalScale = transform.localScale;
 
     }
     // Update is called once per frame
@@ -86,13 +103,21 @@ public class PlayerController : MonoBehaviour
             dodgeCooldownTimer -= Time.deltaTime;
         }
 
+        if (teleportCooldownTimer > 0)
+        {
+            teleportCooldownTimer -= Time.deltaTime;
+        }
+        moveDir = Input.GetAxis("Horizontal") * transform.right +
+            Input.GetAxis("Vertical") * transform.forward;
+
+        teleport();
         dodge();
         movement();
         updateState();
-        updateAnimator();
+        //updateAnimator();
     }
     private void LateUpdate() {
-        updateAimTarget();
+        rotateArm();
     }
 
     void movement() {
@@ -101,10 +126,9 @@ public class PlayerController : MonoBehaviour
             playerVel.y = -2f;
         }
 
-        moveDir = Input.GetAxis("Horizontal") * transform.right +
-            Input.GetAxis("Vertical") * transform.forward;
-
-        controller.Move(moveDir.normalized * currentSpeed * Time.deltaTime);
+        if (!isTeleporting && !isDodging) { 
+            controller.Move(moveDir.normalized * currentSpeed * Time.deltaTime);
+        }
 
         jump();
 
@@ -143,6 +167,48 @@ public class PlayerController : MonoBehaviour
             isDodging = false;
         }
     }
+     // only needs a cooldown and will work off of focus
+    void teleport ()
+    {
+        if (Input.GetButtonDown("Teleport") && teleportCooldownTimer <= 0 && !isTeleporting)
+        {
+            isTeleporting = true;
+
+            teleportTimer = teleportDuration;
+            teleportCooldownTimer = teleportCooldown;
+
+            teleportDirection = moveDir.normalized;
+
+            if (teleportDirection == Vector3.zero)
+            {
+                teleportDirection = transform.forward;
+            }
+        }
+        if (isTeleporting)
+        {
+            transform.localScale = Vector3.Lerp(transform.localScale,
+                originalScale * 0.2f, 15f * Time.deltaTime);
+
+            float teleportSpeed = teleportDistance / teleportDuration;
+
+            controller.Move(teleportDirection *
+                teleportSpeed*
+                Time.deltaTime);
+
+            teleportTimer -= Time.deltaTime;
+
+            if(teleportTimer <= 0f)
+            {
+                isTeleporting = false;
+                teleportTimer = 0f;
+            }
+        }
+        else
+        {
+            transform.localScale = Vector3.Lerp( transform.localScale,
+                originalScale, 15f * Time.deltaTime);
+        }
+    }
 
     void jump() {
         if (Input.GetButtonDown("Jump") && jumpCount < jumpMax) {
@@ -151,64 +217,102 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    //void rotateArm()
-    //{
-    //    Vector3 screenCenter = new Vector3(Screen.width / 2f, Screen.height / 2f, 10f);
+    void rotateArm()
+    {
+        if (armPivot == null || Camera.main == null)
+            return;
 
-    //    Vector3 worldPosition = Camera.main.ScreenToWorldPoint(screenCenter);
-    //    Vector3 direction = (worldPosition - armAim.position).normalized;
-    //    Vector3 localDirection = armAim.parent.InverseTransformDirection(direction);
-    //    Quaternion rot = Quaternion.FromToRotation(Vector3.right, localDirection);
-    //    armAim.localRotation = Quaternion.Lerp(armAim.localRotation, rot * armBaseRotation, armRotateSpeed * Time.deltaTime);
+        Vector3 screenCenter = new Vector3(
+             Screen.width / 2f,
+             Screen.height / 2f,
+             0f
+         );
 
-    //}
+        Ray aimRay =
+            Camera.main.ScreenPointToRay(screenCenter);
 
-    Vector3 getAimPoint() {
-        Camera cam = Camera.main;
+        Vector3 aimPoint =
+            aimRay.GetPoint(100f);
 
-        if (cam == null)
-            return transform.position + transform.forward * 100f;
+        Vector3 aimDirection =
+            aimPoint - armPivot.position;
 
-        Ray ray = new Ray(cam.transform.position, cam.transform.forward);
-
-        if (Physics.Raycast(ray, out RaycastHit hit, 100f)) {
-            return hit.point;
+        if (aimDirection.sqrMagnitude < 0.001f)
+        {
+            return;
         }
-        return ray.GetPoint(100f);
+
+        Quaternion targetRotation =
+            Quaternion.LookRotation(
+                aimDirection.normalized
+            );
+
+        armPivot.rotation = Quaternion.Lerp(
+            armPivot.rotation,
+            targetRotation,
+            armRotateSpeed * Time.deltaTime
+        );
     }
-    void updateAimTarget() {
-        armAimTarget.position = getAimPoint();
-    }
+
+    //Vector3 getAimPoint() {
+    //    Camera cam = Camera.main;
+
+    //    if (cam == null)
+    //        return transform.position + transform.forward * 100f;
+
+    //    Ray ray = new Ray(cam.transform.position, cam.transform.forward);
+
+    //    if (Physics.Raycast(ray, out RaycastHit hit, 100f)) {
+    //        return hit.point;
+    //    }
+    //    return ray.GetPoint(100f);
+    //}
+    //void updateAimTarget() {
+    //    if (armAimTarget == null)
+    //        return;
+    //    armAimTarget.position = getAimPoint();
+    //}
     void updateState() {
-        if (healthSystem.IsDead) {
+        if (healthSystem.IsDead) 
+        {
             currentState = PlayerState.Dead;
             return;
         }
 
-        if (isDodging) {
+        if (isDodging) 
+        {
             currentState = PlayerState.Dodge;
             return;
         }
 
-        if (!controller.isGrounded) {
+        if (isTeleporting)
+        {
+            currentState = PlayerState.Teleport;
+            return;
+        }
+
+        if (!controller.isGrounded) 
+        {
             currentState = PlayerState.Jump;
             return;
         }
-        if (isPlayerSprinting && moveDir.sqrMagnitude > 0.01f) {
+        if (isPlayerSprinting && moveDir.sqrMagnitude > 0.01f) 
+        {
             currentState = PlayerState.Sprint;
             return;
         }
-        if (moveDir.sqrMagnitude > 0.01f) {
+        if (moveDir.sqrMagnitude > 0.01f)
+        {
             currentState = PlayerState.Walk;
             return;
         }
         currentState = PlayerState.Idle;
     }
 
-    void updateAnimator() {
-        animator.SetFloat("Speed", moveDir.magnitude);
-        animator.SetBool("Sprint", isPlayerSprinting);
-        animator.SetBool("Grounded", controller.isGrounded);
-        animator.SetFloat("VerticalSpeed", playerVel.y);
-    }
+    //void updateAnimator() {
+    //    animator.SetFloat("Speed", moveDir.magnitude);
+    //    animator.SetBool("Sprint", isPlayerSprinting);
+    //    animator.SetBool("Grounded", controller.isGrounded);
+    //    animator.SetFloat("VerticalSpeed", playerVel.y);
+    //}
 }
