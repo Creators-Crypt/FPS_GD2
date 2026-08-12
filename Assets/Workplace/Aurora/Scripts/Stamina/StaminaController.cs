@@ -12,13 +12,6 @@ public class StaminaController : MonoBehaviour, IStamina {
     private void Awake() {
         currentStamina = stats.maxStamina;
     }
-    private void OnDisable() {
-        Debug.LogWarning($"[LIFECYCLE ALERT] StaminaController component was DISABLED on GameObject '{gameObject.name}'!");
-    }
-    private void OnDestroy() {
-        Debug.LogError($"[LIFECYCLE ALERT] StaminaController was DESTROYED on '{gameObject.name}'!\n" +
-                       $"Stack Trace Source: {System.Environment.StackTrace}");
-    }
     public bool TrySpend(float cost) {
         
         //if (stats == null) return false;
