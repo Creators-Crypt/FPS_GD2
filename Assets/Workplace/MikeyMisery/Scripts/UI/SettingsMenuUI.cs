@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class SettingsMenuUI : MonoBehaviour
 {
@@ -43,10 +42,5 @@ public class SettingsMenuUI : MonoBehaviour
         videoPanel.SetActive(false);
         interfacePanel.SetActive(false);
         accessibilityPanel.SetActive(false);
-    }
-
-    public void BackToMainMenu()
-    {
-        SceneManager.LoadScene("MainMenu");
     }
 }
