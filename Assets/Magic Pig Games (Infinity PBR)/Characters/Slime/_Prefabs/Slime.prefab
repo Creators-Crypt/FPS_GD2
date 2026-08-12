@@ -208,7 +208,6 @@ GameObject:
   m_Component:
   - component: {fileID: 487474}
   - component: {fileID: 9532484}
-  - component: {fileID: 620454783080702688}
   - component: {fileID: 6775657308031305343}
   m_Layer: 0
   m_Name: Slime
@@ -261,27 +260,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &620454783080702688
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 146436}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 14d700cd6d16c4449892a346ca6a05f1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EnemyAI
-  stats: {fileID: 11400000, guid: b1e63495490e60942a4bd426a6a0766d, type: 2}
-  firePoint: {fileID: 166663215890655940}
-  agent: {fileID: 6775657308031305343}
-  playerTarget: {fileID: 0}
-  spawnPostion: {x: 0, y: 0, z: 0}
-  currentHealth: 0
-  faceTargetRotSpeed: 10
-  timeSinceLastSawPlayer: 0
-  lastAttackTime: 0
 --- !u!195 &6775657308031305343
 NavMeshAgent:
   m_ObjectHideFlags: 0

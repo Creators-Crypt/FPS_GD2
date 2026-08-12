@@ -1,6 +1,3 @@
-using JetBrains.Annotations;
-using UnityEngine;
-
 public class EnemyStateMachine
 {
     public IEnemyState currentState;
@@ -28,7 +25,5 @@ public class EnemyStateMachine
         {
             currentState.Tick();
         }
-    }
-
-   
+    }  
 }

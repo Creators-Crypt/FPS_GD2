@@ -1,8 +1,14 @@
-using System;
 using UnityEngine;
 using System.Collections;
 
-public class damage : MonoBehaviour
+/// <summary>
+/// 
+/// We will change this script to have objects damage the player and entities
+/// Change script to WorldDamage or ObjectDamage
+/// 
+/// </summary>
+
+public class Damage : MonoBehaviour
 {
     enum damageType { bullet, stationary, DOT }
     [SerializeField] damageType type;
@@ -35,10 +41,10 @@ public class damage : MonoBehaviour
         if (other.isTrigger)
             return;
         // bullet and stationary will use on trigger enter
-        IDamage dmg = other.GetComponent<IDamage>();
+        IDamageable dmg = other.GetComponent<IDamageable>();
         if (dmg != null && type != damageType.DOT)
         {
-            dmg.takeDamage(damageAmount);
+            dmg.OnDamage(damageAmount);
 
         }
 
@@ -56,17 +62,17 @@ public class damage : MonoBehaviour
     {
         if (other.isTrigger)
             return;
-        IDamage dmg = other.GetComponent<IDamage>();
+        IDamageable dmg = other.GetComponent<IDamageable>();
         if (dmg != null && type == damageType.DOT && !isDamaging)
         {
             StartCoroutine(damageOther(dmg));
         }
     }
 
-    IEnumerator damageOther(IDamage d)
+    IEnumerator damageOther(IDamageable d)
     {
         isDamaging = true;
-        d.takeDamage(damageAmount);
+        d.OnDamage(damageAmount);
         yield return new WaitForSeconds(damageRate);
         isDamaging = false;
     }
