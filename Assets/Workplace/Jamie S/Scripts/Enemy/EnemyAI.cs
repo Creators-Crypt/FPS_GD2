@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using static EnemyStatsSO;
 
-public class EnemyAI : MonoBehaviour
+public class EnemyAI : MonoBehaviour, IDamageable
 {
     [Header("Data from Scriptiabl object")]
     [SerializeField] public EnemyStatsSO stats;
@@ -119,6 +119,7 @@ public class EnemyAI : MonoBehaviour
                 PreformRangedAttack();
                 break;
             case EnemyType.Bomber:
+                PreforeBomberAttack();
                 break;
             case EnemyType.Boss:
                 break;
@@ -145,6 +146,28 @@ public class EnemyAI : MonoBehaviour
         }
        
     }
+    private void PreforeBomberAttack()
+    {
+        Collider[] hits = Physics.OverlapSphere(transform.position, stats.explosionRadius);
+
+        foreach (Collider hit in hits)
+        {
+            if (hit.gameObject != gameObject)
+            {
+                IDamageable damageable = hit.GetComponent<IDamageable>();
+
+                if (damageable != null)
+                {
+                    damageable.OnDamage(stats.attackDamage);
+                }
+            }
+
+
+        }
+
+        Die();
+
+    }
     private void PerformMeleeAttack()
     {
         if (playerTarget == null) return;
@@ -155,7 +178,7 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
-    public void TakeDamage(float amount)
+    public void OnDamage(float amount)
     {
         currentHealth -= amount;
         if (currentHealth <= 0f)

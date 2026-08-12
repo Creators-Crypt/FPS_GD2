@@ -527,7 +527,7 @@ GameObject:
   - component: {fileID: 2465582576490915417}
   - component: {fileID: 152201418958783638}
   - component: {fileID: 7242434049416401185}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Slime_Melee
   m_TagString: Enemy
   m_Icon: {fileID: 0}
