@@ -11,21 +11,14 @@ public class playerController : MonoBehaviour
     [SerializeField] PlayerStats stats;
     [SerializeField] HealthSystem healthSystem;
     [SerializeField] StaminaController staminaController;
-    [SerializeField] SpellCaster spellCaster;
-    [SerializeField] DeathHandler deathHandler;
-
 
     [Header("Jump")]
     [Range(1, 10)][SerializeField] int jumpSpeed = 5;
     [Range(1, 10)][SerializeField] int jumpMax = 1;
     [SerializeField, Range(1, 10)] int gravity = 10;
 
-    [Header("Animation")]
-    [SerializeField] private Transform armAimTarget;
-    [SerializeField] private Animator animator;
-
-    [Header("Player State")]
-    [SerializeField] private PlayerState currentState;
+    [Header("Arm Control")]
+    [SerializeField] Transform armAim;
 
     //Jumps
     int jumpCount;
@@ -46,42 +39,31 @@ public class playerController : MonoBehaviour
     float dodgeCooldownTimer;
     Vector3 dodgeDirection;
 
-    // PlayerState
-    public enum PlayerState
-    {
-        Idle,
-        Walk,
-        Sprint,
-        Jump,
-        Dodge,
-        Dead
-    }
+    [SerializeField] private float dodgeSpeed;
 
+    private void Awake()
+    {
+        DontDestroyOnLoad(this);
+    }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+     
         controller = GetComponent<CharacterController>();
        
         healthSystem = GetComponent<HealthSystem>();
 
         staminaController = GetComponent<StaminaController>();
+
+        dodgeSpeed = stats.dodgeSpeedMultiplier;
        
         currentSpeed = stats.walkSpeed;
-
-        deathHandler = GetComponent<DeathHandler>();
-
-        spellCaster = GetComponent<SpellCaster>();
-
-        if(animator == null)
-        {
-            animator = GetComponentInChildren<Animator>();
-        }
 
     }
     // Update is called once per frame
     void Update()
     {
-        
+        rotateArm();
         stamina = staminaController.Current;
         isPlayerSprinting = Input.GetKey(KeyCode.LeftShift) && (staminaController.Current > stats.sprintStaminaCost);
         staminaController.IsConsuming = isPlayerSprinting;
@@ -96,22 +78,17 @@ public class playerController : MonoBehaviour
             dodgeCooldownTimer -= Time.deltaTime;
         }
         
-       dodge();
-       movement();
-       updateState();
-       updateAnimator();
-    }
-    private void LateUpdate()
-    {
-        updateAimTarget();
+        dodge();
+        movement();
+       
     }
 
     void movement()
     {
-        if(controller.isGrounded && playerVel.y <0)
+        if(controller.isGrounded)
         {
             jumpCount = 0;
-            playerVel.y = -2f;
+            playerVel.y = 0;
         }
 
         moveDir = Input.GetAxis("Horizontal") * transform.right +
@@ -171,74 +148,12 @@ public class playerController : MonoBehaviour
         }
     }
 
-    //void rotateArm()
-    //{
-    //    Vector3 screenCenter = new Vector3(Screen.width / 2f, Screen.height / 2f, 10f);
-
-    //    Vector3 worldPosition = Camera.main.ScreenToWorldPoint(screenCenter);
-    //    Vector3 direction = (worldPosition - armAim.position).normalized;
-    //    Vector3 localDirection = armAim.parent.InverseTransformDirection(direction);
-    //    Quaternion rot = Quaternion.FromToRotation(Vector3.right, localDirection);
-    //    armAim.localRotation = Quaternion.Lerp(armAim.localRotation, rot * armBaseRotation, armRotateSpeed * Time.deltaTime);
+    void rotateArm()
+    {
+        Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Quaternion rot = Quaternion.LookRotation(worldPosition);
+        armAim.rotation = Quaternion.Lerp(armAim.rotation, rot, 100);
         
-    //}
-
-   Vector3 getAimPoint()
-    {
-        Camera cam = Camera.main;
-
-        if(cam == null)
-            return transform.position + transform.forward * 100f;
-
-        Ray ray = new Ray( cam.transform.position, cam.transform.forward );
-
-        if(Physics.Raycast(ray, out RaycastHit hit, 100f))
-        {
-            return hit.point;
-        }
-        return ray.GetPoint(100f);
-    }
-    void updateAimTarget()
-    {
-        armAimTarget.position = getAimPoint();
-    }
-    void updateState()
-    {
-        if (healthSystem.IsDead)
-        {
-            currentState = PlayerState.Dead;
-            return;
-        }
-
-        if(isDodging)
-        {
-            currentState = PlayerState.Dodge;
-            return;
-        }
-
-        if(!controller.isGrounded)
-        {
-            currentState = PlayerState.Jump;
-            return;
-        }
-        if(isPlayerSprinting && moveDir.sqrMagnitude > 0.01f)
-        {
-            currentState = PlayerState.Sprint;
-            return;
-        }
-        if(moveDir.sqrMagnitude > 0.01f)
-        {
-            currentState = PlayerState.Walk;
-            return;
-        }
-        currentState = PlayerState.Idle;
     }
 
-    void updateAnimator()
-    {
-        animator.SetFloat("Speed", moveDir.magnitude);
-        animator.SetBool("Sprint", isPlayerSprinting);
-        animator.SetBool("Grounded", controller.isGrounded);
-        animator.SetFloat("VerticalSpeed", playerVel.y);
-    }
 }
