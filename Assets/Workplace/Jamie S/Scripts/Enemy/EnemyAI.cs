@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
@@ -5,6 +6,8 @@ using static EnemyStatsSO;
 
 public class EnemyAI : MonoBehaviour, IDamageable
 {
+    public event Action<int> OnKilled;
+    
     [Header("Data from Scriptiabl object")]
     [SerializeField] public EnemyStatsSO stats;
     
@@ -203,6 +206,8 @@ public class EnemyAI : MonoBehaviour, IDamageable
     }
     public void Die()
     {
+        OnKilled?.Invoke(1);
+        
         Destroy(gameObject, .01f);
     }
 

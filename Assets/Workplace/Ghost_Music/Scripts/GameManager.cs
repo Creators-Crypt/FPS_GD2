@@ -4,18 +4,37 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
 
+    [Header("References")]
+    private EnemyAI enemyAI;
+
+    [Header("Menus")]
     [SerializeField] GameObject menuActive;
     [SerializeField] GameObject MenuOpening;
     [SerializeField] GameObject menuPause;
     [SerializeField] GameObject menuWin;
     [SerializeField] GameObject menuLose;
 
+    [Header("Win Conditions")]
+    [SerializeField] private int enemiesKilled;
+    [SerializeField, Range(1, 10)] private int enemyCount = 5;
+
     public bool isPaused;
     public GameObject player;
     public PlayerController playerScript;
 
-    float timeScaleOrig;
+    float timeScaleOrig = 1f;
 
+    private void OnEnable() {
+        enemyAI.OnKilled += EnemyAI_OnKilled;
+    }
+    private void OnDisable() {
+        enemyAI.OnKilled -= EnemyAI_OnKilled;
+    }
+    private void EnemyAI_OnKilled(int amount) {
+        enemiesKilled += amount;
+
+        if (enemiesKilled >= enemyCount) SetWin();
+    }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start() {
@@ -41,7 +60,7 @@ public class GameManager : MonoBehaviour
 
     public void Pause() {
         isPaused = true;
-        Time.timeScale = timeScaleOrig;
+        Time.timeScale = 0f;
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
     }
