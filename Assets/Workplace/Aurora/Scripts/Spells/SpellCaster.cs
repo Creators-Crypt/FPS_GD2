@@ -124,14 +124,10 @@ public class SpellCaster : MonoBehaviour {
         Vector3 origin = castPoint.position;
         Vector3 aim = GetAimDirection(origin);
 
-<<<<<<< HEAD
         //Quaternion spawnRotation = Quaternion.LookRotation(aim); // TODO where in the builder should this be set?
 
-
-        spell.Cast(this, transform, origin, aim);
-=======
         spell.Cast(this, transform, origin, aim, multiplier);
->>>>>>> TayTrainNew
+
     }
     private Vector3 GetAimDirection(Vector3 origin) {
 

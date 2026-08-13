@@ -100,15 +100,12 @@ public class ProjectileDelivery : SpellDeliveryStrategyBase {
             return;
         }
 
-<<<<<<< HEAD
+
         Quaternion spawnRotation = Quaternion.LookRotation(direction, Vector3.up);
 
-        var projectile = Object.Instantiate(context.data.projectilePrefab, context.origin, spawnRotation);
-        projectile.Launch(context.data, context.element, direction);
-=======
         var proj = Object.Instantiate(context.data.projectilePrefab, context.origin, Quaternion.identity);
         proj.Launch(context.data, context.element, direction, context.multiplier);
->>>>>>> TayTrainNew
+
     }
 }
 
@@ -126,15 +123,11 @@ public class ArcProjectileDelivery : SpellDeliveryStrategyBase {
         Vector3 tiltAxis = Vector3.Cross(direction, Vector3.up);
         Vector3 arced = Quaternion.AngleAxis(context.data.arcLaunchAngle, tiltAxis) * direction;
 
-<<<<<<< HEAD
         Quaternion spawnRotation = Quaternion.LookRotation(arced, Vector3.up);
 
-        var proj = Object.Instantiate(context.data.projectilePrefab, context.origin, spawnRotation);
-        proj.Launch(context.data, context.element, arced, true);
-=======
-        var proj = Object.Instantiate(ctx.data.projectilePrefab, ctx.origin, Quaternion.identity);
-        proj.Launch(ctx.data, ctx.element, arced, true, ctx.multiplier);
->>>>>>> TayTrainNew
+        var proj = Object.Instantiate(context.data.projectilePrefab, context.origin, Quaternion.identity);
+        proj.Launch(context.data, context.element, arced, true, context.multiplier);
+
     }
 }
 
