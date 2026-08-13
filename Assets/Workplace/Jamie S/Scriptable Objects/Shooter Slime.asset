@@ -20,12 +20,12 @@ MonoBehaviour:
   patrolWaitTimeMin: 1.5
   patrolWaitTimeMax: 3.5
   detectionRadius: 10
-  detectionAngle: 90
+  detectionAngle: 145
   lostSightTime: 3
   obstacleMask:
     serializedVersion: 2
     m_Bits: 0
-  attackRange: 10
+  attackRange: 20
   attackCooldown: 1.2
   attackDamage: 5
   projectilePrefab: {fileID: 2002685277281540589, guid: 85faa578e3404a0469553bca229569c0, type: 3}

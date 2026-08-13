@@ -247,11 +247,13 @@ MonoBehaviour:
   firePoint: {fileID: 7249149623238161459}
   agent: {fileID: 60301313676581131}
   playerTarget: {fileID: 0}
+  model: {fileID: 7706332113131567506}
   spawnPostion: {x: 0, y: 0, z: 0}
   currentHealth: 0
   faceTargetRotSpeed: 10
   timeSinceLastSawPlayer: 0
   lastAttackTime: 0
+  origColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!95 &2362966611834131817
 Animator:
   serializedVersion: 7

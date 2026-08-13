@@ -29,6 +29,6 @@ public class Projectile : MonoBehaviour
         if (damagable == null) return;
 
         damagable.OnDamage(damage);
-        Destroy(this.gameObject, 0.1f);
+        Destroy(this.gameObject);
     }
 }

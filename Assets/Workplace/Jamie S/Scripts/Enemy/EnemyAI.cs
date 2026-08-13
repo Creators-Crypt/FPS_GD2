@@ -189,6 +189,7 @@ public class EnemyAI : MonoBehaviour, IDamageable
 
         currentHealth -= amount;
         StartCoroutine(FlashRed());
+        if(stats.projectilePrefab != null) {Destroy(stats.projectilePrefab, .01f); }
         if (currentHealth <= 0f)
         {
             Die();

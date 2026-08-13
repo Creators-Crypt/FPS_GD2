@@ -572,7 +572,7 @@ MonoBehaviour:
   firePoint: {fileID: 230003085462281643}
   agent: {fileID: 152201418958783638}
   playerTarget: {fileID: 0}
-  model: {fileID: 0}
+  model: {fileID: 6347676189373725668}
   spawnPostion: {x: 0, y: 0, z: 0}
   currentHealth: 0
   faceTargetRotSpeed: 10

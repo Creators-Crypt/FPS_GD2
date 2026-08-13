@@ -16,18 +16,18 @@ MonoBehaviour:
   maxHealth: 20
   patrolSpeed: 2
   chaseSpeed: 4.5
-  patrolRadius: 8
+  patrolRadius: 20
   patrolWaitTimeMin: 1.5
   patrolWaitTimeMax: 3.5
   detectionRadius: 10
-  detectionAngle: 90
+  detectionAngle: 145
   lostSightTime: 3
   obstacleMask:
     serializedVersion: 2
     m_Bits: 0
   attackRange: 1.5
   attackCooldown: 1.2
-  attackDamage: 5
+  attackDamage: 15
   projectilePrefab: {fileID: 0}
   projectileSpeed: 10
   explosionRadius: 3
