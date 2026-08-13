@@ -568,15 +568,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3f739a5649b1ab479ab1aababf7eb57, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyAI
-  stats: {fileID: 11400000, guid: b1e63495490e60942a4bd426a6a0766d, type: 2}
+  stats: {fileID: 11400000, guid: d54506179f373ed4c89904adb1ce5830, type: 2}
   firePoint: {fileID: 230003085462281643}
   agent: {fileID: 152201418958783638}
   playerTarget: {fileID: 0}
+  model: {fileID: 0}
   spawnPostion: {x: 0, y: 0, z: 0}
   currentHealth: 0
   faceTargetRotSpeed: 10
   timeSinceLastSawPlayer: 0
   lastAttackTime: 0
+  origColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!95 &2465582576490915417
 Animator:
   serializedVersion: 7

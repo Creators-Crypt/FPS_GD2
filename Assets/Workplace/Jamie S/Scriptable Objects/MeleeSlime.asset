@@ -10,11 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 91ed46f2e35663a4899748da965190d9, type: 3}
-  m_Name: Slime
+  m_Name: MeleeSlime
   m_EditorClassIdentifier: Assembly-CSharp::EnemyStatsSO
+  enemyType: 0
   maxHealth: 20
   patrolSpeed: 2
-  chaseSpeed: 4
+  chaseSpeed: 5
   patrolRadius: 8
   patrolWaitTimeMin: 1.5
   patrolWaitTimeMax: 3.5
@@ -27,3 +28,6 @@ MonoBehaviour:
   attackRange: 1.5
   attackCooldown: 1.2
   attackDamage: 5
+  projectilePrefab: {fileID: 0}
+  projectileSpeed: 10
+  explosionRadius: 3

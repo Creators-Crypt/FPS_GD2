@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 using static EnemyStatsSO;
@@ -11,11 +12,14 @@ public class EnemyAI : MonoBehaviour, IDamageable
     [SerializeField] private Transform firePoint;
     [SerializeField] public NavMeshAgent agent;
     [SerializeField] public Transform playerTarget;
+    [SerializeField] public Renderer model;
+
     public Vector3 spawnPostion;   
     public float currentHealth;
     public float faceTargetRotSpeed = 10;
     public float timeSinceLastSawPlayer;
     public float lastAttackTime;
+    public Color origColor;
 
 
     public EnemyStateMachine stateMachine;
@@ -37,6 +41,8 @@ public class EnemyAI : MonoBehaviour, IDamageable
         {
             Debug.LogWarning("Be sure the player is TAGED AS PLAYER");
         }
+
+        origColor = model.material.color;
 
         if (firePoint == null) firePoint = transform;
         spawnPostion = transform.position;
@@ -180,13 +186,20 @@ public class EnemyAI : MonoBehaviour, IDamageable
 
     public void OnDamage(float amount)
     {
+
         currentHealth -= amount;
+        StartCoroutine(FlashRed());
         if (currentHealth <= 0f)
         {
             Die();
         }
     }
-
+    IEnumerator FlashRed()
+    {
+        model.material.color = Color.red;
+        yield return new WaitForSeconds(0.1f);
+        model.material.color = origColor;
+    }
     public void Die()
     {
         Destroy(gameObject, .01f);
