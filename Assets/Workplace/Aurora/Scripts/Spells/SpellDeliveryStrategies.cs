@@ -11,6 +11,7 @@ public struct SpellCastContext {
 
     public SpellData data;
     public SpellElement element;      // May differ from data.element (runtime override)
+    public float multiplier;
     public Transform caster;
     public Vector3 origin;
     public Vector3 direction;         // Normalized aim direction
@@ -76,7 +77,7 @@ public abstract class SpellDeliveryStrategyBase : ISpellDeliveryStrategy {
         var hits = Physics2D.OverlapCircleAll(center, radius, context.data.hitLayers);
         foreach (var hit in hits) {
             if (hit.TryGetComponent(out IDamageable dmg))
-                dmg.OnDamage(context.data.damage);
+                dmg.OnDamage(context.data.damage * context.multiplier);
         }
     }
 }
@@ -97,7 +98,7 @@ public class ProjectileDelivery : SpellDeliveryStrategyBase {
         }
 
         var proj = Object.Instantiate(context.data.projectilePrefab, context.origin, Quaternion.identity);
-        proj.Launch(context.data, context.element, direction);
+        proj.Launch(context.data, context.element, direction, context.multiplier);
     }
 }
 
@@ -117,7 +118,7 @@ public class ArcProjectileDelivery : SpellDeliveryStrategyBase {
         Vector3 arced = Quaternion.Euler(0f, 0f, ctx.data.arcLaunchAngle * sign) * direction;
 
         var proj = Object.Instantiate(ctx.data.projectilePrefab, ctx.origin, Quaternion.identity);
-        proj.Launch(ctx.data, ctx.element, arced, true);
+        proj.Launch(ctx.data, ctx.element, arced, true, ctx.multiplier);
     }
 }
 
@@ -133,7 +134,7 @@ public class RayDelivery : SpellDeliveryStrategyBase {
         var hits = Physics2D.RaycastAll(context.origin, direction, context.data.rayDistance, context.data.hitLayers);
         foreach (var hit in hits) {
             if (hit.collider.TryGetComponent(out IDamageable dmg))
-                dmg.OnDamage(context.data.damage);
+                dmg.OnDamage(context.data.damage * context.multiplier);
         }
 
         // Beam visual - short-lived LineRenderer.

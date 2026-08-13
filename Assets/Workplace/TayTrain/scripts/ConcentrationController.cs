@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class ConcentrationController : MonoBehaviour //,IConcentration
+public class ConcentrationController : MonoBehaviour ,IConcentration
 {
     [SerializeField] private PlayerStats stats;
     [SerializeField] private float currentConcentration;
@@ -10,12 +10,12 @@ public class ConcentrationController : MonoBehaviour //,IConcentration
     {
         currentConcentration = stats.maxConcentration;
     }
-    public void Spend(float cost)
+    public void spend(float cost)
     {
         currentConcentration = Mathf.Clamp(currentConcentration -  cost, 0f, stats.maxConcentration);
         //currentConcentration -= Spell.concentrationCost;
     }
-    public float GetDamageMultipler()
+    public float getDamageMultiplier()
     {
         if (currentConcentration >= 400f)
             return 2f;

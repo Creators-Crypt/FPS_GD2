@@ -55,6 +55,10 @@ public class PlayerController : MonoBehaviour
     float teleportCooldownTimer;
     Vector3 teleportDirection;
 
+    //Concentration
+    bool isConcentrating;
+    float concentrationTimer;
+
     //Player size
     Vector3 originalScale;
 
@@ -69,6 +73,7 @@ public class PlayerController : MonoBehaviour
         Jump,
         Dodge,
         Teleport,
+        Concentrate,
         Dead
     }
 
@@ -95,7 +100,10 @@ public class PlayerController : MonoBehaviour
     void Update() {
 
         stamina = staminaController.Current;
-        isPlayerSprinting = Input.GetKey(KeyCode.LeftShift) && (staminaController.Current > stats.sprintStaminaCost);
+        isPlayerSprinting = !isConcentrating && 
+            Input.GetKey(KeyCode.LeftShift) &&
+            (staminaController.Current > stats.sprintStaminaCost);
+
         staminaController.IsConsuming = isPlayerSprinting;
         currentSpeed = (isPlayerSprinting) ? stats.sprintSpeed : stats.walkSpeed;
         if (isPlayerSprinting) {
@@ -115,6 +123,7 @@ public class PlayerController : MonoBehaviour
 
         teleport();
         dodge();
+        concentrate();
         movement();
         updateState();
         //updateAnimator();
@@ -129,11 +138,15 @@ public class PlayerController : MonoBehaviour
             playerVel.y = -2f;
         }
 
-        if (!isTeleporting && !isDodging) { 
+        if (!isTeleporting && !isDodging && !isConcentrating) { 
             controller.Move(moveDir.normalized * currentSpeed * Time.deltaTime);
         }
 
-        jump();
+        if(!isConcentrating)
+        {
+            jump();
+        }
+       
 
         controller.Move(playerVel * Time.deltaTime);
 
@@ -221,7 +234,23 @@ public class PlayerController : MonoBehaviour
     }
     void concentrate()
     {
+        if (Input.GetButtonDown("Concentrate") && !isConcentrating)
+        {
+            isConcentrating = true;
+            concentrationTimer = stats.refillConcentrationTime;
+        }
+        if(isConcentrating)
+        {
+            concentrationTimer-= Time.deltaTime;
 
+            if(concentrationTimer <= 0f)
+            {
+                concentrationController.refill();
+
+                isConcentrating = false;
+                concentrationTimer = 0f;
+            }
+        }
     }
 
     void rotateArm()
@@ -311,6 +340,11 @@ public class PlayerController : MonoBehaviour
         if (moveDir.sqrMagnitude > 0.01f)
         {
             currentState = PlayerState.Walk;
+            return;
+        }
+        if(isConcentrating)
+        {
+            currentState = PlayerState.Concentrate;
             return;
         }
         currentState = PlayerState.Idle;

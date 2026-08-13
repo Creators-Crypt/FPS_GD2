@@ -112,15 +112,18 @@ public class SpellCaster : MonoBehaviour {
         // Pay stamina before firing.
         if (stamina != null && !stamina.TrySpend(spell.Data.staminaCost)) return;
 
+        float multiplier = 1f;
+
         if(concentration != null)
         {
-            concentration.Spend(spell.Data.concentrationCost);
+            multiplier = concentration.getDamageMultiplier();
+            concentration.spend(spell.Data.concentrationCost);
         }
 
         Vector3 origin = castPoint.position;
         Vector3 aim = GetAimDirection(origin);
 
-        spell.Cast(this, transform, origin, aim);
+        spell.Cast(this, transform, origin, aim, multiplier);
     }
     private Vector3 GetAimDirection(Vector3 origin) {
 
