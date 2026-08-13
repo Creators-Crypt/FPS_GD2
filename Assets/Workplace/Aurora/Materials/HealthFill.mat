@@ -130,7 +130,7 @@ Material:
     - _ZWrite: 1
     m_Colors:
     - White: {r: 1, g: 1, b: 1, a: 1}
-    - _BarColor: {r: 0.9471697, g: 0.01250974, b: 0.01250974, a: 1}
+    - _BarColor: {r: 0.035384767, g: 0.9490196, b: 0.011764705, a: 1}
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}

@@ -55,6 +55,7 @@ public class SpellBuilder {
 
     private float? damage;
     private float? staminaCost;
+    private float? concentrationCost;
     private float? cooldown;
     private int? spawnCount;
     private float? spreadAngle;
@@ -62,11 +63,12 @@ public class SpellBuilder {
 
     public SpellBuilder(SpellData source) { this.source = source; }
 
-    public SpellBuilder WithDelivery(SpellDeliveryKind kind) { delivery = kind; return this; }
-    public SpellBuilder WithElement(SpellElement e)          { element = e; return this; }
-    public SpellBuilder WithDamage(float d)                  { damage = d; return this; }
-    public SpellBuilder WithStaminaCost(float c)             { staminaCost = c; return this; }
-    public SpellBuilder WithCooldown(float c)                { cooldown = c; return this; }
+    public SpellBuilder WithDelivery(SpellDeliveryKind kind)       { delivery = kind; return this; }
+    public SpellBuilder WithElement(SpellElement elementType)      { element = elementType; return this; }
+    public SpellBuilder WithDamage(float dmg)                      { damage = dmg; return this; }
+    public SpellBuilder WithStaminaCost(float stamina)             { staminaCost = stamina; return this; }
+    public SpellBuilder WithConcentrationCost(float concentration) { concentrationCost = concentration; return this; }
+    public SpellBuilder WithCooldown(float waitTime)               { cooldown = waitTime; return this; }
 
     public SpellBuilder WithSpawnCount(int count, float? spreadAngle = null, float? interval = null) {
 
@@ -91,14 +93,15 @@ public class SpellBuilder {
         var runtimeData = Object.Instantiate(source);
         runtimeData.name = source.name + " (Runtime)";
 
-        if (damage.HasValue)        runtimeData.damage = damage.Value;
-        if (staminaCost.HasValue)   runtimeData.staminaCost = staminaCost.Value;
-        if (cooldown.HasValue)      runtimeData.cooldown = cooldown.Value;
-        if (spawnCount.HasValue)    runtimeData.spawnCount = spawnCount.Value;
-        if (spreadAngle.HasValue)   runtimeData.spreadAngle = spreadAngle.Value;
-        if (spawnInterval.HasValue) runtimeData.spawnInterval = spawnInterval.Value;
-        if (delivery.HasValue)      runtimeData.delivery = delivery.Value;
-        if (element.HasValue)       runtimeData.element = element.Value;
+        if (damage.HasValue)            runtimeData.damage = damage.Value;
+        if (staminaCost.HasValue)       runtimeData.staminaCost = staminaCost.Value;
+        if (concentrationCost.HasValue) runtimeData.concentrationCost = concentrationCost.Value;
+        if (cooldown.HasValue)          runtimeData.cooldown = cooldown.Value;
+        if (spawnCount.HasValue)        runtimeData.spawnCount = spawnCount.Value;
+        if (spreadAngle.HasValue)       runtimeData.spreadAngle = spreadAngle.Value;
+        if (spawnInterval.HasValue)     runtimeData.spawnInterval = spawnInterval.Value;
+        if (delivery.HasValue)          runtimeData.delivery = delivery.Value;
+        if (element.HasValue)           runtimeData.element = element.Value;
 
         var strategy = SpellFactory.GetDelivery(runtimeData.delivery);
         return new Spell(runtimeData, strategy);
@@ -144,11 +147,11 @@ public class Spell {
     /// Caller is responsible for paying stamina first (check Data.staminaCost).
     /// 
     /// </summary>
-    public bool Cast(MonoBehaviour runner, Transform caster, Vector2 origin, Vector2 direction)
+    public bool Cast(MonoBehaviour runner, Transform caster, Vector3 origin, Vector3 direction)
     {
         if (!IsReady || Data == null || Delivery == null) return false;
 
-        if (direction.sqrMagnitude < 0.0001f) direction = Vector2.right;
+        if (direction.sqrMagnitude < 0.0001f) direction = Vector3.forward;
 
         var context = new SpellCastContext {
 

@@ -97,7 +97,7 @@ public class ProjectileDelivery : SpellDeliveryStrategyBase {
         }
 
         var proj = Object.Instantiate(context.data.projectilePrefab, context.origin, Quaternion.identity);
-        proj.Launch(context.data, context.element, direction, gravityScale: 0f);
+        proj.Launch(context.data, context.element, direction);
     }
 }
 
@@ -117,7 +117,7 @@ public class ArcProjectileDelivery : SpellDeliveryStrategyBase {
         Vector3 arced = Quaternion.Euler(0f, 0f, ctx.data.arcLaunchAngle * sign) * direction;
 
         var proj = Object.Instantiate(ctx.data.projectilePrefab, ctx.origin, Quaternion.identity);
-        proj.Launch(ctx.data, ctx.element, arced, ctx.data.arcGravityScale);
+        proj.Launch(ctx.data, ctx.element, arced, true);
     }
 }
 

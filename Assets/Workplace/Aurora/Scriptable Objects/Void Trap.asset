@@ -12,16 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01bfd6b29c565404581f07c3653bf0e6, type: 3}
   m_Name: Void Trap
   m_EditorClassIdentifier: Assembly-CSharp::SpellData
-  spellName: New Spell
+  spellName: Void Trap
   icon: {fileID: 0}
   element: 4
-  delivery: 1
+  delivery: 2
   damage: 15
   staminaCost: 10
   cooldown: 0.75
   hitLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 512
   projectilePrefab: {fileID: 0}
   projectileSpeed: 12
   projectileLifetime: 4

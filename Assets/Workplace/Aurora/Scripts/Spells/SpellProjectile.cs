@@ -27,12 +27,24 @@ public class SpellProjectile : MonoBehaviour {
     }
 
     /// <summary>Called by the delivery strategy right after Instantiate.</summary>
-    public void Launch(SpellData spellData, SpellElement spellElement, Vector3 direction, float gravityScale)
+    public void Launch(SpellData spellData, SpellElement spellElement, Vector3 direction)
     {
         data = spellData;
         element = spellElement;
 
-        rb.useGravity = true;
+        //rb.useGravity = true;
+        rb.linearVelocity = direction.normalized * spellData.projectileSpeed;
+
+        // Face travel direction; arcing shots keep re-facing in Update.
+        FaceVelocity(rb.linearVelocity);
+
+        Destroy(gameObject, spellData.projectileLifetime);
+    }
+    public void Launch(SpellData spellData, SpellElement spellElement, Vector3 direction, bool gravityState) {
+        data = spellData;
+        element = spellElement;
+
+        rb.useGravity = gravityState;
         rb.linearVelocity = direction.normalized * spellData.projectileSpeed;
 
         // Face travel direction; arcing shots keep re-facing in Update.

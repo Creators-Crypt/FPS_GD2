@@ -21,6 +21,7 @@ public class HealthSystem : MonoBehaviour, IHealth, IDamageable {
 
         CurrentHealth = MaxHealth;
         IsDead = false;
+        OnHealthChanged?.Invoke(CurrentHealth, MaxHealth);
     }
     public void HealMax() {
         CurrentHealth = MaxHealth;
