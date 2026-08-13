@@ -525,7 +525,10 @@ PlayerSettings:
       m_Height: 720
       m_Kind: 1
       m_SubKind: 
-  m_BuildTargetBatching: []
+  m_BuildTargetBatching:
+  - m_BuildTarget: Standalone
+    m_StaticBatching: 1
+    m_DynamicBatching: 0
   m_BuildTargetShaderSettings: []
   m_BuildTargetGraphicsJobs: []
   m_BuildTargetGraphicsJobMode: []
@@ -924,7 +927,6 @@ PlayerSettings:
   apiCompatibilityLevel: 6
   captureStartupLogs: {}
   activeInputHandler: 2
-  enableNativePlatformBackendsForNewInputSystem: 1
   windowsGamepadBackendHint: 0
   cloudProjectId: a0d644cf-5e82-4a4a-973a-314ee82f1a20
   framebufferDepthMemorylessMode: 0

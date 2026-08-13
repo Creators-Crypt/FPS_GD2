@@ -11,7 +11,8 @@ public class PlayerDeath : DeathHandler {
         base.OnDisable();
     }
     protected override void HandleDeath() {
-        
-        //GameManager.instance.
+
+        GameManager.instance.SetLose();
+        gameObject.SetActive(false);
     }
 }
