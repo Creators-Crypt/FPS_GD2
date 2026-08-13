@@ -21,6 +21,8 @@ public class SpellCaster : MonoBehaviour {
 
     private IStamina stamina;
 
+    private IConcentration concentration;
+
     private Spell[] spells;
     private int equippedIndex;
 
@@ -34,6 +36,7 @@ public class SpellCaster : MonoBehaviour {
         // Grab whatever IStamina implementation lives on this GameObject.
         // Interface-typed, so swapping StaminaController for another system needs no code change here.
         stamina = GetComponent<IStamina>();
+        concentration = GetComponent<IConcentration>();
 
         BuildLoadout();
     }
@@ -108,6 +111,11 @@ public class SpellCaster : MonoBehaviour {
 
         // Pay stamina before firing.
         if (stamina != null && !stamina.TrySpend(spell.Data.staminaCost)) return;
+
+        if(concentration != null)
+        {
+            concentration.Spend(spell.Data.concentrationCost);
+        }
 
         Vector3 origin = castPoint.position;
         Vector3 aim = GetAimDirection(origin);
