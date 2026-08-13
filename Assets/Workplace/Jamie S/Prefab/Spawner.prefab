@@ -29,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 1435714295309781288}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -27.38, y: 2.57, z: 4.51038}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -50,6 +50,7 @@ MonoBehaviour:
   enemyPrefabs:
   - {fileID: 4862841050284946198, guid: d16c23e17727a1341b5e056fbdaedf50, type: 3}
   - {fileID: 1287332823282865865, guid: 9fa37a38089e95c4ab1b57a57ef712a2, type: 3}
+  - {fileID: 3415334238524441893, guid: 3e466bd40c5eee34ab0981bf9c137864, type: 3}
   spawnPoints:
   - {fileID: 8694351145243087390}
   triggerRadius: 10
