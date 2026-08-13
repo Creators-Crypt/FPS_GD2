@@ -24,17 +24,7 @@ public class GameManager : MonoBehaviour
 
     float timeScaleOrig = 1f;
 
-    private void OnEnable() {
-        enemyAI.OnKilled += EnemyAI_OnKilled;
-    }
-    private void OnDisable() {
-        enemyAI.OnKilled -= EnemyAI_OnKilled;
-    }
-    private void EnemyAI_OnKilled(int amount) {
-        enemiesKilled += amount;
 
-        if (enemiesKilled >= enemyCount) SetWin();
-    }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start() {
@@ -57,7 +47,12 @@ public class GameManager : MonoBehaviour
             }
         }
     }
-
+    public void EnemyAIKilled() {
+        
+        enemiesKilled++;
+        
+        if (enemiesKilled >= enemyCount) SetWin();
+    }
     public void Pause() {
         isPaused = true;
         Time.timeScale = 0f;
