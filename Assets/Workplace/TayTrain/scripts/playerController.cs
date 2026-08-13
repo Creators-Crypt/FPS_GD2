@@ -8,6 +8,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] PlayerStats stats;
     [SerializeField] HealthSystem healthSystem;
     [SerializeField] StaminaController staminaController;
+    [SerializeField] ConcentrationController concentrationController;
     [SerializeField] SpellCaster spellCaster;
     [SerializeField] DeathHandler deathHandler;
 
@@ -78,6 +79,8 @@ public class PlayerController : MonoBehaviour
         healthSystem = GetComponent<HealthSystem>();
 
         staminaController = GetComponent<StaminaController>();
+
+        concentrationController = GetComponent<ConcentrationController>();
 
         currentSpeed = stats.walkSpeed;
 
@@ -215,6 +218,10 @@ public class PlayerController : MonoBehaviour
             jumpCount++;
             playerVel.y = jumpSpeed;
         }
+    }
+    void concentrate()
+    {
+
     }
 
     void rotateArm()

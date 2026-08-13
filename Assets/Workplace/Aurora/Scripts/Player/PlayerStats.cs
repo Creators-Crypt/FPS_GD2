@@ -33,10 +33,11 @@ public class PlayerStats : ScriptableObject {
     [Tooltip("The maximum health the player may have.")]
     [Range(5f, 100f)] public float maxHealth = 50;
     [Range(.1f, 5f)] public float invincibleTime = 1f;
-    public bool canTakeDamage = false;
+    public bool canTakeDamage = true;
 
     [Header("Concentration Settings")]
-    //public float 
+    public float maxConcentration = 500f;
+    public float refillConcentrationTime = 1.5f;
 
     public float MaxHealth => maxHealth;
 }

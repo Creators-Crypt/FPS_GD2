@@ -47,6 +47,8 @@ GameObject:
   - component: {fileID: 6673412563084392932}
   - component: {fileID: 9127910612194883331}
   - component: {fileID: 4996734475627912866}
+  - component: {fileID: 2283865359861941845}
+  - component: {fileID: 7547695135435654964}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -90,6 +92,7 @@ MonoBehaviour:
   stats: {fileID: 11400000, guid: dfe4fb052dce893488008b0512ccee0f, type: 2}
   healthSystem: {fileID: 1874060393386750794}
   staminaController: {fileID: 6673412563084392932}
+  concentrationController: {fileID: 2283865359861941845}
   spellCaster: {fileID: 0}
   deathHandler: {fileID: 0}
   jumpSpeed: 1
@@ -185,6 +188,43 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b21274946eb7db4eb685209da8ad681, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DeathHandler
+--- !u!114 &2283865359861941845
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1818594594264804547}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7a65a2d100d632438a076cda9ae02b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ConcentrationController
+  stats: {fileID: 11400000, guid: dfe4fb052dce893488008b0512ccee0f, type: 2}
+  currentConcentration: 0
+--- !u!136 &7547695135435654964
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1818594594264804547}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: -1}
 --- !u!1 &1883817470414989196
 GameObject:
   m_ObjectHideFlags: 0

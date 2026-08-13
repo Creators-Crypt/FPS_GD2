@@ -16,6 +16,6 @@ public class DeathHandler : MonoBehaviour {
     private void HandleDeath() {
 
         Debug.Log($"I've died and I'm a dummy! {gameObject.name}");
-        //Destroy(gameObject); Uncomment when we're testing death.
+        Destroy(gameObject); 
     }
 }
