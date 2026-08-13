@@ -147,20 +147,22 @@ public class Spell {
     /// Caller is responsible for paying stamina first (check Data.staminaCost).
     /// 
     /// </summary>
-    public bool Cast(MonoBehaviour runner, Transform caster, Vector3 origin, Vector3 direction)
+    public bool Cast(MonoBehaviour runner, Transform caster, Vector3 origin, Vector3 direction, float multiplier)
     {
         if (!IsReady || Data == null || Delivery == null) return false;
 
         if (direction.sqrMagnitude < 0.0001f) direction = Vector3.forward;
 
-        var context = new SpellCastContext {
+        var context = new SpellCastContext
+        {
 
             data = Data,
             element = Element,
             caster = caster,
             origin = origin,
             direction = direction.normalized,
-            runner = runner
+            runner = runner,
+            multiplier = multiplier
         };
 
         Delivery.Cast(context);

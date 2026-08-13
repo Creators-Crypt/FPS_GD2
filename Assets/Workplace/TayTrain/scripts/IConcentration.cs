@@ -4,9 +4,10 @@ public interface IConcentration
     float Ratio { get; }
 
     
-    bool Spend(float cost);
+    void spend(float cost);
 
-    void Refill();
-    float GetDamageMultiplier();
+    void refill();
+    public float getDamageMultiplier();
+    
   
 }
