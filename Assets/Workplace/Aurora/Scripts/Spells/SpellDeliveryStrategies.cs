@@ -61,19 +61,22 @@ public abstract class SpellDeliveryStrategyBase : ISpellDeliveryStrategy {
             yield return new WaitForSeconds(context.data.spawnInterval);
         }
     }
-    private static Vector2 FanDirection(SpellCastContext context, int index, int count) {
+    private static Vector3 FanDirection(SpellCastContext context, int index, int count) {
     
         float spread = context.data.spreadAngle;
         float t = count > 1 ? (float)index / (count - 1) : 0.5f;
         float angle = Mathf.Lerp(-spread * 0.5f, spread * 0.5f, t);
-        return Quaternion.Euler(0f, 0f, angle) * context.direction;
+        Vector3 localRight = Vector3.Cross(context.direction, Vector3.up).normalized;
+        Vector3 localUp = Vector3.Cross(localRight, context.direction).normalized;
+
+        return Quaternion.AngleAxis(angle, localUp) * context.direction;
     }
     /// <summary>Fire one instance of this delivery in the given direction. </summary>
     protected abstract void Execute(SpellCastContext context, Vector3 direction);
     /// <summary>Damage every IDamageable in a circle. Shared by AOE and Hand. </summary>
     protected static void DamageCircle(SpellCastContext context, Vector3 center, float radius) {
 
-        var hits = Physics2D.OverlapCircleAll(center, radius, context.data.hitLayers);
+        var hits = Physics.OverlapSphere(center, radius, context.data.hitLayers);
         foreach (var hit in hits) {
             if (hit.TryGetComponent(out IDamageable dmg))
                 dmg.OnDamage(context.data.damage);
@@ -96,8 +99,10 @@ public class ProjectileDelivery : SpellDeliveryStrategyBase {
             return;
         }
 
-        var proj = Object.Instantiate(context.data.projectilePrefab, context.origin, Quaternion.identity);
-        proj.Launch(context.data, context.element, direction);
+        Quaternion spawnRotation = Quaternion.LookRotation(direction, Vector3.up);
+
+        var projectile = Object.Instantiate(context.data.projectilePrefab, context.origin, spawnRotation);
+        projectile.Launch(context.data, context.element, direction);
     }
 }
 
@@ -105,19 +110,20 @@ public class ProjectileDelivery : SpellDeliveryStrategyBase {
 public class ArcProjectileDelivery : SpellDeliveryStrategyBase {
 
     public override SpellDeliveryKind Kind => SpellDeliveryKind.ArcProjectile;
-    protected override void Execute(SpellCastContext ctx, Vector3 direction) {
+    protected override void Execute(SpellCastContext context, Vector3 direction) {
         
-        if (ctx.data.projectilePrefab == null) {
-            Debug.LogWarning($"[Spell] '{ctx.data.spellName}' has no projectilePrefab assigned.");
+        if (context.data.projectilePrefab == null) {
+            Debug.LogWarning($"[Spell] '{context.data.spellName}' has no projectilePrefab assigned.");
             return;
         }
 
-        // Tilt the aim upward by arcLaunchAngle (mirrored for leftward aim).
-        float sign = direction.x >= 0f ? 1f : -1f;
-        Vector3 arced = Quaternion.Euler(0f, 0f, ctx.data.arcLaunchAngle * sign) * direction;
+        Vector3 tiltAxis = Vector3.Cross(direction, Vector3.up);
+        Vector3 arced = Quaternion.AngleAxis(context.data.arcLaunchAngle, tiltAxis) * direction;
 
-        var proj = Object.Instantiate(ctx.data.projectilePrefab, ctx.origin, Quaternion.identity);
-        proj.Launch(ctx.data, ctx.element, arced, true);
+        Quaternion spawnRotation = Quaternion.LookRotation(arced, Vector3.up);
+
+        var proj = Object.Instantiate(context.data.projectilePrefab, context.origin, spawnRotation);
+        proj.Launch(context.data, context.element, arced, true);
     }
 }
 
@@ -130,7 +136,7 @@ public class RayDelivery : SpellDeliveryStrategyBase {
 
         Vector3 endPosition = context.origin + direction * context.data.rayDistance;
 
-        var hits = Physics2D.RaycastAll(context.origin, direction, context.data.rayDistance, context.data.hitLayers);
+        RaycastHit[] hits = Physics.RaycastAll(context.origin, direction, context.data.rayDistance, context.data.hitLayers);
         foreach (var hit in hits) {
             if (hit.collider.TryGetComponent(out IDamageable dmg))
                 dmg.OnDamage(context.data.damage);

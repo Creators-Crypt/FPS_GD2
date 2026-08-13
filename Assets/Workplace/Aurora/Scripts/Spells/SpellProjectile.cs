@@ -23,7 +23,7 @@ public class SpellProjectile : MonoBehaviour {
 
         rb = GetComponent<Rigidbody>();
         // start the rb with dynamic
-        rb.freezeRotation = true;
+        rb.constraints = RigidbodyConstraints.FreezeRotation;
     }
 
     /// <summary>Called by the delivery strategy right after Instantiate.</summary>
@@ -63,7 +63,7 @@ public class SpellProjectile : MonoBehaviour {
     private void FaceVelocity(Vector3 velocity) {
 
         if (velocity.sqrMagnitude > 0.001f)
-            transform.rotation = Quaternion.LookRotation(Vector3.forward, velocity);
+            transform.rotation = Quaternion.LookRotation(velocity, Vector3.up);
     }
 
     private void OnTriggerEnter(Collider other)
