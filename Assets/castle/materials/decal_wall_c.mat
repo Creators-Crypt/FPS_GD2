@@ -121,20 +121,12 @@ Material:
     - _ZWrite: 1
     m_Colors:
     - _BaseColor: {r: 0.8602941, g: 0.8602941, b: 0.8602941, a: 1}
-<<<<<<< HEAD
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-=======
-    - _Color: {r: 0.8602941, g: 0.8602941, b: 0.8602941, a: 1}
->>>>>>> Development
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
-<<<<<<< HEAD
---- !u!114 &9149343195050152294
-=======
---- !u!114 &2721862731869436174
->>>>>>> Development
+--- !u!114 &2629453345314765272
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
