@@ -4,11 +4,11 @@ using UnityEngine.SceneManagement;
 public class ButtonFunctions : MonoBehaviour
 {
     public void Continue() {
-
+        Resume();
     }
 
     public void NewGame() {
-
+        Restart(); 
     }
 
     public void QuitGame() {
@@ -23,7 +23,8 @@ public class ButtonFunctions : MonoBehaviour
         GameManager.instance.Unpause();
     }
 
-    public void Restart() {
+    public void Restart()
+    {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         GameManager.instance.Unpause();
     }
