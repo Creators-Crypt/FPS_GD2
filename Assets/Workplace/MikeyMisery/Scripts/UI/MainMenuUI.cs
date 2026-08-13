@@ -16,4 +16,7 @@ public class MainMenuUI : MonoBehaviour
     public void OpenCredits() {
         SceneManager.LoadScene("CreditsMenu");
     }
+    public void RetryGame() {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
 }
