@@ -7,25 +7,31 @@ using UnityEngine.UI;
 /// 
 /// </summary>
 /// <remarks>
+/// 
 /// Requires a GameObject with an IHealth component assigned to function correctly.
+/// 
+/// Fix bug for player specific healthbar
+/// 
 /// </remarks>
 public class HealthBarUI : MonoBehaviour {
 
     [Header("Target & Components")]
     [Tooltip("Health target is the Player.")]
     [SerializeField] private GameObject healthTarget;
-    [SerializeField] private Slider healthSlider;
+    [SerializeField] private Image healthSlider;
 
     private IHealth healthSystem;
 
-    private void Awake() {
+    private void Start() {
         
-        if (healthTarget != null) {
+        /*if (healthTarget != null) {
             Debug.LogError($"Health Target is missing on {gameObject.name} UI!", this);
             return;
         }
 
-        if (healthTarget.TryGetComponent<IHealth>(out var health)) healthSystem = health;
+        if (healthTarget.TryGetComponent<IHealth>(out var health)) healthSystem = health;*/
+
+        healthSystem = GameObject.FindGameObjectWithTag("Player").GetComponent<IHealth>();
     }
     private void OnEnable() {
 
@@ -45,6 +51,6 @@ public class HealthBarUI : MonoBehaviour {
         if (healthSlider == null) return;
 
         float calculatedHealth = currentHealth / maxHealth;
-        healthSlider.value = calculatedHealth;
+        healthSlider.fillAmount = calculatedHealth;
     }
 }

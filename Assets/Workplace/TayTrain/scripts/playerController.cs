@@ -11,12 +11,18 @@ public class PlayerController : MonoBehaviour
     [SerializeField] ConcentrationController concentrationController;
     [SerializeField] SpellCaster spellCaster;
     [SerializeField] DeathHandler deathHandler;
+    [SerializeField] private GameObject concentrationLight;
+
+    [Header("Player Visuals")]
+    [SerializeField] private TrailRenderer teleportTrail;
+    
 
 
     [Header("Jump")]
     [Range(1, 30)][SerializeField] int jumpSpeed = 5;
     [Range(1, 10)][SerializeField] int jumpMax = 1;
     [SerializeField, Range(1, 10)] int gravity = 10;
+
 
     [Header("Animation")]
     [SerializeField] private Transform armPivot;
@@ -94,6 +100,11 @@ public class PlayerController : MonoBehaviour
         spellCaster = GetComponent<SpellCaster>();
 
         originalScale = transform.localScale;
+
+        if(teleportTrail != null)
+        {
+            teleportTrail.emitting = false;
+        }
 
     }
     // Update is called once per frame
@@ -193,6 +204,12 @@ public class PlayerController : MonoBehaviour
             teleportTimer = teleportDuration;
             teleportCooldownTimer = teleportCooldown;
 
+            if (teleportTrail != null)
+            {
+                teleportTrail.Clear();
+                teleportTrail.emitting = true;
+            }
+
             teleportDirection = moveDir.normalized;
 
             if (teleportDirection == Vector3.zero)
@@ -217,6 +234,11 @@ public class PlayerController : MonoBehaviour
             {
                 isTeleporting = false;
                 teleportTimer = 0f;
+
+                if(teleportTrail != null)
+                {
+                    teleportTrail.emitting = false;
+                }
             }
         }
         else
@@ -238,6 +260,8 @@ public class PlayerController : MonoBehaviour
         {
             isConcentrating = true;
             concentrationTimer = stats.refillConcentrationTime;
+
+            concentrationLight.SetActive(true);
         }
         if(isConcentrating)
         {
@@ -249,6 +273,8 @@ public class PlayerController : MonoBehaviour
 
                 isConcentrating = false;
                 concentrationTimer = 0f;
+
+                concentrationLight.SetActive(false);
             }
         }
     }
