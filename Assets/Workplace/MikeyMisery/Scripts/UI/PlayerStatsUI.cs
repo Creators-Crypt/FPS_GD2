@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,6 +15,10 @@ public class PlayerStatsUI : MonoBehaviour
     private float currentMana = 50f;
 
     private void Start() {
+
+        staminaController = GameObject.FindGameObjectWithTag("Player").GetComponent<StaminaController>();
+        healthSystem = GameObject.FindGameObjectWithTag("Player").GetComponent<HealthSystem>();
+
         staminaFill.fillAmount = staminaController.Ratio * 0.5f; // Start with half stamina
         manaFill.fillAmount = (currentMana / maxMana) * 0.5f; // Start with half mana
     }

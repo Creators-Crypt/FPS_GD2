@@ -216,12 +216,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8662077439358633456}
-  - component: {fileID: 7761638068522542706}
+  - component: {fileID: 3008289139750706588}
   - component: {fileID: 9159737729615350152}
-  - component: {fileID: 1874060393386750794}
+  - component: {fileID: 7761638068522542706}
+  - component: {fileID: 658035891976646642}
   - component: {fileID: 6673412563084392932}
   - component: {fileID: 9127910612194883331}
-  - component: {fileID: 4996734475627912866}
+  - component: {fileID: 1874060393386750794}
+  - component: {fileID: 1655807396318687533}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -251,37 +253,29 @@ Transform:
   - {fileID: 1484677499562603440}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7761638068522542706
-MonoBehaviour:
+--- !u!136 &3008289139750706588
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1818594594264804547}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3311b4e944df67c4a9108caadf427232, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::NewMonoBehaviourScript
-  controller: {fileID: 9159737729615350152}
-  stats: {fileID: 11400000, guid: dfe4fb052dce893488008b0512ccee0f, type: 2}
-  healthSystem: {fileID: 1874060393386750794}
-  staminaController: {fileID: 6673412563084392932}
-  spellCaster: {fileID: 0}
-  deathHandler: {fileID: 0}
-  jumpSpeed: 1
-  jumpMax: 1
-  gravity: 1
-  armPivot: {fileID: 8616454463657622074}
-  armRotateSpeed: 10
-  currentState: 0
-  teleportDuration: 0.5
-  teleportCooldown: 1.5
-  teleportDistance: 10
-  currentSpeed: 0
-  isPlayerSprinting: 0
-  staminaTimer: 0
-  stamina: 0
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 2.5
+  m_Direction: 1
+  m_Center: {x: -0.19, y: 0, z: -1}
 --- !u!143 &9159737729615350152
 CharacterController:
   m_ObjectHideFlags: 0
@@ -307,7 +301,7 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0, z: -1}
---- !u!114 &1874060393386750794
+--- !u!114 &7761638068522542706
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -316,10 +310,45 @@ MonoBehaviour:
   m_GameObject: {fileID: 1818594594264804547}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 162d463c4c35c1440a483312bea79e5c, type: 3}
+  m_Script: {fileID: 11500000, guid: 3311b4e944df67c4a9108caadf427232, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HealthSystem
+  m_EditorClassIdentifier: Assembly-CSharp::NewMonoBehaviourScript
+  controller: {fileID: 9159737729615350152}
   stats: {fileID: 11400000, guid: dfe4fb052dce893488008b0512ccee0f, type: 2}
+  healthSystem: {fileID: 1874060393386750794}
+  staminaController: {fileID: 6673412563084392932}
+  concentrationController: {fileID: 0}
+  spellCaster: {fileID: 0}
+  deathHandler: {fileID: 0}
+  concentrationLight: {fileID: 0}
+  teleportTrail: {fileID: 0}
+  jumpSpeed: 1
+  jumpMax: 1
+  gravity: 1
+  armPivot: {fileID: 8616454463657622074}
+  armRotateSpeed: 10
+  currentState: 0
+  teleportDuration: 0.5
+  teleportCooldown: 1.5
+  teleportDistance: 10
+  currentSpeed: 0
+  isPlayerSprinting: 0
+  staminaTimer: 0
+  stamina: 0
+--- !u!114 &658035891976646642
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1818594594264804547}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7a65a2d100d632438a076cda9ae02b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ConcentrationController
+  stats: {fileID: 11400000, guid: dfe4fb052dce893488008b0512ccee0f, type: 2}
+  currentConcentration: 0
 --- !u!114 &6673412563084392932
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -350,7 +379,7 @@ MonoBehaviour:
   spellLoadout:
   - {fileID: 11400000, guid: aac2b223b067c1e4db26bc6d9adb76a2, type: 2}
   castPoint: {fileID: 1559729259802013399}
---- !u!114 &4996734475627912866
+--- !u!114 &1874060393386750794
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -359,9 +388,22 @@ MonoBehaviour:
   m_GameObject: {fileID: 1818594594264804547}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6b21274946eb7db4eb685209da8ad681, type: 3}
+  m_Script: {fileID: 11500000, guid: 162d463c4c35c1440a483312bea79e5c, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DeathHandler
+  m_EditorClassIdentifier: Assembly-CSharp::HealthSystem
+  stats: {fileID: 11400000, guid: dfe4fb052dce893488008b0512ccee0f, type: 2}
+--- !u!114 &1655807396318687533
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1818594594264804547}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ca0594b1896f0e4e92f7e86b380d9cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerDeath
 --- !u!1 &1883817470414989196
 GameObject:
   m_ObjectHideFlags: 0
