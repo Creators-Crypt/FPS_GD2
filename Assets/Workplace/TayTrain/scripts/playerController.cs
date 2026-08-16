@@ -1,7 +1,8 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviour , IInvulnerable
 {
     [Header("References")]
     [SerializeField] CharacterController controller;
@@ -32,9 +33,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private PlayerState currentState;
 
     [Header("Teleport")]
-    [Range(0.05f, 10f)][SerializeField] float teleportDuration = .12f;
+    [Range(0.05f, 10f)][SerializeField] float teleportTrailTime = 0.2f;
     [Range(0.1f, 3f)][SerializeField] float teleportCooldown = 1.0f;
-    [Range(1f, 20f)][SerializeField] float teleportDistance = 6f;
+    [Range(1f, 100f)][SerializeField] float teleportDistance = 100f;
 
     //Jumps
     int jumpCount;
@@ -55,11 +56,16 @@ public class PlayerController : MonoBehaviour
     float dodgeCooldownTimer;
     Vector3 dodgeDirection;
 
+    //Bool for dodge and equpment
+    public bool IsInvulnerable
+    {
+        get {  return isDodging; }
+    }
+
+
     //Teleport
     bool isTeleporting;
-    float teleportTimer;
     float teleportCooldownTimer;
-    Vector3 teleportDirection;
 
     //Concentration
     bool isConcentrating;
@@ -69,7 +75,7 @@ public class PlayerController : MonoBehaviour
     Vector3 originalScale;
 
     // Animation for arm
-    Quaternion armBaseRotation;
+    //Quaternion armBaseRotation;
 
     // PlayerState
     public enum PlayerState {
@@ -182,16 +188,26 @@ public class PlayerController : MonoBehaviour
         }
 
         if (isDodging) {
+
+            transform.localScale = Vector3.Lerp(transform.localScale,
+                originalScale * 0.1f, 15f * Time.deltaTime);
+
             controller.Move(dodgeDirection *
                 stats.walkSpeed *
                 stats.dodgeSpeedMultiplier *
                 Time.deltaTime);
+
+            dodgeTimer -= Time.deltaTime;
+
+            if (dodgeTimer <= 0)
+            {
+                isDodging = false;
+            }
         }
-
-        dodgeTimer -= Time.deltaTime;
-
-        if (dodgeTimer <= 0) {
-            isDodging = false;
+        else
+        {
+            transform.localScale = Vector3.Lerp(transform.localScale,
+                originalScale, 15f * Time.deltaTime);
         }
     }
      // only needs a cooldown and will work off of focus
@@ -201,51 +217,63 @@ public class PlayerController : MonoBehaviour
         {
             isTeleporting = true;
 
-            teleportTimer = teleportDuration;
             teleportCooldownTimer = teleportCooldown;
 
-            if (teleportTrail != null)
+            RaycastHit hit;
+
+            Vector3 teleportDirection = Camera.main.transform.forward;
+            Vector3 teleportPoint;
+
+            if (Physics.Raycast(Camera.main.transform.position,
+                teleportDirection, out hit, teleportDistance))
+            {
+                teleportPoint = hit.point - teleportDirection * 1.5f;
+            }
+
+            else
+            {
+                teleportPoint = transform.position + teleportDirection * teleportDistance;
+            }
+
+            RaycastHit groundHit;
+
+            Vector3 groundCheck = teleportPoint + Vector3.up * 10f;
+
+            if(Physics.Raycast(groundCheck, Vector3.down, out groundHit, 20f))
+            {
+                if(teleportPoint.y < groundHit.point.y)
+                {
+                    teleportPoint.y = groundHit.point.y;
+                }
+            }
+           
+            if(teleportTrail != null)
             {
                 teleportTrail.Clear();
                 teleportTrail.emitting = true;
             }
 
-            teleportDirection = moveDir.normalized;
+            controller.enabled = false;
+            transform.position = teleportPoint;
+            controller.enabled = true;
 
-            if (teleportDirection == Vector3.zero)
+            if (teleportTrail != null)
             {
-                teleportDirection = transform.forward;
+                StartCoroutine(stopTeleportTrail());
             }
-        }
-        if (isTeleporting)
+
+            
+        } 
+    }
+    IEnumerator stopTeleportTrail()
+    {
+        yield return new WaitForSeconds(teleportTrailTime);
+
+        if(teleportTrail!= null)
         {
-            transform.localScale = Vector3.Lerp(transform.localScale,
-                originalScale * 0.2f, 15f * Time.deltaTime);
-
-            float teleportSpeed = teleportDistance / teleportDuration;
-
-            controller.Move(teleportDirection *
-                teleportSpeed*
-                Time.deltaTime);
-
-            teleportTimer -= Time.deltaTime;
-
-            if(teleportTimer <= 0f)
-            {
-                isTeleporting = false;
-                teleportTimer = 0f;
-
-                if(teleportTrail != null)
-                {
-                    teleportTrail.emitting = false;
-                }
-            }
+            teleportTrail.emitting = false;
         }
-        else
-        {
-            transform.localScale = Vector3.Lerp( transform.localScale,
-                originalScale, 15f * Time.deltaTime);
-        }
+        isTeleporting = false;
     }
 
     void jump() {
