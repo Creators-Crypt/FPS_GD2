@@ -4,12 +4,27 @@ public class EquipStatsMods : MonoBehaviour
 {
 
     [Header("Equipment Bonuses")]
+    //Amulets
+    [SerializeField] float staminaRegenMult = 1f;
+    [SerializeField] float concentrationRegenMult = 1f;
+    [SerializeField] float healthRegenMult = 1f;
+    public float StaminaRegenMult
+    {
+        get { return staminaRegenMult; }
+    }
+    public float ConcentrationRegenMult
+    {
+        get { return concentrationRegenMult; }
+    }
+    public float HealthRegenMult
+    {
+        get { return healthRegenMult; }
+    }
     //Boots
     [SerializeField] int bonusJumps;
     [SerializeField] float speedMult = 1f;
     [SerializeField] float gravityMult = 1f;
 
-    //Boots
     public int BonusJumps
     {
         get { return bonusJumps;}

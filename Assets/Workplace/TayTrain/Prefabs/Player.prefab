@@ -673,9 +673,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8fcaaddd85c0fbe4fbae3cc9e4978274, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EquipStatsMods
+  staminaRegenMult: 1
+  concentrationRegenMult: 1
+  healthRegenMult: 1
   bonusJumps: 0
-  speedMult: 0
-  gravityMult: 0
+  speedMult: 1
+  gravityMult: 1
 --- !u!1 &1883817470414989196
 GameObject:
   m_ObjectHideFlags: 0
@@ -2579,7 +2582,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 5939
+  m_VersionIndex: 5948
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []

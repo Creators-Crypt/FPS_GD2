@@ -9,7 +9,7 @@ public class Boots : MonoBehaviour, IEquipment
     [SerializeField] Sprite icon;
 
     [Header("Boots Bonuses")]
-    [SerializeField] int extraJumps;
+    [SerializeField] int bonusJumps;
     [SerializeField] float speedBonus;
     [SerializeField] float gravityMult;
 
@@ -34,7 +34,7 @@ public class Boots : MonoBehaviour, IEquipment
 
     public void equip(EquipStatsMods stats)
     {
-        stats.addJumps(extraJumps);
+        stats.addJumps(bonusJumps);
         stats.addSpeed(speedBonus);
         stats.lowerGravity(gravityMult);
         //Debug.Log(bootsName + " Equipped");
@@ -42,7 +42,7 @@ public class Boots : MonoBehaviour, IEquipment
 
     public void unequip(EquipStatsMods stats)
     {
-        stats.removeJumps(extraJumps);
+        stats.removeJumps(bonusJumps);
         stats.removeSpeed(speedBonus);
         stats.restoreGravity(gravityMult);
         //Debug.Log(bootsName + " Unequipped");
