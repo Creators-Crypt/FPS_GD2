@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using UnityEditor.Animations;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour , IInvulnerable
@@ -73,6 +74,9 @@ public class PlayerController : MonoBehaviour , IInvulnerable
 
     //Player size
     Vector3 originalScale;
+
+    //LayerMask
+    [SerializeField] LayerMask ignoreLayer;
 
     // Animation for arm
     //Quaternion armBaseRotation;
@@ -225,7 +229,7 @@ public class PlayerController : MonoBehaviour , IInvulnerable
             Vector3 teleportPoint;
 
             if (Physics.Raycast(Camera.main.transform.position,
-                teleportDirection, out hit, teleportDistance))
+                teleportDirection, out hit, teleportDistance, ~ignoreLayer))
             {
                 teleportPoint = hit.point - teleportDirection * 1.5f;
             }
@@ -239,11 +243,14 @@ public class PlayerController : MonoBehaviour , IInvulnerable
 
             Vector3 groundCheck = teleportPoint + Vector3.up * 10f;
 
-            if(Physics.Raycast(groundCheck, Vector3.down, out groundHit, 20f))
+            if(Physics.Raycast(groundCheck, Vector3.down, out groundHit, 20f, ~ignoreLayer))
             {
-                if(teleportPoint.y < groundHit.point.y)
+                float controllerBottom = controller.center.y - (controller.height / 2f);
+
+                float groundOffset = -controllerBottom;
+                if(teleportPoint.y < groundHit.point.y + groundOffset)
                 {
-                    teleportPoint.y = groundHit.point.y;
+                    teleportPoint.y = groundHit.point.y + groundOffset;
                 }
             }
            
@@ -256,6 +263,8 @@ public class PlayerController : MonoBehaviour , IInvulnerable
             controller.enabled = false;
             transform.position = teleportPoint;
             controller.enabled = true;
+
+            //playerVel.y = 0f;
 
             if (teleportTrail != null)
             {
