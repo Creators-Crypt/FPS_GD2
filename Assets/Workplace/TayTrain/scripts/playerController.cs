@@ -419,4 +419,15 @@ public class PlayerController : MonoBehaviour , IInvulnerable
     //    animator.SetBool("Grounded", controller.isGrounded);
     //    animator.SetFloat("VerticalSpeed", playerVel.y);
     //}
+
+    //Equipment Stat changes
+    public void addJumps(int amount)
+    {
+        jumpMax += amount;
+    }
+
+    public void removeJumps(int amount)
+    {
+        jumpMax -= amount;
+    }
 }
