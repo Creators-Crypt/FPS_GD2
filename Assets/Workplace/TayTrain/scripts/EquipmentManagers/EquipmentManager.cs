@@ -12,7 +12,7 @@ public class EquipmentManager : MonoBehaviour
     [SerializeField] GameObject testItem;
 
     [Header("Player")]
-    [SerializeField] PlayerController player;
+    [SerializeField] EquipStatsMods stats;
 
     //Equipment types
     public enum EquipmentSlot
@@ -23,6 +23,7 @@ public class EquipmentManager : MonoBehaviour
         Boots
     }
 
+    //Used for testing can change when we decide for UI and Inventory
     void Update()
     {
         if(Input.GetKeyDown(KeyCode.T))
@@ -73,7 +74,7 @@ public class EquipmentManager : MonoBehaviour
 
             if (oldEquipment != null)
             {
-                oldEquipment.unequip(player);
+                oldEquipment.unequip(stats);
             }
         }
 
@@ -96,7 +97,7 @@ public class EquipmentManager : MonoBehaviour
                 break;
         }
 
-        equipment.equip(player);
+        equipment.equip(stats);
     }
 
     public void unequipItem(GameObject item)
@@ -137,6 +138,6 @@ public class EquipmentManager : MonoBehaviour
                 break;
         }
 
-        equipment.unequip(player);
+        equipment.unequip(stats);
     }
 }

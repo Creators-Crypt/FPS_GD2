@@ -14,6 +14,7 @@ public class PlayerController : MonoBehaviour , IInvulnerable
     [SerializeField] SpellCaster spellCaster;
     [SerializeField] DeathHandler deathHandler;
     [SerializeField] private GameObject concentrationLight;
+    [SerializeField] EquipStatsMods equipmentStats;
 
     [Header("Player Visuals")]
     [SerializeField] private TrailRenderer teleportTrail;
@@ -111,6 +112,8 @@ public class PlayerController : MonoBehaviour , IInvulnerable
 
         originalScale = transform.localScale;
 
+        equipmentStats = GetComponent<EquipStatsMods>();
+
         if(teleportTrail != null)
         {
             teleportTrail.emitting = false;
@@ -160,7 +163,7 @@ public class PlayerController : MonoBehaviour , IInvulnerable
         }
 
         if (!isTeleporting && !isDodging && !isConcentrating) { 
-            controller.Move(moveDir.normalized * currentSpeed * Time.deltaTime);
+            controller.Move(moveDir.normalized * (currentSpeed * Mathf.Max(1f, equipmentStats.SpeedMult)) * Time.deltaTime);
         }
 
         if(!isConcentrating)
@@ -171,7 +174,7 @@ public class PlayerController : MonoBehaviour , IInvulnerable
 
         controller.Move(playerVel * Time.deltaTime);
 
-        playerVel.y -= gravity * Time.deltaTime;
+        playerVel.y -= (gravity * equipmentStats.GravityMult) * Time.deltaTime;
 
     }
 
@@ -286,7 +289,7 @@ public class PlayerController : MonoBehaviour , IInvulnerable
     }
 
     void jump() {
-        if (Input.GetButtonDown("Jump") && jumpCount < jumpMax) {
+        if (Input.GetButtonDown("Jump") && jumpCount < jumpMax + equipmentStats.BonusJumps) {
             jumpCount++;
             playerVel.y = jumpSpeed;
         }
@@ -420,14 +423,4 @@ public class PlayerController : MonoBehaviour , IInvulnerable
     //    animator.SetFloat("VerticalSpeed", playerVel.y);
     //}
 
-    //Equipment Stat changes
-    public void addJumps(int amount)
-    {
-        jumpMax += amount;
-    }
-
-    public void removeJumps(int amount)
-    {
-        jumpMax -= amount;
-    }
 }

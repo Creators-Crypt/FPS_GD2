@@ -5,27 +5,46 @@ public class Boots : MonoBehaviour, IEquipment
 {
     [Header("Boot Info")]
     [SerializeField] string bootsName;
+    [SerializeField] string bootsDescriptoin;
+    [SerializeField] Sprite icon;
 
     [Header("Boots Bonuses")]
     [SerializeField] int extraJumps;
-    [SerializeField] float staminaBonus;
     [SerializeField] float speedBonus;
+    [SerializeField] float gravityMult;
+
+    //Parts to show in a UI
+    public string ItemName
+    {
+        get { return bootsName; }
+    }
+    public string ItemDescription
+    {
+        get { return bootsDescriptoin; }
+    }
+    public Sprite Icon
+    {
+        get { return icon; }
+    }
 
     public EquipmentManager.EquipmentSlot Slot
     {
         get { return EquipmentManager.EquipmentSlot.Boots; }
     }
 
-  
-    public void equip(PlayerController player)
+    public void equip(EquipStatsMods stats)
     {
-        player.addJumps(extraJumps);
-        Debug.Log(bootsName + " Equipped");
+        stats.addJumps(extraJumps);
+        stats.addSpeed(speedBonus);
+        stats.lowerGravity(gravityMult);
+        //Debug.Log(bootsName + " Equipped");
     }
 
-    public void unequip(PlayerController player)
+    public void unequip(EquipStatsMods stats)
     {
-        player.removeJumps(extraJumps);
-        Debug.Log(bootsName + " Unequipped");
+        stats.removeJumps(extraJumps);
+        stats.removeSpeed(speedBonus);
+        stats.restoreGravity(gravityMult);
+        //Debug.Log(bootsName + " Unequipped");
     }
 }

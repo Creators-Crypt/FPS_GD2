@@ -155,7 +155,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &65719181446917458
 Transform:
   m_ObjectHideFlags: 0
@@ -318,6 +318,7 @@ GameObject:
   - component: {fileID: 4167275286118533494}
   - component: {fileID: 3919352187849786472}
   - component: {fileID: 6683432880067380384}
+  - component: {fileID: 5648653540166664426}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -413,6 +414,7 @@ MonoBehaviour:
   spellCaster: {fileID: 0}
   deathHandler: {fileID: 0}
   concentrationLight: {fileID: 516907137128402063}
+  equipmentStats: {fileID: 5648653540166664426}
   teleportTrail: {fileID: 3919352187849786472}
   jumpSpeed: 10
   jumpMax: 1
@@ -657,6 +659,23 @@ MonoBehaviour:
   amulet: {fileID: 0}
   armor: {fileID: 0}
   boots: {fileID: 0}
+  testItem: {fileID: 0}
+  stats: {fileID: 5648653540166664426}
+--- !u!114 &5648653540166664426
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1818594594264804547}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fcaaddd85c0fbe4fbae3cc9e4978274, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EquipStatsMods
+  bonusJumps: 0
+  speedMult: 0
+  gravityMult: 0
 --- !u!1 &1883817470414989196
 GameObject:
   m_ObjectHideFlags: 0
@@ -2560,7 +2579,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 5915
+  m_VersionIndex: 5939
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
