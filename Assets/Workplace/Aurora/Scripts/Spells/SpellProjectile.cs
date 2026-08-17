@@ -3,8 +3,8 @@ using UnityEngine;
 
 /// <summary>
 /// 
-/// Generic spell projectile. Works for straight shots (gravityScale 0)
-/// and arcing shots (gravityScale > 0). Prefab needs: Rigidbody2D + Collider2D (IsTrigger).
+/// Generic spell projectile. Works for straight shots gravity = false
+/// and arcing shots gravity = true. Prefab needs: Rigidbody & Collider
 /// 
 /// </summary>
 [RequireComponent(typeof(Rigidbody), typeof(Collider))]
@@ -32,7 +32,7 @@ public class SpellProjectile : MonoBehaviour {
         data = spellData;
         element = spellElement;
         multiplier = damageMultiplier;
-        //rb.useGravity = true;
+        rb.useGravity = false;
         rb.linearVelocity = direction.normalized * spellData.projectileSpeed;
 
         // Face travel direction; arcing shots keep re-facing in Update.
@@ -75,7 +75,7 @@ public class SpellProjectile : MonoBehaviour {
         if ((data.hitLayers.value & (1 << other.gameObject.layer)) == 0) return;
 
         if (other.TryGetComponent(out IDamageable dmg))
-            dmg.OnDamage(data.damage); //*multiplier
+            dmg.OnDamage(data.damage * multiplier);
 
         if (impactVfxPrefab != null)
         {
