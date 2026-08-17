@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEditor.Animations;
 using UnityEngine;
 
@@ -65,7 +66,11 @@ public class PlayerController : MonoBehaviour , IInvulnerable
     bool isDodging;
     float dodgeTimer;
     float dodgeCooldownTimer;
+    float originalControllerHeight;
+    Vector3 originalControllerCenter;
     Vector3 dodgeDirection;
+
+    [SerializeField] float dodgeControllerHeight = 0.01f;
 
     //Bool for dodge and equpment
     public bool IsInvulnerable
@@ -120,6 +125,10 @@ public class PlayerController : MonoBehaviour , IInvulnerable
         spellCaster = GetComponent<SpellCaster>();
 
         originalScale = transform.localScale;
+
+        originalControllerHeight = controller.height;
+
+        originalControllerCenter = controller.center;
 
         if(teleportTrail != null)
         {
@@ -189,7 +198,8 @@ public class PlayerController : MonoBehaviour , IInvulnerable
     void dodge() {
 
 
-        if (Input.GetButtonDown("Dodge") && dodgeCooldownTimer <= 0 && staminaController.TrySpend(stats.dodgeStaminaCost)) {
+        if (Input.GetButtonDown("Dodge") && dodgeCooldownTimer <= 0 && staminaController.TrySpend(stats.dodgeStaminaCost))
+        {
             isDodging = true;
 
             dodgeTimer = stats.dodgeDuration;
@@ -200,6 +210,12 @@ public class PlayerController : MonoBehaviour , IInvulnerable
             if (dodgeDirection == Vector3.zero) {
                 dodgeDirection = transform.forward;
             }
+
+            controller.height = dodgeControllerHeight;
+
+            float heightDifference = originalControllerHeight - dodgeControllerHeight;
+
+            controller.center = originalControllerCenter - new Vector3(0f, heightDifference / 2f, 0f);
         }
 
         if (isDodging) {
@@ -217,6 +233,9 @@ public class PlayerController : MonoBehaviour , IInvulnerable
             if (dodgeTimer <= 0)
             {
                 isDodging = false;
+
+                controller.height = originalControllerHeight;
+                controller.center = originalControllerCenter;
             }
         }
         else
