@@ -8,7 +8,7 @@ public class Amulets : MonoBehaviour, IEquipment
     [SerializeField] Sprite icon;
 
     [Header("Boots Bonuses")]
-    [SerializeField] float staminaRegeMult;
+    [SerializeField] float staminaRegenMult;
     [SerializeField] float concentrationRegenMult;
     [SerializeField] float healthRegenMult;
 
@@ -34,13 +34,18 @@ public class Amulets : MonoBehaviour, IEquipment
     public void equip(EquipStatsMods stats)
     {
         //stats.addJumps(extraJumps);
+        stats.increaseStaminaRegen(staminaRegenMult);
+        stats.increaseConcentrationSpeedMult(concentrationRegenMult);
+        stats.increaseHealthRegen(healthRegenMult);
         
         //Debug.Log(bootsName + " Equipped");
     }
 
     public void unequip(EquipStatsMods stats)
     {
-       
+        stats.normalStaminaRegen(staminaRegenMult);
+        stats.normalConcentrationSpeedMult(concentrationRegenMult);
+        stats.normalHealthRegen(healthRegenMult);
         //Debug.Log(bootsName + " Unequipped");
     }
 }
