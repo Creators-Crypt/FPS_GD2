@@ -257,10 +257,10 @@ MonoBehaviour:
   m_SoftShadowQuality: 0
   m_RenderingLayersMask:
     serializedVersion: 0
-    m_Bits: 1
+    m_Bits: 4294967295
   m_ShadowRenderingLayersMask:
     serializedVersion: 0
-    m_Bits: 1
+    m_Bits: 4294967295
   m_Version: 4
   m_LightLayerMask: 1
   m_ShadowLayerMask: 1
@@ -414,7 +414,6 @@ MonoBehaviour:
   spellCaster: {fileID: 0}
   deathHandler: {fileID: 0}
   concentrationLight: {fileID: 516907137128402063}
-  equipmentStats: {fileID: 5648653540166664426}
   teleportTrail: {fileID: 3919352187849786472}
   jumpSpeed: 10
   jumpMax: 1
@@ -461,6 +460,7 @@ MonoBehaviour:
   stats: {fileID: 11400000, guid: dfe4fb052dce893488008b0512ccee0f, type: 2}
   currentStamina: 0
   fallBackRegenRate: 5
+  regenMult: 1
 --- !u!114 &9127910612194883331
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -673,8 +673,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8fcaaddd85c0fbe4fbae3cc9e4978274, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EquipStatsMods
+  playerController: {fileID: 0}
+  staminaController: {fileID: 0}
   staminaRegenMult: 1
-  concentrationRegenMult: 1
+  concentrationSpeedMult: 1
   healthRegenMult: 1
   bonusJumps: 0
   speedMult: 1
