@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4924521481380085956}
-  - component: {fileID: 4770394907264787346}
+  - component: {fileID: 8609345335748441835}
   m_Layer: 5
   m_Name: PlayerStatsHUD
   m_TagString: Untagged
@@ -42,7 +42,7 @@ RectTransform:
   m_AnchoredPosition: {x: -213.4, y: 55}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0}
---- !u!114 &4770394907264787346
+--- !u!114 &8609345335748441835
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -55,7 +55,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerStatsUI
   healthFill: {fileID: 9080173081179585565}
-  healthSystem: {fileID: 0}
   staminaFill: {fileID: 6027914868571490470}
   manaFill: {fileID: 2695654913007700799}
   staminaController: {fileID: 0}
@@ -370,7 +369,6 @@ GameObject:
   - component: {fileID: 2456049823141722355}
   - component: {fileID: 6413306685111907576}
   - component: {fileID: 9080173081179585565}
-  - component: {fileID: 4943389009399346518}
   m_Layer: 5
   m_Name: HealthBarFill
   m_TagString: Untagged
@@ -435,20 +433,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &4943389009399346518
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8683325798558634019}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 619ec0bebfdd2e448bfdac574dc764e3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HealthBarUI
-  healthTarget: {fileID: 0}
-  healthSlider: {fileID: 9080173081179585565}
 --- !u!1 &8883107676463123582
 GameObject:
   m_ObjectHideFlags: 0

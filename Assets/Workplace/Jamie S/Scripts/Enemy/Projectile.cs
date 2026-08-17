@@ -25,10 +25,15 @@ public class Projectile : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        IDamageable damagable = other.GetComponent<IDamageable>();
-        if (damagable == null) return;
+        /*Debug.Log("Enter the OnTrigger");
+        if (!other.TryGetComponent<IDamageable>(out var damagable)) return;
 
         damagable.OnDamage(damage);
-        Destroy(this.gameObject);
+        Destroy(this.gameObject);*/
+
+        if (other.TryGetComponent<HealthSystem>(out var health)) {
+            health.OnDamage(damage);
+            Debug.Log($"I've collided with {other.gameObject.name} and dealt {damage} damage.");
+        }
     }
 }
