@@ -14,7 +14,6 @@ public class PlayerController : MonoBehaviour , IInvulnerable
     [SerializeField] SpellCaster spellCaster;
     [SerializeField] DeathHandler deathHandler;
     [SerializeField] private GameObject concentrationLight;
-    [SerializeField] EquipStatsMods equipmentStats;
 
     [Header("Player Visuals")]
     [SerializeField] private TrailRenderer teleportTrail;
@@ -41,6 +40,16 @@ public class PlayerController : MonoBehaviour , IInvulnerable
 
     //Jumps
     int jumpCount;
+
+    //Equipment Mods
+    int bonusJumps = 0;
+    float speedMult = 1f;
+    float gravityMult = 1f;
+    float concentrationSpeedMult = 1f;
+    float healthRegenMult = 1f;
+    float healthRegenTimer;
+
+
 
     //Movement
     Vector3 moveDir;
@@ -112,8 +121,6 @@ public class PlayerController : MonoBehaviour , IInvulnerable
 
         originalScale = transform.localScale;
 
-        equipmentStats = GetComponent<EquipStatsMods>();
-
         if(teleportTrail != null)
         {
             teleportTrail.emitting = false;
@@ -149,6 +156,7 @@ public class PlayerController : MonoBehaviour , IInvulnerable
         dodge();
         concentrate();
         movement();
+        healthRegen();
         updateState();
         //updateAnimator();
     }
@@ -163,7 +171,7 @@ public class PlayerController : MonoBehaviour , IInvulnerable
         }
 
         if (!isTeleporting && !isDodging && !isConcentrating) { 
-            controller.Move(moveDir.normalized * (currentSpeed * Mathf.Max(1f, equipmentStats.SpeedMult)) * Time.deltaTime);
+            controller.Move(moveDir.normalized * (currentSpeed * speedMult) * Time.deltaTime);
         }
 
         if(!isConcentrating)
@@ -174,7 +182,7 @@ public class PlayerController : MonoBehaviour , IInvulnerable
 
         controller.Move(playerVel * Time.deltaTime);
 
-        playerVel.y -= (gravity * equipmentStats.GravityMult) * Time.deltaTime;
+        playerVel.y -= (gravity * gravityMult) * Time.deltaTime;
 
     }
 
@@ -289,20 +297,41 @@ public class PlayerController : MonoBehaviour , IInvulnerable
     }
 
     void jump() {
-        if (Input.GetButtonDown("Jump") && jumpCount < jumpMax + equipmentStats.BonusJumps) {
+        if (Input.GetButtonDown("Jump") && jumpCount < jumpMax + bonusJumps) {
             jumpCount++;
             playerVel.y = jumpSpeed;
         }
+    }
+    public void setBonusJumps(int amount)
+    {
+        bonusJumps = amount;
+    }
+    public void setSpeedMult(float amount)
+    {
+        speedMult = amount;
+    }
+    public void setGravityMult(float amount)
+    {
+        gravityMult = amount;
+    }
+    public void setConcentrationSpeedMult(float amount)
+    {
+        concentrationSpeedMult = amount;
+    }
+    public void setHealthRegenMult(float amount)
+    {
+        healthRegenMult = amount;
     }
     void concentrate()
     {
         if (Input.GetButtonDown("Concentrate") && !isConcentrating)
         {
             isConcentrating = true;
-            concentrationTimer = stats.refillConcentrationTime;
+            concentrationTimer = stats.refillConcentrationTime / concentrationSpeedMult;
 
             concentrationLight.SetActive(true);
         }
+
         if(isConcentrating)
         {
             concentrationTimer-= Time.deltaTime;
@@ -422,5 +451,17 @@ public class PlayerController : MonoBehaviour , IInvulnerable
     //    animator.SetBool("Grounded", controller.isGrounded);
     //    animator.SetFloat("VerticalSpeed", playerVel.y);
     //}
+    void healthRegen()
+    {
+        if(healthRegenMult <= 1f)
+        {
+            healthRegenTimer += Time.deltaTime;
 
+            if(healthRegenTimer >= 1f)
+            {
+                healthSystem.OnHeal(healthRegenMult);
+                healthRegenTimer = 0f;
+            }
+        }
+    }
 }
