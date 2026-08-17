@@ -24,6 +24,8 @@ public class SpellCaster : MonoBehaviour {
     private Spell[] spells;
     private int equippedIndex;
 
+    public SpellWeaponData EquippedWeapon { get; private set; }
+
     public Spell EquippedSpell =>
         (spells != null && spells.Length > 0) ? spells[equippedIndex] : null;
 
@@ -106,6 +108,17 @@ public class SpellCaster : MonoBehaviour {
         var spell = EquippedSpell;
 
         if (spell == null || !spell.IsReady) return;
+
+        if (EquippedWeapon != null) {
+
+            spell.SetDelivery(EquippedWeapon.delivery);
+
+            if (EquippedWeapon.overrideSpawnCount) {
+
+                spell.Data.spawnCount = EquippedWeapon.weaponSpawnCount;
+                spell.Data.spreadAngle = EquippedWeapon.weaponSpreadAngle;
+            }
+        }
 
         // Pay stamina before firing.
         if (stamina != null && !stamina.TrySpend(spell.Data.staminaCost)) return;
