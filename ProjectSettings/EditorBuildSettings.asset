@@ -6,17 +6,8 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Workplace/MikeyMisery/Scenes/MainMenu.unity
-    guid: 8a9da9b0d9ae079418a5d6ec5fb472ed
-  - enabled: 1
-    path: Assets/Workplace/MikeyMisery/Scenes/LoadingScreen.unity
-    guid: dcae406032cede54c8006a734e4482f5
-  - enabled: 1
-    path: Assets/Workplace/MikeyMisery/Scenes/SettingsMenu.unity
-    guid: 0dcd2563f5a673d429518c16e9e55b2e
-  - enabled: 1
-    path: Assets/Workplace/MikeyMisery/Scenes/CreditsMenu.unity
-    guid: 858c372164b3106489c482c9b8b177de
+    path: Assets/_Project/Scenes/Menus.unity
+    guid: 948770f29c685ad4b8cede66d4e825d7
   - enabled: 1
     path: Assets/_Project/Scenes/main.unity
     guid: 6b1dda3b5ebad454c9c8f276623106cf

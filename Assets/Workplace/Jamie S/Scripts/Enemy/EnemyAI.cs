@@ -205,7 +205,7 @@ public class EnemyAI : MonoBehaviour, IDamageable
     }
     public void Die()
     {
-        GameManager.instance.EnemyAIKilled();
+        //GameManager.instance.EnemyAIKilled();
         
         Destroy(gameObject, .01f);
     }
