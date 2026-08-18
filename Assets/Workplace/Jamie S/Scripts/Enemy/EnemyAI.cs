@@ -211,17 +211,59 @@ public class EnemyAI : MonoBehaviour, IDamageable
             Die();
         }
     }
+  
+
+    private void SplitSlime()
+    {
+        if(stats.splitVFXPrefab != null)
+        {
+            Instantiate(stats.splitVFXPrefab, transform.position, Quaternion.identity);
+        }
+
+        for(int i =0; i < stats.splitCount; i++)
+        {
+            Vector2 randomOffset = UnityEngine.Random.insideUnitCircle * stats.splitRadius;
+            Vector3 spawnPOS = transform.position + new Vector3(randomOffset.x, 0 , randomOffset.y);
+
+            GameObject newEnemy = Instantiate(stats.splitPrefab, spawnPOS, Quaternion.identity);
+
+            if (stats.splitGrowthSpeed > 0f)
+            {
+                StartCoroutine(GrowSpawn(stats.splitGrowthSpeed));
+            }
+
+        }
+    }
+    public void Die()
+    {
+        //GameManager.instance.EnemyAIKilled();
+        if(stats.splitPrefab != null && UnityEngine.Random.value <= stats.splitChance)
+        {
+            SplitSlime();
+        } 
+
+        Destroy(gameObject, .01f);
+    }
+
+
     IEnumerator FlashRed()
     {
         model.material.color = Color.red;
         yield return new WaitForSeconds(0.1f);
         model.material.color = origColor;
     }
-    public void Die()
-    {
-        //GameManager.instance.EnemyAIKilled();
-        
-        Destroy(gameObject, .01f);
-    }
 
+    IEnumerator GrowSpawn (float _duration)
+    {
+        Vector3 fullScale = transform.localScale;
+        transform.localScale = Vector3.zero;
+        float elapsed = 0f;
+        while(elapsed < _duration)
+        {
+            transform.localScale = Vector3.Lerp(Vector3.zero, fullScale, elapsed /  _duration);
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+        transform.localScale = fullScale;
+    }
 }

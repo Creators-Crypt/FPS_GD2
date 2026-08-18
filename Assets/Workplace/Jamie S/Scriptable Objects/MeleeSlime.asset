@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: MeleeSlime
   m_EditorClassIdentifier: Assembly-CSharp::EnemyStatsSO
   enemyType: 0
-  maxHealth: 20
+  maxHealth: 30
   patrolSpeed: 2
   chaseSpeed: 5
-  patrolRadius: 8
+  patrolRadius: 20
   patrolWaitTimeMin: 1.5
   patrolWaitTimeMax: 3.5
   detectionRadius: 10
@@ -31,3 +31,9 @@ MonoBehaviour:
   projectilePrefab: {fileID: 0}
   projectileSpeed: 10
   explosionRadius: 3
+  splitChance: 0.5
+  splitPrefab: {fileID: 4858449309327273670, guid: 614c2b9a88154c045ab679a987b44de2, type: 3}
+  splitCount: 2
+  splitRadius: 2
+  splitVFXPrefab: {fileID: 0}
+  splitGrowthSpeed: 0

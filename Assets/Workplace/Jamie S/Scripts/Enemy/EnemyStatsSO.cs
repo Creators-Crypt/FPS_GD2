@@ -35,6 +35,14 @@ public class EnemyStatsSO : ScriptableObject
 
     [Header("Bomber Attack")]
     public float explosionRadius = 3f;
+
+    [Header("Split")]
+    [Range(0f, 1f)] public float splitChance = 0.5f;
+    public GameObject splitPrefab;
+    public int splitCount = 2;
+    public float splitRadius = .75f;
+    public GameObject splitVFXPrefab;
+    public float splitGrowthSpeed;
    
     
 }
