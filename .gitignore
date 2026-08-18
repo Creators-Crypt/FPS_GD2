@@ -105,8 +105,6 @@ InitTestScene*.unity*
 
 # Auto-generated scenes by play mode tests
 /[Aa]ssets/[Ii]nit[Tt]est[Ss]cene*.unity*
-/[Aa]ssets/castle
-/[Aa]ssets/Hivemind
 /ProjectSettings/Packages
 /ProjectSettings/Packages
 /ProjectSettings/Packages/com.unity.probuilder
