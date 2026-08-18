@@ -16,6 +16,8 @@ public class EnemyAI : MonoBehaviour, IDamageable
     [SerializeField] public Transform playerTarget;
     [SerializeField] public Renderer model;
 
+    [SerializeField] private LayerMask playerLayer; //ADDED Line to script.
+
     public Vector3 spawnPostion;   
     public float currentHealth;
     public float faceTargetRotSpeed = 10;
@@ -116,6 +118,7 @@ public class EnemyAI : MonoBehaviour, IDamageable
 
     public void PreformAttack()
     {
+        Debug.Log("Enter Perform Attack");
         lastAttackTime = Time.time;
 
         switch(stats.enemyType)
@@ -156,11 +159,12 @@ public class EnemyAI : MonoBehaviour, IDamageable
     }
     private void PreforeBomberAttack()
     {
-        Collider[] hits = Physics.OverlapSphere(transform.position, stats.explosionRadius);
+        Debug.Log("Enter the attack");
+        Collider[] hits = Physics.OverlapSphere(transform.position, stats.explosionRadius, playerLayer);
 
         foreach (Collider hit in hits)
         {
-            if (hit.gameObject != gameObject)
+/*            if (hit.gameObject != gameObject)
             {
                 IDamageable damageable = hit.GetComponent<IDamageable>();
 
@@ -168,8 +172,10 @@ public class EnemyAI : MonoBehaviour, IDamageable
                 {
                     damageable.OnDamage(stats.attackDamage);
                 }
+            }*/
+            if (hit.TryGetComponent<HealthSystem>(out var playerHealth)) {
+                playerHealth.OnDamage(stats.attackDamage);
             }
-
 
         }
 
@@ -178,11 +184,19 @@ public class EnemyAI : MonoBehaviour, IDamageable
     }
     private void PerformMeleeAttack()
     {
-        if (playerTarget == null) return;
-        IDamageable damageable = playerTarget.GetComponent<IDamageable>();
-        if(damageable != null)
-        {
+        if (playerTarget == null) {
+            Debug.LogError($"[{gameObject.name}] Melee Attack failed: playerTarget is NULL!");
+            return;
+        }
+
+        Debug.Log($"[{gameObject.name}] Attempting melee attack on object named: '{playerTarget.name}'");
+
+        if (playerTarget.TryGetComponent<HealthSystem>(out var damageable)) {
+            Debug.Log($"[{gameObject.name}] SUCCESS: Found HealthSystem on '{playerTarget.name}'. Dealing {stats.attackDamage} damage.");
             damageable.OnDamage(stats.attackDamage);
+        } else {
+            Debug.LogError($"[{gameObject.name}] CRITICAL: Checked '{playerTarget.name}' but it does NOT have a HealthSystem! " +
+                       $"Is this the correct root object?");
         }
     }
 
@@ -205,7 +219,7 @@ public class EnemyAI : MonoBehaviour, IDamageable
     }
     public void Die()
     {
-        GameManager.instance.EnemyAIKilled();
+        //GameManager.instance.EnemyAIKilled();
         
         Destroy(gameObject, .01f);
     }
