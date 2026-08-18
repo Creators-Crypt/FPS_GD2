@@ -483,6 +483,34 @@ PrefabInstance:
       propertyPath: m_Name
       value: lighting
       objectReference: {fileID: 0}
+    - target: {fileID: 2484609711866177494, guid: d120db411aeb24b41b1e13027b1628e6, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.9212199
+      objectReference: {fileID: 0}
+    - target: {fileID: 2484609711866177494, guid: d120db411aeb24b41b1e13027b1628e6, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.29045945
+      objectReference: {fileID: 0}
+    - target: {fileID: 2484609711866177494, guid: d120db411aeb24b41b1e13027b1628e6, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.24684007
+      objectReference: {fileID: 0}
+    - target: {fileID: 2484609711866177494, guid: d120db411aeb24b41b1e13027b1628e6, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.07782836
+      objectReference: {fileID: 0}
+    - target: {fileID: 2484609711866177494, guid: d120db411aeb24b41b1e13027b1628e6, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 35
+      objectReference: {fileID: 0}
+    - target: {fileID: 2484609711866177494, guid: d120db411aeb24b41b1e13027b1628e6, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: -30
+      objectReference: {fileID: 0}
+    - target: {fileID: 2484609711866177494, guid: d120db411aeb24b41b1e13027b1628e6, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3164147038573759193, guid: d120db411aeb24b41b1e13027b1628e6, type: 3}
       propertyPath: m_IsActive
       value: 1
@@ -537,19 +565,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5398535015866505468, guid: d120db411aeb24b41b1e13027b1628e6, type: 3}
       propertyPath: m_Color.b
-      value: 0.65882355
+      value: 0.78039217
       objectReference: {fileID: 0}
     - target: {fileID: 5398535015866505468, guid: d120db411aeb24b41b1e13027b1628e6, type: 3}
       propertyPath: m_Color.g
-      value: 0.5254902
+      value: 0.65882355
       objectReference: {fileID: 0}
     - target: {fileID: 5398535015866505468, guid: d120db411aeb24b41b1e13027b1628e6, type: 3}
       propertyPath: m_Color.r
-      value: 0.4862745
+      value: 0.56078434
       objectReference: {fileID: 0}
     - target: {fileID: 5398535015866505468, guid: d120db411aeb24b41b1e13027b1628e6, type: 3}
       propertyPath: m_Intensity
-      value: 0.25
+      value: 0.15
       objectReference: {fileID: 0}
     - target: {fileID: 5398535015866505468, guid: d120db411aeb24b41b1e13027b1628e6, type: 3}
       propertyPath: m_BounceIntensity
@@ -557,7 +585,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5398535015866505468, guid: d120db411aeb24b41b1e13027b1628e6, type: 3}
       propertyPath: m_Shadows.m_Strength
-      value: 0.8
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: 7211665706608925548, guid: d120db411aeb24b41b1e13027b1628e6, type: 3}
       propertyPath: m_IsActive
