@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 91ed46f2e35663a4899748da965190d9, type: 3}
-  m_Name: BomberSlime
+  m_Name: Split Melee Slime
   m_EditorClassIdentifier: Assembly-CSharp::EnemyStatsSO
-  enemyType: 2
-  maxHealth: 30
-  patrolSpeed: 2
-  chaseSpeed: 4.5
-  patrolRadius: 20
+  enemyType: 0
+  maxHealth: 15
+  patrolSpeed: 1
+  chaseSpeed: 3.5
+  patrolRadius: 10
   patrolWaitTimeMin: 1.5
   patrolWaitTimeMax: 3.5
   detectionRadius: 10
@@ -25,15 +25,15 @@ MonoBehaviour:
   obstacleMask:
     serializedVersion: 2
     m_Bits: 0
-  attackRange: 2.01
+  attackRange: 2
   attackCooldown: 1.2
-  attackDamage: 15
-  projectilePrefab: {fileID: 0}
-  projectileSpeed: 10
-  explosionRadius: 6
-  splitChance: 0.5
-  splitPrefab: {fileID: 2062379671512809283, guid: 03bd780669ea9f949b3072d79f0c3abb, type: 3}
+  attackDamage: 5
+  projectilePrefab: {fileID: 2002685277281540589, guid: 85faa578e3404a0469553bca229569c0, type: 3}
+  projectileSpeed: 20
+  explosionRadius: 3
+  splitChance: 0
+  splitPrefab: {fileID: 0}
   splitCount: 2
-  splitRadius: 2
+  splitRadius: 0.75
   splitVFXPrefab: {fileID: 0}
   splitGrowthSpeed: 0

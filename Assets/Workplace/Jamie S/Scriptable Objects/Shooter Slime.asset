@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: Shooter Slime
   m_EditorClassIdentifier: Assembly-CSharp::EnemyStatsSO
   enemyType: 1
-  maxHealth: 10
+  maxHealth: 30
   patrolSpeed: 2
   chaseSpeed: 4
-  patrolRadius: 8
+  patrolRadius: 20
   patrolWaitTimeMin: 1.5
   patrolWaitTimeMax: 3.5
   detectionRadius: 10
@@ -31,3 +31,9 @@ MonoBehaviour:
   projectilePrefab: {fileID: 2002685277281540589, guid: 85faa578e3404a0469553bca229569c0, type: 3}
   projectileSpeed: 20
   explosionRadius: 3
+  splitChance: 0.5
+  splitPrefab: {fileID: 8849678851245949963, guid: 722e50717483894479156f0de3d076ac, type: 3}
+  splitCount: 2
+  splitRadius: 2
+  splitVFXPrefab: {fileID: 0}
+  splitGrowthSpeed: 0
