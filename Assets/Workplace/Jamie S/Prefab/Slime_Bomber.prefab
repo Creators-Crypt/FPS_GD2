@@ -248,6 +248,9 @@ MonoBehaviour:
   agent: {fileID: 60301313676581131}
   playerTarget: {fileID: 0}
   model: {fileID: 7706332113131567506}
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 64
   spawnPostion: {x: 0, y: 0, z: 0}
   currentHealth: 0
   faceTargetRotSpeed: 10

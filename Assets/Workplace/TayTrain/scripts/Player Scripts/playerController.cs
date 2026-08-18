@@ -478,7 +478,7 @@ public class PlayerController : MonoBehaviour , IInvulnerable
 
             if(healthRegenTimer >= 1f)
             {
-                healthSystem.OnHeal(healthRegenMult);
+                //healthSystem.OnHeal(healthRegenMult);
                 healthRegenTimer = 0f;
             }
         }

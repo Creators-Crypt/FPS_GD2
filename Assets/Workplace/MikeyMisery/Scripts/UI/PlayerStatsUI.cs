@@ -5,7 +5,6 @@ using UnityEngine.UI;
 public class PlayerStatsUI : MonoBehaviour
 {
     [SerializeField] private Image healthFill;
-    [SerializeField] private HealthSystem healthSystem;
     [SerializeField] private Image staminaFill;
     [SerializeField] private Image manaFill;
 
@@ -14,10 +13,14 @@ public class PlayerStatsUI : MonoBehaviour
     private float maxMana = 100f;
     private float currentMana = 50f;
 
+    private void OnEnable() {
+        HealthSystem.OnHealthChangedUI += UpdateHealthBar;
+    }
+
     private void Start() {
 
         staminaController = GameObject.FindGameObjectWithTag("Player").GetComponent<StaminaController>();
-        healthSystem = GameObject.FindGameObjectWithTag("Player").GetComponent<HealthSystem>();
+        
 
         staminaFill.fillAmount = staminaController.Ratio * 0.5f; // Start with half stamina
         manaFill.fillAmount = (currentMana / maxMana) * 0.5f; // Start with half mana
@@ -25,7 +28,11 @@ public class PlayerStatsUI : MonoBehaviour
 
     private void Update()
     {
-        healthFill.fillAmount = healthSystem.CurrentHealth / healthSystem.MaxHealth;
+        
         staminaFill.fillAmount = staminaController.Ratio * 0.5f; // Update stamina fill amount
+    }
+    private void UpdateHealthBar(float currentHealth, float maxHealth) {
+
+        healthFill.fillAmount = currentHealth / maxHealth;
     }
 }

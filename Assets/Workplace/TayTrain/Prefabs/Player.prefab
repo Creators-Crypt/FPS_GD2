@@ -257,10 +257,10 @@ MonoBehaviour:
   m_SoftShadowQuality: 0
   m_RenderingLayersMask:
     serializedVersion: 0
-    m_Bits: 1
+    m_Bits: 4294967295
   m_ShadowRenderingLayersMask:
     serializedVersion: 0
-    m_Bits: 1
+    m_Bits: 4294967295
   m_Version: 4
   m_LightLayerMask: 1
   m_ShadowLayerMask: 1

@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 /// <summary>
 /// 
@@ -141,6 +143,11 @@ public class RayDelivery : SpellDeliveryStrategyBase {
         Vector3 endPosition = context.origin + direction * context.data.rayDistance;
 
         RaycastHit[] hits = Physics.RaycastAll(context.origin, direction, context.data.rayDistance, context.data.hitLayers);
+
+        Array.Sort(hits, (a, b) => a.distance.CompareTo(b.distance));
+
+        if (hits.Length > 0) endPosition = hits[0].point;
+
         foreach (var hit in hits) {
             if (hit.collider.TryGetComponent(out IDamageable dmg))
                 dmg.OnDamage(context.data.damage * context.multiplier);
@@ -154,9 +161,9 @@ public class RayDelivery : SpellDeliveryStrategyBase {
         lineRenderer.SetPosition(1, endPosition);
         lineRenderer.startWidth = context.data.rayWidth;
         lineRenderer.endWidth = context.data.rayWidth;
-        lineRenderer.material = context.data.rayMaterial != null
+        lineRenderer.sharedMaterial = context.data.rayMaterial != null
             ? context.data.rayMaterial
-            : new Material(Shader.Find("Sprites/Default"));
+            : Canvas.GetDefaultCanvasMaterial();
 
         lineRenderer.startColor = context.data.rayColor;
         lineRenderer.endColor = context.data.rayColor;

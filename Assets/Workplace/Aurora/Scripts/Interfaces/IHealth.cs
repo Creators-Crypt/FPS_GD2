@@ -7,8 +7,8 @@ public interface IHealth {
     float MaxHealth { get; }
     bool IsDead { get; }
 
-    event Action<float, float> OnHealthChanged;
     event Action OnDeath;
+    event Action<float, float> OnHealthChanged;
     
     public void OnHeal(float healAmount);
     public void HealMax();

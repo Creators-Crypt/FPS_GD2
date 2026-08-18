@@ -122,7 +122,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 5362466609830920821}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: MainMenuUI, Assembly-CSharp
         m_MethodName: OpenSettings
         m_Mode: 1
@@ -376,7 +376,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2253717069974669119}
   - component: {fileID: 1766485065857582596}
-  - component: {fileID: 5362466609830920821}
   m_Layer: 0
   m_Name: UI
   m_TagString: Untagged
@@ -413,18 +412,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e72bdd1ab56d7c7489ea1746ded7d10a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ButtonFunctions
---- !u!114 &5362466609830920821
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1211920921739654366}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 023e932557e91164c8b34466d1209453, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::MainMenuUI
 --- !u!1 &1313935871595779160
 GameObject:
   m_ObjectHideFlags: 0
@@ -2960,7 +2947,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 5362466609830920821}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: MainMenuUI, Assembly-CSharp
         m_MethodName: RetryGame
         m_Mode: 1
@@ -3411,7 +3398,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 5362466609830920821}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: MainMenuUI, Assembly-CSharp
         m_MethodName: OpenSettings
         m_Mode: 1
@@ -3924,7 +3911,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 5362466609830920821}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: MainMenuUI, Assembly-CSharp
         m_MethodName: OpenSettings
         m_Mode: 1
@@ -4454,7 +4441,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 882741636734639516, guid: c68d99f6bc07e454282cd057a20f7430, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

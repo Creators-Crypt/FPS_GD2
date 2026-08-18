@@ -21,13 +21,15 @@ MonoBehaviour:
   maxSlopeAngle: 45
   enemyLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 512
   maxStamina: 100
   currentStamina: 51.32952
   staminaRegenRate: 0
   dodgeStaminaCost: 20
   sprintStaminaCost: 20
   sprintStaminaRegen: 4
-  maxHealth: 50
+  maxHealth: 100
   invincibleTime: 1
-  canTakeDamage: 0
+  canTakeDamage: 1
+  maxConcentration: 500
+  refillConcentrationTime: 1.5

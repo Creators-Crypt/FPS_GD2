@@ -6,15 +6,17 @@ public class HealthSystem : MonoBehaviour, IHealth, IDamageable {
 
     public event Action OnDeath;
     public event Action<float, float> OnHealthChanged;
+    public static Action<float, float> OnHealthChangedUI;
 
     [Header("Health Data")]
     [SerializeField] private PlayerStats stats;
 
+    private float currentHealth;
     private readonly float maxHP = 100f;
 
     private IInvulnerable invulnerable;
 
-    public float CurrentHealth {  get; private set; }
+    public float CurrentHealth => currentHealth;
     public float MaxHealth => stats != null ? stats.MaxHealth : maxHP;
     public bool IsDead { get; private set; }
 
@@ -25,12 +27,13 @@ public class HealthSystem : MonoBehaviour, IHealth, IDamageable {
     }
     private void InitializeHealth() {
 
-        CurrentHealth = MaxHealth;
+        currentHealth = MaxHealth;
         IsDead = false;
-        OnHealthChanged?.Invoke(CurrentHealth, MaxHealth);
+        OnHealthChangedUI?.Invoke(CurrentHealth, MaxHealth);
     }
     public void HealMax() {
-        CurrentHealth = MaxHealth;
+        currentHealth = MaxHealth;
+        OnHealthChangedUI?.Invoke(CurrentHealth, MaxHealth);
     }
     public IEnumerator HealOverTime(float duration) {
         throw new NotImplementedException();
@@ -39,20 +42,20 @@ public class HealthSystem : MonoBehaviour, IHealth, IDamageable {
 
         if (IsDead || healAmount <= 0) return;
 
-        CurrentHealth = Mathf.Max(MaxHealth, CurrentHealth + healAmount);
+        currentHealth = Mathf.Max(MaxHealth, CurrentHealth + healAmount);
 
-        if (CurrentHealth > MaxHealth) CurrentHealth = MaxHealth;
+        if (CurrentHealth > MaxHealth) currentHealth = MaxHealth;
 
-        OnHealthChanged?.Invoke(CurrentHealth, MaxHealth);
+        OnHealthChangedUI?.Invoke(CurrentHealth, MaxHealth);
     }
     public void OnDamage(float damage) {
         
         if (IsDead || damage <= 0) return;
 
-        if (invulnerable != null && invulnerable.IsInvulnerable) return;
+        //if (invulnerable != null && invulnerable.IsInvulnerable) return;
 
-        CurrentHealth = Mathf.Max(0, CurrentHealth - damage);
-        OnHealthChanged?.Invoke(CurrentHealth, MaxHealth);
+        currentHealth = Mathf.Max(0, CurrentHealth - damage);
+        OnHealthChangedUI?.Invoke(CurrentHealth, MaxHealth);
 
         if (CurrentHealth <= 0) Death();
     }

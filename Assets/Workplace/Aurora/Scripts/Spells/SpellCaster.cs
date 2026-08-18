@@ -20,11 +20,11 @@ public class SpellCaster : MonoBehaviour {
     [SerializeField] private Transform castPoint;
 
     private IStamina stamina;
-
     private IConcentration concentration;
-
     private Spell[] spells;
     private int equippedIndex;
+
+    public SpellWeaponData EquippedWeapon { get; private set; }
 
     public Spell EquippedSpell =>
         (spells != null && spells.Length > 0) ? spells[equippedIndex] : null;
@@ -98,8 +98,8 @@ public class SpellCaster : MonoBehaviour {
         var spell = EquippedSpell;
         if (spell == null) return;
 
-        int next = ((int)spell.Data.delivery + 1)
-                    % System.Enum.GetValues(typeof(SpellDeliveryKind)).Length;
+        int totalDelivery = System.Enum.GetValues(typeof(SpellDeliveryKind)).Length;
+        int next = ((int)spell.Delivery.Kind + 1) % totalDelivery;
 
         spell.SetDelivery((SpellDeliveryKind)next);
     }
@@ -108,6 +108,17 @@ public class SpellCaster : MonoBehaviour {
         var spell = EquippedSpell;
 
         if (spell == null || !spell.IsReady) return;
+
+        if (EquippedWeapon != null) {
+
+            spell.SetDelivery(EquippedWeapon.delivery);
+
+            if (EquippedWeapon.overrideSpawnCount) {
+
+                spell.Data.spawnCount = EquippedWeapon.weaponSpawnCount;
+                spell.Data.spreadAngle = EquippedWeapon.weaponSpreadAngle;
+            }
+        }
 
         // Pay stamina before firing.
         if (stamina != null && !stamina.TrySpend(spell.Data.staminaCost)) return;
@@ -135,20 +146,9 @@ public class SpellCaster : MonoBehaviour {
 
         if (mouse == null || cam == null) return transform.forward;
 
-       /* Plane groundPlane = new Plane(Vector3.up, origin);
-        Ray ray = cam.ScreenPointToRay(mouse.position.ReadValue());
+        Vector3 mouseScreenPosition = mouse.position.ReadValue();
 
-        if (groundPlane.Raycast(ray, out float rayDistance)) {
-
-            Vector3 worldPoint = ray.GetPoint(rayDistance);
-            Vector3 direction = worldPoint - origin;
-
-            //return direction.sqrMagnitude > 0.0001f ? direction.normalized : transform.forward;
-            return direction.normalized;
-        }
-        return origin;*/
-
-        Ray ray = cam.ScreenPointToRay(mouse.position.ReadValue());
+        Ray ray = cam.ScreenPointToRay(mouseScreenPosition);
         if (Physics.Raycast(ray, out RaycastHit hit)) {
             Vector3 direction = hit.point - origin;
             return direction.normalized;

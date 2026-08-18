@@ -90,7 +90,7 @@ public class SpellBuilder {
         }
 
         // Runtime copy so overrides never touch the shared SO asset.
-        var runtimeData = Object.Instantiate(source);
+        var runtimeData = UnityEngine.Object.Instantiate(source);
         runtimeData.name = source.name + " (Runtime)";
 
         if (damage.HasValue)            runtimeData.damage = damage.Value;
@@ -131,7 +131,6 @@ public class Spell {
     /// <summary> Change the delivery shape at runtime (projectile -> ray, etc.). </summary>
     public void SetDelivery(SpellDeliveryKind kind) {
 
-        Data.delivery = kind;
         Delivery = SpellFactory.GetDelivery(kind);
     }
 
