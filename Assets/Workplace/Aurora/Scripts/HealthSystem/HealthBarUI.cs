@@ -14,7 +14,7 @@ public class HealthBarUI : MonoBehaviour {
     [Header("Target & Components")]
     [Tooltip("Health target is the Player.")]
     [SerializeField] private GameObject healthTarget;
-    [SerializeField] private Slider healthSlider;
+    [SerializeField] private Image healthSlider;
 
     private IHealth healthSystem;
 
@@ -45,6 +45,6 @@ public class HealthBarUI : MonoBehaviour {
         if (healthSlider == null) return;
 
         float calculatedHealth = currentHealth / maxHealth;
-        healthSlider.value = calculatedHealth;
+        healthSlider.fillAmount = calculatedHealth;
     }
 }

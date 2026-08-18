@@ -11,12 +11,18 @@ public class PlayerController : MonoBehaviour
     [SerializeField] ConcentrationController concentrationController;
     [SerializeField] SpellCaster spellCaster;
     [SerializeField] DeathHandler deathHandler;
+    [SerializeField] private GameObject concentrationLight;
+
+    [Header("Player Visuals")]
+    [SerializeField] private TrailRenderer teleportTrail;
+    
 
 
     [Header("Jump")]
     [Range(1, 30)][SerializeField] int jumpSpeed = 5;
     [Range(1, 10)][SerializeField] int jumpMax = 1;
     [SerializeField, Range(1, 10)] int gravity = 10;
+
 
     [Header("Animation")]
     [SerializeField] private Transform armPivot;
@@ -55,6 +61,10 @@ public class PlayerController : MonoBehaviour
     float teleportCooldownTimer;
     Vector3 teleportDirection;
 
+    //Concentration
+    bool isConcentrating;
+    float concentrationTimer;
+
     //Player size
     Vector3 originalScale;
 
@@ -69,6 +79,7 @@ public class PlayerController : MonoBehaviour
         Jump,
         Dodge,
         Teleport,
+        Concentrate,
         Dead
     }
 
@@ -90,12 +101,20 @@ public class PlayerController : MonoBehaviour
 
         originalScale = transform.localScale;
 
+        if(teleportTrail != null)
+        {
+            teleportTrail.emitting = false;
+        }
+
     }
     // Update is called once per frame
     void Update() {
 
         stamina = staminaController.Current;
-        isPlayerSprinting = Input.GetKey(KeyCode.LeftShift) && (staminaController.Current > stats.sprintStaminaCost);
+        isPlayerSprinting = !isConcentrating && 
+            Input.GetKey(KeyCode.LeftShift) &&
+            (staminaController.Current > stats.sprintStaminaCost);
+
         staminaController.IsConsuming = isPlayerSprinting;
         currentSpeed = (isPlayerSprinting) ? stats.sprintSpeed : stats.walkSpeed;
         if (isPlayerSprinting) {
@@ -115,6 +134,7 @@ public class PlayerController : MonoBehaviour
 
         teleport();
         dodge();
+        concentrate();
         movement();
         updateState();
         //updateAnimator();
@@ -129,11 +149,15 @@ public class PlayerController : MonoBehaviour
             playerVel.y = -2f;
         }
 
-        if (!isTeleporting && !isDodging) { 
+        if (!isTeleporting && !isDodging && !isConcentrating) { 
             controller.Move(moveDir.normalized * currentSpeed * Time.deltaTime);
         }
 
-        jump();
+        if(!isConcentrating)
+        {
+            jump();
+        }
+       
 
         controller.Move(playerVel * Time.deltaTime);
 
@@ -180,6 +204,12 @@ public class PlayerController : MonoBehaviour
             teleportTimer = teleportDuration;
             teleportCooldownTimer = teleportCooldown;
 
+            if (teleportTrail != null)
+            {
+                teleportTrail.Clear();
+                teleportTrail.emitting = true;
+            }
+
             teleportDirection = moveDir.normalized;
 
             if (teleportDirection == Vector3.zero)
@@ -204,6 +234,11 @@ public class PlayerController : MonoBehaviour
             {
                 isTeleporting = false;
                 teleportTimer = 0f;
+
+                if(teleportTrail != null)
+                {
+                    teleportTrail.emitting = false;
+                }
             }
         }
         else
@@ -221,7 +256,27 @@ public class PlayerController : MonoBehaviour
     }
     void concentrate()
     {
+        if (Input.GetButtonDown("Concentrate") && !isConcentrating)
+        {
+            isConcentrating = true;
+            concentrationTimer = stats.refillConcentrationTime;
 
+            concentrationLight.SetActive(true);
+        }
+        if(isConcentrating)
+        {
+            concentrationTimer-= Time.deltaTime;
+
+            if(concentrationTimer <= 0f)
+            {
+                concentrationController.refill();
+
+                isConcentrating = false;
+                concentrationTimer = 0f;
+
+                concentrationLight.SetActive(false);
+            }
+        }
     }
 
     void rotateArm()
@@ -311,6 +366,11 @@ public class PlayerController : MonoBehaviour
         if (moveDir.sqrMagnitude > 0.01f)
         {
             currentState = PlayerState.Walk;
+            return;
+        }
+        if(isConcentrating)
+        {
+            currentState = PlayerState.Concentrate;
             return;
         }
         currentState = PlayerState.Idle;

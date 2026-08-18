@@ -112,15 +112,21 @@ public class SpellCaster : MonoBehaviour {
         // Pay stamina before firing.
         if (stamina != null && !stamina.TrySpend(spell.Data.staminaCost)) return;
 
+        float multiplier = 1f;
+
         if(concentration != null)
         {
-            concentration.Spend(spell.Data.concentrationCost);
+            multiplier = concentration.getDamageMultiplier();
+            concentration.spend(spell.Data.concentrationCost);
         }
 
         Vector3 origin = castPoint.position;
         Vector3 aim = GetAimDirection(origin);
 
-        spell.Cast(this, transform, origin, aim);
+        //Quaternion spawnRotation = Quaternion.LookRotation(aim); // TODO where in the builder should this be set?
+
+        spell.Cast(this, transform, origin, aim, multiplier);
+
     }
     private Vector3 GetAimDirection(Vector3 origin) {
 
@@ -129,7 +135,7 @@ public class SpellCaster : MonoBehaviour {
 
         if (mouse == null || cam == null) return transform.forward;
 
-        Plane groundPlane = new Plane(Vector3.up, origin);
+       /* Plane groundPlane = new Plane(Vector3.up, origin);
         Ray ray = cam.ScreenPointToRay(mouse.position.ReadValue());
 
         if (groundPlane.Raycast(ray, out float rayDistance)) {
@@ -137,7 +143,15 @@ public class SpellCaster : MonoBehaviour {
             Vector3 worldPoint = ray.GetPoint(rayDistance);
             Vector3 direction = worldPoint - origin;
 
-            return direction.sqrMagnitude > 0.0001f ? direction.normalized : transform.forward;
+            //return direction.sqrMagnitude > 0.0001f ? direction.normalized : transform.forward;
+            return direction.normalized;
+        }
+        return origin;*/
+
+        Ray ray = cam.ScreenPointToRay(mouse.position.ReadValue());
+        if (Physics.Raycast(ray, out RaycastHit hit)) {
+            Vector3 direction = hit.point - origin;
+            return direction.normalized;
         }
         return transform.forward;
     }
