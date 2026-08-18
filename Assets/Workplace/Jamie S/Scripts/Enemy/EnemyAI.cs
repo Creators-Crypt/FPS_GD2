@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
@@ -5,6 +6,7 @@ using static EnemyStatsSO;
 
 public class EnemyAI : MonoBehaviour, IDamageable
 {
+    
     [Header("Data from Scriptiabl object")]
     [SerializeField] public EnemyStatsSO stats;
     
@@ -189,7 +191,7 @@ public class EnemyAI : MonoBehaviour, IDamageable
 
         currentHealth -= amount;
         StartCoroutine(FlashRed());
-        if(stats.projectilePrefab != null) {Destroy(stats.projectilePrefab, .01f); }
+        //if(stats.projectilePrefab != null) { Destroy(stats.projectilePrefab, .01f); }
         if (currentHealth <= 0f)
         {
             Die();
@@ -203,6 +205,8 @@ public class EnemyAI : MonoBehaviour, IDamageable
     }
     public void Die()
     {
+        //GameManager.instance.EnemyAIKilled();
+        
         Destroy(gameObject, .01f);
     }
 
