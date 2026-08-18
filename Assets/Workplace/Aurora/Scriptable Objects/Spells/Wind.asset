@@ -10,20 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 01bfd6b29c565404581f07c3653bf0e6, type: 3}
-  m_Name: Void Trap
+  m_Name: Wind
   m_EditorClassIdentifier: Assembly-CSharp::SpellData
-  spellName: Void Trap
+  spellName: New Spell
   icon: {fileID: 0}
   element: 4
-  delivery: 2
+  delivery: 1
   damage: 15
   staminaCost: 10
   concentrationCost: 25
   cooldown: 0.75
   hitLayers:
     serializedVersion: 2
-    m_Bits: 776
-  projectilePrefab: {fileID: 2127112754668339983, guid: 3f67e53db50141d47b9e426fe84eb846, type: 3}
+    m_Bits: 0
+  projectilePrefab: {fileID: 0}
   projectileSpeed: 12
   projectileLifetime: 4
   arcGravityScale: 2
@@ -33,8 +33,8 @@ MonoBehaviour:
   rayVisualDuration: 0.12
   rayMaterial: {fileID: 0}
   rayColor: {r: 0, g: 1, b: 1, a: 1}
-  aoeRadius: 5
-  aoeCastDistance: 5
+  aoeRadius: 2.5
+  aoeCastDistance: 0
   aoeVfxPrefab: {fileID: 0}
   handRange: 1.4
   handRadius: 0.8
