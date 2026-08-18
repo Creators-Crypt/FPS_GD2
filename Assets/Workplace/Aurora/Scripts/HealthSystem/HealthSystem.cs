@@ -12,11 +12,17 @@ public class HealthSystem : MonoBehaviour, IHealth, IDamageable {
 
     private readonly float maxHP = 100f;
 
+    private IInvulnerable invulnerable;
+
     public float CurrentHealth {  get; private set; }
     public float MaxHealth => stats != null ? stats.MaxHealth : maxHP;
     public bool IsDead { get; private set; }
 
-    private void Awake() => InitializeHealth();
+    private void Awake() {
+
+        invulnerable = GetComponent<IInvulnerable>();
+        InitializeHealth();
+    }
     private void InitializeHealth() {
 
         CurrentHealth = MaxHealth;
@@ -42,6 +48,8 @@ public class HealthSystem : MonoBehaviour, IHealth, IDamageable {
     public void OnDamage(float damage) {
         
         if (IsDead || damage <= 0) return;
+
+        if (invulnerable != null && invulnerable.IsInvulnerable) return;
 
         CurrentHealth = Mathf.Max(0, CurrentHealth - damage);
         OnHealthChanged?.Invoke(CurrentHealth, MaxHealth);
