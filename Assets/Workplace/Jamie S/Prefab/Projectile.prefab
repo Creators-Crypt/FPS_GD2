@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 5414002896168617779}
   - component: {fileID: 279028913391366043}
   - component: {fileID: 6380638111279560755}
-  m_Layer: 11
+  m_Layer: 7
   m_Name: Projectile
   m_TagString: Enemy Projectile
   m_Icon: {fileID: 0}
@@ -82,7 +82,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 4bbedbd38e9aed2469972d66d0d35fd8, type: 2}
+  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
