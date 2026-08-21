@@ -20,12 +20,12 @@ public class ButtonFunctions : MonoBehaviour
     }
 
     public void Resume() {
-        GameManager.instance.ResumeGame();
+        GameManager.Instance.ResumeGame();
     }
 
     public void Restart()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-        GameManager.instance.ResumeGame();
+        GameManager.Instance.ResumeGame();
     }
 }
