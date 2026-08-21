@@ -661,7 +661,6 @@ MonoBehaviour:
   amulet: {fileID: 0}
   armor: {fileID: 0}
   boots: {fileID: 0}
-  testItem: {fileID: 0}
   stats: {fileID: 5648653540166664426}
 --- !u!114 &5648653540166664426
 MonoBehaviour:
@@ -675,8 +674,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8fcaaddd85c0fbe4fbae3cc9e4978274, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EquipStatsMods
-  playerController: {fileID: 0}
-  staminaController: {fileID: 0}
+  playerController: {fileID: 7761638068522542706}
+  staminaController: {fileID: 6673412563084392932}
   staminaRegenMult: 1
   concentrationSpeedMult: 1
   healthRegenMult: 1
@@ -2586,7 +2585,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 5963
+  m_VersionIndex: 5975
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
