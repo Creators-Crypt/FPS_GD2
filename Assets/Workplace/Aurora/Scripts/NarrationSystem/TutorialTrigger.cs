@@ -1,16 +1,23 @@
+using System;
 using UnityEngine;
 
-public class TutorialTrigger : MonoBehaviour
-{
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
+public class TutorialTrigger : MonoBehaviour {
+
+    private void OnTriggerEnter(Collider other) {
         
+        if (other.CompareTag("Player")) {
+
+            GameManager.Instance.SetStage(GameStage.Intro_TutorialTrapped);
+            TrapPlayerInArena();
+            SpawnSlimes();
+        }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+    private void TrapPlayerInArena() {
+        throw new NotImplementedException();
+    }
+
+    private void SpawnSlimes() {
+        throw new NotImplementedException();
     }
 }
