@@ -31,9 +31,9 @@ MonoBehaviour:
   projectilePrefab: {fileID: 2002685277281540589, guid: 85faa578e3404a0469553bca229569c0, type: 3}
   projectileSpeed: 20
   explosionRadius: 3
-  splitChance: 0.5
+  splitChance: 1
   splitPrefab: {fileID: 8849678851245949963, guid: 722e50717483894479156f0de3d076ac, type: 3}
   splitCount: 2
-  splitRadius: 2
-  splitVFXPrefab: {fileID: 0}
+  splitRadius: 10
+  splitVFXPrefab: {fileID: 6865101975669719008, guid: d6e9340b6de345a49ab29188122113e4, type: 3}
   splitGrowthSpeed: 0
