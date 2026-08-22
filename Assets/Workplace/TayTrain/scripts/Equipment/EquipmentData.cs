@@ -46,10 +46,10 @@ public class EquipmentData : ScriptableObject
     {
         switch(slot)
         {
-            case EquipmentManager.EquipmentSlot.Boots:
-                stats.addJumps(bonusJumps);
-                stats.addSpeed(speedBonus);
-                stats.lowerGravity(gravityReduction);
+            case EquipmentManager.EquipmentSlot.Helmet:
+                stats.addHealthMax(healthMaxBonus);
+                stats.addConcentrationMax(concentrationMaxBonus);
+                stats.addStaminaMax(staminaMaxBonus);
                 break;
 
             case EquipmentManager.EquipmentSlot.Amulet:
@@ -57,6 +57,14 @@ public class EquipmentData : ScriptableObject
                 stats.increaseConcentrationSpeedMult(concentrationTimeReduction);
                 stats.increaseHealthRegen(healthRegenBonus);
                 break;
+
+            case EquipmentManager.EquipmentSlot.Boots:
+                stats.addJumps(bonusJumps);
+                stats.addSpeed(speedBonus);
+                stats.lowerGravity(gravityReduction);
+                break;
+
+            
         }
     }
 
@@ -64,10 +72,10 @@ public class EquipmentData : ScriptableObject
     {
         switch(slot)
         {
-            case EquipmentManager.EquipmentSlot.Boots:
-                stats.removeJumps(bonusJumps);
-                stats.removeSpeed(speedBonus);
-                stats.restoreGravity(gravityReduction);
+            case EquipmentManager.EquipmentSlot.Helmet:
+                stats.normalHealthMax(healthMaxBonus);
+                stats.normalConcentrationMax(concentrationMaxBonus);
+                stats.normalStaminaMax(staminaMaxBonus);
                 break;
 
             case EquipmentManager.EquipmentSlot.Amulet:
@@ -75,6 +83,14 @@ public class EquipmentData : ScriptableObject
                 stats.normalConcentrationSpeedMult(concentrationTimeReduction);
                 stats.normalHealthRegen(healthRegenBonus);
                 break;
+
+            case EquipmentManager.EquipmentSlot.Boots:
+                stats.removeJumps(bonusJumps);
+                stats.removeSpeed(speedBonus);
+                stats.restoreGravity(gravityReduction);
+                break;
+
+           
         }
     }
 }

@@ -56,13 +56,34 @@ public class EquipmentUI : MonoBehaviour
             armorName.text = "Armor";
         }
 
-        if (boots != null )
+       
+
+        updateBoots();
+    }
+
+    void updateBoots()
+    {
+        EquipmentData boots = equipmentManager.GetBoots();
+
+        if (boots != null)
         {
             bootsName.text = boots.itemName;
+            bootsDescription.text = boots.itemDescription;
+
+            if(boots.icon != null)
+            {
+                bootsIcon.sprite = boots.icon;
+            }
+
+            bootsStats.text = "Bonus Jumps: +" + boots.bonusJumps +
+                "\nSpeed: +" + boots.speedBonus +
+                "\nGravity Reduction: " + boots.gravityReduction;
         }
         else
         {
             bootsName.text = "Boots";
+            bootsDescription.text = "";
+            bootsStats.text = "";
         }
     }
 }

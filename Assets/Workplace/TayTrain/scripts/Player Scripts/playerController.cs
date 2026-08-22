@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour , IInvulnerable
+public class PlayerController : MonoBehaviour 
 {
     [Header("References")]
     [SerializeField] CharacterController controller;
@@ -51,6 +51,7 @@ public class PlayerController : MonoBehaviour , IInvulnerable
     float concentrationSpeedMult = 1f;
     float healthRegenMult = 1f;
     float healthRegenTimer;
+    float healthMaxBonus = 0f;
 
 
 
@@ -73,13 +74,6 @@ public class PlayerController : MonoBehaviour , IInvulnerable
     Vector3 dodgeDirection;
 
     [SerializeField] float dodgeControllerHeight = 0.01f;
-
-    //Bool for dodge and equpment
-    public bool IsInvulnerable
-    {
-        get {  return isDodging; }
-    }
-
 
     //Teleport
     bool isTeleporting;
@@ -328,6 +322,39 @@ public class PlayerController : MonoBehaviour , IInvulnerable
             playerVel.y = jumpSpeed;
         }
     }
+
+    //Helmet stats
+    public float HealthMaxBonus
+    {
+        get { return healthMaxBonus; }
+    }
+    public void setHealthMaxBonus(float amount)
+    {
+        healthMaxBonus = amount;
+    }
+    //Amulet stats
+    public void setConcentrationSpeedMult(float amount)
+    {
+        concentrationSpeedMult = amount;
+    }
+    public void setHealthRegenMult(float amount)
+    {
+        healthRegenMult = amount;
+    }
+    void healthRegen()
+    {
+        if (healthRegenMult <= 1f)
+        {
+            healthRegenTimer += Time.deltaTime;
+
+            if (healthRegenTimer >= 1f)
+            {
+                //healthSystem.OnHeal(healthRegenMult);
+                healthRegenTimer = 0f;
+            }
+        }
+    }
+    //Boots stats
     public void setBonusJumps(int amount)
     {
         bonusJumps = amount;
@@ -339,14 +366,6 @@ public class PlayerController : MonoBehaviour , IInvulnerable
     public void setGravityMult(float amount)
     {
         gravityMult = amount;
-    }
-    public void setConcentrationSpeedMult(float amount)
-    {
-        concentrationSpeedMult = amount;
-    }
-    public void setHealthRegenMult(float amount)
-    {
-        healthRegenMult = amount;
     }
     void concentrate()
     {
@@ -477,20 +496,7 @@ public class PlayerController : MonoBehaviour , IInvulnerable
     //    animator.SetBool("Grounded", controller.isGrounded);
     //    animator.SetFloat("VerticalSpeed", playerVel.y);
     //}
-    void healthRegen()
-    {
-        if(healthRegenMult <= 1f)
-        {
-            healthRegenTimer += Time.deltaTime;
-
-            if(healthRegenTimer >= 1f)
-            {
-                //healthSystem.OnHeal(healthRegenMult);
-                healthRegenTimer = 0f;
-            }
-        }
-    }
-
+    
     void lookAtEquipment()
     {
         RaycastHit hit;
