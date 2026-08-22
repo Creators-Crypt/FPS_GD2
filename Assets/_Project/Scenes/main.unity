@@ -2048,7 +2048,7 @@ MonoBehaviour:
   m_OverrideVoxelSize: 0
   m_VoxelSize: 0.16666667
   m_MinRegionArea: 2
-  m_NavMeshData: {fileID: 23800000, guid: 8ce548a1c33a4a64fb0eb7ca793b598e, type: 2}
+  m_NavMeshData: {fileID: 23800000, guid: a6c90be6224b8e94db5adc65cacd0257, type: 2}
   m_BuildHeightMesh: 0
 --- !u!4 &1373876809
 Transform:
@@ -2384,6 +2384,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28c48b61b4dbec149a489453db59a82a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
+  currentStage: 0
   currentState: 0
   pauseMenu: {fileID: 701277098}
   winMenu: {fileID: 2002768943}
