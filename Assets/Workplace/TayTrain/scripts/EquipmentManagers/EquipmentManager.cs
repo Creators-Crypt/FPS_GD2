@@ -79,5 +79,23 @@ public class EquipmentManager : MonoBehaviour, IEquipmentPickup
         return oldEquipment;
     }
 
-   
+    public EquipmentData GetHelmet()
+    {
+        return helmet;
+    }
+
+    public EquipmentData GetAmulet()
+    {
+        return amulet;
+    }
+
+    public EquipmentData GetArmor()
+    {
+        return armor;
+    }
+
+    public EquipmentData GetBoots()
+    {
+        return boots;
+    }
 }
