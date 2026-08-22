@@ -27,6 +27,7 @@ public class EquipmentManager : MonoBehaviour, IEquipmentPickup
     {
         if (newEquipment == null)
             return null;
+<<<<<<< HEAD
 
         EquipmentData oldEquipment = null;
 
@@ -80,4 +81,77 @@ public class EquipmentManager : MonoBehaviour, IEquipmentPickup
     }
 
    
+=======
+
+        EquipmentData oldEquipment = null;
+
+      switch (newEquipment.slot)
+        {
+            case EquipmentSlot.Helmet:
+                oldEquipment = helmet;
+                break;
+
+            case EquipmentSlot.Amulet:
+                oldEquipment = amulet;
+                break;
+
+            case EquipmentSlot.Armor:
+                oldEquipment = armor;
+                break;
+
+            case EquipmentSlot.Boots:
+                oldEquipment = boots;
+                break;
+        }
+
+        if (oldEquipment != null)
+        {
+            oldEquipment.Unequip(stats);
+        }
+            
+
+        switch (newEquipment.slot)
+        {
+            case EquipmentSlot.Helmet:
+                helmet = newEquipment;
+                break;
+
+            case EquipmentSlot.Amulet:
+                amulet = newEquipment;
+                break;
+
+            case EquipmentSlot.Armor:
+                armor = newEquipment;
+                break;
+
+            case EquipmentSlot.Boots:
+                boots = newEquipment;
+                break;
+        }
+
+        newEquipment.Equip(stats);
+        Debug.Log("Equipped: " + newEquipment.itemName);
+        return oldEquipment;
+    }
+
+    public EquipmentData GetHelmet()
+    {
+        return helmet;
+    }
+
+    public EquipmentData GetAmulet()
+    {
+        return amulet;
+    }
+
+    public EquipmentData GetArmor()
+    {
+        return armor;
+    }
+
+    public EquipmentData GetBoots()
+    {
+        return boots;
+    }
+>>>>>>> ca916791cbaee9a335d7dff14a47216ac32028f8
 }

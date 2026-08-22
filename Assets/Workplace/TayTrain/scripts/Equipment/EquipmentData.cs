@@ -46,10 +46,17 @@ public class EquipmentData : ScriptableObject
     {
         switch(slot)
         {
+<<<<<<< HEAD
             case EquipmentManager.EquipmentSlot.Boots:
                 stats.addJumps(bonusJumps);
                 stats.addSpeed(speedBonus);
                 stats.lowerGravity(gravityReduction);
+=======
+            case EquipmentManager.EquipmentSlot.Helmet:
+                stats.addHealthMax(healthMaxBonus);
+                stats.addConcentrationMax(concentrationMaxBonus);
+                stats.addStaminaMax(staminaMaxBonus);
+>>>>>>> ca916791cbaee9a335d7dff14a47216ac32028f8
                 break;
 
             case EquipmentManager.EquipmentSlot.Amulet:
@@ -57,6 +64,17 @@ public class EquipmentData : ScriptableObject
                 stats.increaseConcentrationSpeedMult(concentrationTimeReduction);
                 stats.increaseHealthRegen(healthRegenBonus);
                 break;
+<<<<<<< HEAD
+=======
+
+            case EquipmentManager.EquipmentSlot.Boots:
+                stats.addJumps(bonusJumps);
+                stats.addSpeed(speedBonus);
+                stats.lowerGravity(gravityReduction);
+                break;
+
+            
+>>>>>>> ca916791cbaee9a335d7dff14a47216ac32028f8
         }
     }
 
@@ -64,10 +82,17 @@ public class EquipmentData : ScriptableObject
     {
         switch(slot)
         {
+<<<<<<< HEAD
             case EquipmentManager.EquipmentSlot.Boots:
                 stats.removeJumps(bonusJumps);
                 stats.removeSpeed(speedBonus);
                 stats.restoreGravity(gravityReduction);
+=======
+            case EquipmentManager.EquipmentSlot.Helmet:
+                stats.normalHealthMax(healthMaxBonus);
+                stats.normalConcentrationMax(concentrationMaxBonus);
+                stats.normalStaminaMax(staminaMaxBonus);
+>>>>>>> ca916791cbaee9a335d7dff14a47216ac32028f8
                 break;
 
             case EquipmentManager.EquipmentSlot.Amulet:
@@ -75,6 +100,17 @@ public class EquipmentData : ScriptableObject
                 stats.normalConcentrationSpeedMult(concentrationTimeReduction);
                 stats.normalHealthRegen(healthRegenBonus);
                 break;
+<<<<<<< HEAD
+=======
+
+            case EquipmentManager.EquipmentSlot.Boots:
+                stats.removeJumps(bonusJumps);
+                stats.removeSpeed(speedBonus);
+                stats.restoreGravity(gravityReduction);
+                break;
+
+           
+>>>>>>> ca916791cbaee9a335d7dff14a47216ac32028f8
         }
     }
 }

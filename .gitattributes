@@ -148,3 +148,4 @@ Packages/packages-lock.json linguist-generated
 *.skel.bytes            lfs
 # Exceptions for .asset files such as lightning pre-baking
 LightingData.asset     binary
+"Assets/Scenes/Dev Scenes/TaylorDev.unity" -filter -diff -merge text
