@@ -1,10 +1,8 @@
 using System;
 using System.Collections;
-using Unity.VisualScripting;
-using UnityEditor.Animations;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour , IInvulnerable
+public class PlayerController : MonoBehaviour 
 {
     [Header("References")]
     [SerializeField] CharacterController controller;
@@ -16,10 +14,12 @@ public class PlayerController : MonoBehaviour , IInvulnerable
     [SerializeField] DeathHandler deathHandler;
     [SerializeField] private GameObject concentrationLight;
 
+
     [Header("Player Visuals")]
     [SerializeField] private TrailRenderer teleportTrail;
-    
 
+    [Header("Equipment Display Name")]
+    [SerializeField] float equipmentLookDistance = 30f;
 
     [Header("Jump")]
     [Range(1, 30)][SerializeField] int jumpSpeed = 5;
@@ -31,8 +31,10 @@ public class PlayerController : MonoBehaviour , IInvulnerable
     [SerializeField] private Transform armPivot;
     [SerializeField] private float armRotateSpeed = 10f;
 
+
     [Header("Player State")]
     [SerializeField] private PlayerState currentState;
+
 
     [Header("Teleport")]
     [Range(0.05f, 10f)][SerializeField] float teleportTrailTime = 0.2f;
@@ -49,9 +51,7 @@ public class PlayerController : MonoBehaviour , IInvulnerable
     float concentrationSpeedMult = 1f;
     float healthRegenMult = 1f;
     float healthRegenTimer;
-
-
-
+  
     //Movement
     Vector3 moveDir;
     Vector3 playerVel;
@@ -71,13 +71,6 @@ public class PlayerController : MonoBehaviour , IInvulnerable
     Vector3 dodgeDirection;
 
     [SerializeField] float dodgeControllerHeight = 0.01f;
-
-    //Bool for dodge and equpment
-    public bool IsInvulnerable
-    {
-        get {  return isDodging; }
-    }
-
 
     //Teleport
     bool isTeleporting;
@@ -166,11 +159,16 @@ public class PlayerController : MonoBehaviour , IInvulnerable
         concentrate();
         movement();
         healthRegen();
+        lookAtEquipment();
         updateState();
         //updateAnimator();
     }
     private void LateUpdate() {
-        rotateArm();
+        
+        if(moveDir != Vector3.zero)
+        {
+            rotateArm();
+        }
     }
 
     void movement() {
@@ -321,6 +319,43 @@ public class PlayerController : MonoBehaviour , IInvulnerable
             playerVel.y = jumpSpeed;
         }
     }
+
+    //Helmet stats
+    public void setHealthMaxBonus(float amount)
+    {
+        //will add info
+    }
+    public void setConcentrationMaxBonus(float amount)
+    {
+        //will add info
+    }
+    public void setStaminaMaxBonus(float amount)
+    {
+        //will add info
+    }
+    //Amulet stats
+    public void setConcentrationSpeedMult(float amount)
+    {
+        concentrationSpeedMult = amount;
+    }
+    public void setHealthRegenMult(float amount)
+    {
+        healthRegenMult = amount;
+    }
+    void healthRegen()
+    {
+        if (healthRegenMult <= 1f)
+        {
+            healthRegenTimer += Time.deltaTime;
+
+            if (healthRegenTimer >= 1f)
+            {
+                //healthSystem.OnHeal(healthRegenMult);
+                healthRegenTimer = 0f;
+            }
+        }
+    }
+    //Boots stats
     public void setBonusJumps(int amount)
     {
         bonusJumps = amount;
@@ -332,14 +367,6 @@ public class PlayerController : MonoBehaviour , IInvulnerable
     public void setGravityMult(float amount)
     {
         gravityMult = amount;
-    }
-    public void setConcentrationSpeedMult(float amount)
-    {
-        concentrationSpeedMult = amount;
-    }
-    public void setHealthRegenMult(float amount)
-    {
-        healthRegenMult = amount;
     }
     void concentrate()
     {
@@ -470,16 +497,22 @@ public class PlayerController : MonoBehaviour , IInvulnerable
     //    animator.SetBool("Grounded", controller.isGrounded);
     //    animator.SetFloat("VerticalSpeed", playerVel.y);
     //}
-    void healthRegen()
+    
+    void lookAtEquipment()
     {
-        if(healthRegenMult <= 1f)
-        {
-            healthRegenTimer += Time.deltaTime;
+        RaycastHit hit;
 
-            if(healthRegenTimer >= 1f)
+        Debug.DrawRay(Camera.main.transform.position,
+            armPivot.forward * equipmentLookDistance, Color.green);
+
+        if (Physics.Raycast(Camera.main.transform.position,
+            armPivot.forward, out hit, equipmentLookDistance))
+        {
+            EquipmentPickup pickup = hit.collider.GetComponentInParent<EquipmentPickup>();
+
+            if(pickup != null)
             {
-                //healthSystem.OnHeal(healthRegenMult);
-                healthRegenTimer = 0f;
+                Debug.Log(pickup.GetEquipmentName());
             }
         }
     }

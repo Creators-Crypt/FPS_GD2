@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SpellWeaponData
   weaponName: 
   weaponKind: 0
-  delivery: 0
+  delivery: 1
   overrideSpawnCount: 0
   weaponSpawnCount: 3
   weaponSpreadAngle: 30

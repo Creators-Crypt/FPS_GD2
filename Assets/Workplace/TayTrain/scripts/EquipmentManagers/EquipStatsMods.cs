@@ -8,6 +8,12 @@ public class EquipStatsMods : MonoBehaviour
     [SerializeField] StaminaController staminaController;
 
     [Header("Equipment Bonuses")]
+
+    //Helmet
+    [SerializeField] float healthMaxBonus;
+    [SerializeField] float concentrationMaxBonus;
+    [SerializeField] float staminaMaxBonus;
+
     //Amulets
     [SerializeField] float staminaRegenMult = 1f;
     [SerializeField] float concentrationSpeedMult = 1f;
@@ -18,6 +24,69 @@ public class EquipStatsMods : MonoBehaviour
     [SerializeField] float speedMult = 1f;
     [SerializeField] float gravityMult = 1f;
 
+    //Helmet
+    public float HealthMaxBonus
+    {
+        get { return healthMaxBonus; }
+    }
+    public float ConcentrationMaxBonus
+    {
+        get { return concentrationMaxBonus; }
+    }
+    public float StaminaMaxBonus
+    {
+        get { return staminaMaxBonus; }
+    }
+    public void addHealthMax(float amount)
+    {
+        healthMaxBonus += amount;
+
+      playerController.setHealthMaxBonus(healthMaxBonus);
+    }
+    public void normalHealthMax(float amount)
+    {
+        healthMaxBonus -= amount;
+
+        if (healthMaxBonus < 0)
+        {
+            healthMaxBonus = 0;
+        }
+
+        playerController.setHealthMaxBonus(healthMaxBonus);
+    }
+    public void addConcentrationMax(float amount)
+    {
+        concentrationMaxBonus += amount;
+
+        playerController.setConcentrationMaxBonus(concentrationMaxBonus);
+    }
+    public void normalConcentrationMax(float amount)
+    {
+        concentrationMaxBonus -= amount;
+
+        if(concentrationMaxBonus < 0)
+        {
+            concentrationMaxBonus = 0;
+        }
+
+        playerController.setConcentrationMaxBonus(concentrationMaxBonus);
+    }
+    public void addStaminaMax(float amount)
+    {
+        staminaMaxBonus += amount;
+        playerController.setStaminaMaxBonus(staminaMaxBonus);
+    }
+    public void normalStaminaMax(float amount)
+    {
+        staminaMaxBonus -= amount;
+
+        if (staminaMaxBonus < 0)
+        {
+            staminaMaxBonus = 0;
+        }
+        playerController.setStaminaMaxBonus(staminaMaxBonus);
+    }
+    //Amulets
     public float StaminaRegenMult
     {
         get { return staminaRegenMult; }
@@ -35,25 +104,20 @@ public class EquipStatsMods : MonoBehaviour
         staminaRegenMult += amount;
         staminaController.setRegenMult(staminaRegenMult);
     }
-    public void increaseConcentrationSpeedMult(float amount)
-    {
-        concentrationSpeedMult += amount;
-        playerController.setConcentrationSpeedMult(concentrationSpeedMult);
-    }
-    public void increaseHealthRegen(float amount)
-    {
-        healthRegenMult += amount;
-        playerController.setHealthRegenMult(healthRegenMult);
-    }
     public void normalStaminaRegen(float amount)
     {
         staminaRegenMult -= amount;
-        if(staminaRegenMult < 1f)
+        if (staminaRegenMult < 1f)
         {
             staminaRegenMult = 1f;
         }
 
         staminaController.setRegenMult(staminaRegenMult);
+    }
+    public void increaseConcentrationSpeedMult(float amount)
+    {
+        concentrationSpeedMult += amount;
+        playerController.setConcentrationSpeedMult(concentrationSpeedMult);
     }
     public void normalConcentrationSpeedMult(float amount)
     {
@@ -62,7 +126,12 @@ public class EquipStatsMods : MonoBehaviour
         {
             concentrationSpeedMult = 1f;
         }
-        playerController.setConcentrationSpeedMult(concentrationSpeedMult) ;
+        playerController.setConcentrationSpeedMult(concentrationSpeedMult);
+    }
+    public void increaseHealthRegen(float amount)
+    {
+        healthRegenMult += amount;
+        playerController.setHealthRegenMult(healthRegenMult);
     }
     public void normalHealthRegen(float amount)
     {
@@ -73,6 +142,8 @@ public class EquipStatsMods : MonoBehaviour
         }
         playerController.setHealthRegenMult(healthRegenMult);
     }
+
+    //Boots
     public int BonusJumps
     {
         get { return bonusJumps;}
