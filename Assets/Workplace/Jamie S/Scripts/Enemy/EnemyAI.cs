@@ -215,21 +215,26 @@ public class EnemyAI : MonoBehaviour, IDamageable
 
     private void SplitSlime()
     {
-        if(stats.splitVFXPrefab != null)
-        {
-            Instantiate(stats.splitVFXPrefab, transform.position, Quaternion.identity);
-        }
-
+       
         for(int i =0; i < stats.splitCount; i++)
         {
             Vector2 randomOffset = UnityEngine.Random.insideUnitCircle * stats.splitRadius;
             Vector3 spawnPOS = transform.position + new Vector3(randomOffset.x, 0 , randomOffset.y);
 
+            if (stats.splitVFXPrefab != null)
+            {
+                Instantiate(stats.splitVFXPrefab, spawnPOS, Quaternion.identity);
+            }
+
             GameObject newEnemy = Instantiate(stats.splitPrefab, spawnPOS, Quaternion.identity);
 
             if (stats.splitGrowthSpeed > 0f)
             {
-                StartCoroutine(GrowSpawn(stats.splitGrowthSpeed));
+                EnemyAI newEnemyAI = newEnemy.GetComponent<EnemyAI>();
+                if(newEnemyAI != null)
+                {
+                    newEnemyAI.StartCoroutine(GrowSpawn(stats.splitGrowthSpeed));
+                }
             }
 
         }
