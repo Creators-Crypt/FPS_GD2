@@ -41,7 +41,7 @@ public class EquipStatsMods : MonoBehaviour
     {
         healthMaxBonus += amount;
 
-        playerController.setHealthMaxBonus(healthMaxBonus);
+      playerController.setHealthMaxBonus(healthMaxBonus);
     }
     public void normalHealthMax(float amount)
     {
@@ -57,6 +57,8 @@ public class EquipStatsMods : MonoBehaviour
     public void addConcentrationMax(float amount)
     {
         concentrationMaxBonus += amount;
+
+        playerController.setConcentrationMaxBonus(concentrationMaxBonus);
     }
     public void normalConcentrationMax(float amount)
     {
@@ -66,10 +68,13 @@ public class EquipStatsMods : MonoBehaviour
         {
             concentrationMaxBonus = 0;
         }
+
+        playerController.setConcentrationMaxBonus(concentrationMaxBonus);
     }
     public void addStaminaMax(float amount)
     {
-        healthMaxBonus += amount;
+        staminaMaxBonus += amount;
+        playerController.setStaminaMaxBonus(staminaMaxBonus);
     }
     public void normalStaminaMax(float amount)
     {
@@ -79,6 +84,7 @@ public class EquipStatsMods : MonoBehaviour
         {
             staminaMaxBonus = 0;
         }
+        playerController.setStaminaMaxBonus(staminaMaxBonus);
     }
     //Amulets
     public float StaminaRegenMult

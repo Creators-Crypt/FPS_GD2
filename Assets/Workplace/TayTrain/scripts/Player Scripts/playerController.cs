@@ -320,6 +320,19 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    //Helmet stats
+    public void setHealthMaxBonus(float amount)
+    {
+        //will add info
+    }
+    public void setConcentrationMaxBonus(float amount)
+    {
+        //will add info
+    }
+    public void setStaminaMaxBonus(float amount)
+    {
+        //will add info
+    }
     //Amulet stats
     public void setConcentrationSpeedMult(float amount)
     {
