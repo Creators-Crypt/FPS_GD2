@@ -1,10 +1,13 @@
-using System.Runtime.CompilerServices;
-using UnityEditor.Rendering;
+using System;
 using UnityEngine;
 
-public class GameManager : MonoBehaviour
+public class GameManager : Singleton<GameManager>
 {
-    public static GameManager instance;
+
+    public static event Action<GameStage> OnStageChanged;
+    public static event Action<string> OnPlayerAction;
+
+    [SerializeField] private GameStage currentStage;
 
     public enum GameState
     {
@@ -25,22 +28,13 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private CameraController cameraController;
 
-    private void Awake()
-    {
-        if (instance == null)
-        {
-            instance = this;
-        }
-        else if (instance != this)
-        {
-            Destroy(gameObject);
-        }
-    }
+    protected override void Awake() { base.Awake(); }
 
     private void Start()
     {
         Time.timeScale = 1f;
         currentState = GameState.Playing;
+        currentStage = GameStage.Intro_Spawn;
 
         HideCursor();
     }
@@ -126,5 +120,14 @@ public class GameManager : MonoBehaviour
     {
         settingsMenu.SetActive(false);
         pauseMenu.SetActive(true);
+    }
+    public void SetStage(GameStage newState) {
+
+        currentStage = newState;
+        OnStageChanged?.Invoke(currentStage);
+    }
+    public void PlayerPerformAction(string actionKey) {
+
+        OnPlayerAction?.Invoke(actionKey);
     }
 }
