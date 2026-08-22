@@ -10,16 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1d4c1670e597b4244b440d870fb40836, type: 3}
-  m_Name: Speed Boots
+  m_Name: Moon Boots
   m_EditorClassIdentifier: Assembly-CSharp::EquipmentData
-  itemName: Jump Boots
+  itemName: Moon Boots
   itemDescription: Increase max jumps by 1
   icon: {fileID: 0}
   slot: 3
   pickupPrefabs: {fileID: 0}
+  pickupMaterial: {fileID: 2100000, guid: 43ea024462c0bdf49b9390e927bdd079, type: 2}
   bonusJumps: 0
-  speedBonus: 1.5
-  gravityReduction: 0
+  speedBonus: 0
+  gravityReduction: 0.3
   staminaRegenBonus: 0
   concentrationTimeReduction: 0
   healthRegenBonus: 0

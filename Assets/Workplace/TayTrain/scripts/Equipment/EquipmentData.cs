@@ -15,6 +15,7 @@ public class EquipmentData : ScriptableObject
 
     [Header("World Pickup")]
     public GameObject pickupPrefabs;
+    public Material pickupMaterial;
 
     //Boots
     [Header("Boots Bonuses")]
