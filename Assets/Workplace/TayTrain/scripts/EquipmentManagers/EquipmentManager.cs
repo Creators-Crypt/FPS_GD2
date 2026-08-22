@@ -1,15 +1,13 @@
 using UnityEngine;
 
-public class EquipmentManager : MonoBehaviour
+public class EquipmentManager : MonoBehaviour, IEquipmentPickup
 {
     [Header("Equipment Slots")]
-    [SerializeField] GameObject helmet;
-    [SerializeField] GameObject amulet;
-    [SerializeField] GameObject armor;
-    [SerializeField] GameObject boots;
+    [SerializeField] EquipmentData helmet;
+    [SerializeField] EquipmentData amulet;
+    [SerializeField] EquipmentData armor;
+    [SerializeField] EquipmentData boots;
 
-    //for testing
-    [SerializeField] GameObject testItem;
 
     [Header("Player")]
     [SerializeField] EquipStatsMods stats;
@@ -23,121 +21,63 @@ public class EquipmentManager : MonoBehaviour
         Boots
     }
 
-    //Used for testing can change when we decide for UI and Inventory
-    void Update()
+
+
+    public EquipmentData GetEquipment(EquipmentData newEquipment)
     {
-        if(Input.GetKeyDown(KeyCode.T))
-        {
-            equipItem(testItem);
-        }
-       
-        if(Input.GetKeyDown(KeyCode.G))
-        {
-            unequipItem(testItem);
-        }
-    }
+        if (newEquipment == null)
+            return null;
 
-    public void equipItem(GameObject item)
-    {
-        IEquipment equipment = item.GetComponent<IEquipment>();
+        EquipmentData oldEquipment = null;
 
-        if (equipment == null)
-            return;
-
-        GameObject currentItem = null;
-
-      switch (equipment.Slot)
+      switch (newEquipment.slot)
         {
             case EquipmentSlot.Helmet:
-                currentItem = helmet;
+                oldEquipment = helmet;
                 break;
 
             case EquipmentSlot.Amulet:
-                currentItem = amulet;
+                oldEquipment = amulet;
                 break;
 
             case EquipmentSlot.Armor:
-                currentItem = armor;
+                oldEquipment = armor;
                 break;
 
             case EquipmentSlot.Boots:
-                currentItem = boots;
+                oldEquipment = boots;
                 break;
         }
 
-        if (currentItem == item)
-            return;
-
-        if (currentItem != null)
+        if (oldEquipment != null)
         {
-            IEquipment oldEquipment = currentItem.GetComponent<IEquipment>();
-
-            if (oldEquipment != null)
-            {
-                oldEquipment.unequip(stats);
-            }
+            oldEquipment.Unequip(stats);
         }
+            
 
-        switch (equipment.Slot)
+        switch (newEquipment.slot)
         {
             case EquipmentSlot.Helmet:
-                helmet = item;
+                helmet = newEquipment;
                 break;
 
             case EquipmentSlot.Amulet:
-                amulet = item;
+                amulet = newEquipment;
                 break;
 
             case EquipmentSlot.Armor:
-                armor = item;
+                armor = newEquipment;
                 break;
 
             case EquipmentSlot.Boots:
-                boots = item;
+                boots = newEquipment;
                 break;
         }
 
-        equipment.equip(stats);
+        newEquipment.Equip(stats);
+        Debug.Log("Equipped: " + newEquipment.itemName);
+        return oldEquipment;
     }
 
-    public void unequipItem(GameObject item)
-    {
-        IEquipment equipment = item.GetComponent<IEquipment>();
-
-        if (equipment == null)
-            return;
-
-        switch (equipment.Slot)
-        {
-            case EquipmentSlot.Helmet:
-                if (helmet != item)
-                    return;
-
-                helmet = null;
-                break;
-
-            case EquipmentSlot.Amulet:
-                if (amulet != item)
-                    return;
-
-                amulet = null;
-                break;
-
-            case EquipmentSlot.Armor:
-                if (armor != item)
-                    return;
-
-                armor = null;
-                break;
-
-            case EquipmentSlot.Boots:
-                if (boots != item)
-                    return;
-
-                boots = null;
-                break;
-        }
-
-        equipment.unequip(stats);
-    }
+   
 }

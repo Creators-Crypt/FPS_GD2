@@ -1,7 +1,5 @@
 using System;
 using System.Collections;
-using Unity.VisualScripting;
-using UnityEditor.Animations;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour , IInvulnerable
@@ -16,10 +14,12 @@ public class PlayerController : MonoBehaviour , IInvulnerable
     [SerializeField] DeathHandler deathHandler;
     [SerializeField] private GameObject concentrationLight;
 
+
     [Header("Player Visuals")]
     [SerializeField] private TrailRenderer teleportTrail;
-    
 
+    [Header("Equipment Display Name")]
+    [SerializeField] float equipmentLookDistance = 30f;
 
     [Header("Jump")]
     [Range(1, 30)][SerializeField] int jumpSpeed = 5;
@@ -31,8 +31,10 @@ public class PlayerController : MonoBehaviour , IInvulnerable
     [SerializeField] private Transform armPivot;
     [SerializeField] private float armRotateSpeed = 10f;
 
+
     [Header("Player State")]
     [SerializeField] private PlayerState currentState;
+
 
     [Header("Teleport")]
     [Range(0.05f, 10f)][SerializeField] float teleportTrailTime = 0.2f;
@@ -166,11 +168,16 @@ public class PlayerController : MonoBehaviour , IInvulnerable
         concentrate();
         movement();
         healthRegen();
+        lookAtEquipment();
         updateState();
         //updateAnimator();
     }
     private void LateUpdate() {
-        rotateArm();
+        
+        if(moveDir != Vector3.zero)
+        {
+            rotateArm();
+        }
     }
 
     void movement() {
@@ -480,6 +487,25 @@ public class PlayerController : MonoBehaviour , IInvulnerable
             {
                 //healthSystem.OnHeal(healthRegenMult);
                 healthRegenTimer = 0f;
+            }
+        }
+    }
+
+    void lookAtEquipment()
+    {
+        RaycastHit hit;
+
+        Debug.DrawRay(Camera.main.transform.position,
+            armPivot.forward * equipmentLookDistance, Color.green);
+
+        if (Physics.Raycast(Camera.main.transform.position,
+            armPivot.forward, out hit, equipmentLookDistance))
+        {
+            EquipmentPickup pickup = hit.collider.GetComponentInParent<EquipmentPickup>();
+
+            if(pickup != null)
+            {
+                Debug.Log(pickup.GetEquipmentName());
             }
         }
     }

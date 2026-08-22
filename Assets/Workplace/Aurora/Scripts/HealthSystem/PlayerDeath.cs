@@ -12,7 +12,7 @@ public class PlayerDeath : DeathHandler {
     }
     protected override void HandleDeath() {
 
-        GameManager.instance.SetLose();
+        GameManager.Instance.SetLose();
         gameObject.SetActive(false);
     }
 }
