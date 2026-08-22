@@ -51,10 +51,7 @@ public class PlayerController : MonoBehaviour
     float concentrationSpeedMult = 1f;
     float healthRegenMult = 1f;
     float healthRegenTimer;
-    float healthMaxBonus = 0f;
-
-
-
+  
     //Movement
     Vector3 moveDir;
     Vector3 playerVel;
@@ -323,15 +320,6 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    //Helmet stats
-    public float HealthMaxBonus
-    {
-        get { return healthMaxBonus; }
-    }
-    public void setHealthMaxBonus(float amount)
-    {
-        healthMaxBonus = amount;
-    }
     //Amulet stats
     public void setConcentrationSpeedMult(float amount)
     {
