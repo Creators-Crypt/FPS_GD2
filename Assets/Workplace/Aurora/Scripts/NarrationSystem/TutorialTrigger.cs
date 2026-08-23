@@ -4,6 +4,7 @@ public class TutorialTrigger : MonoBehaviour {
 
     [SerializeField] private Spawner tutorialSpawner;
     [SerializeField] private GameObject tutorialCage;
+    [SerializeField] private TutorialProgress tutorialProgress;
 
     private void OnTriggerEnter(Collider other) {
         
@@ -12,6 +13,7 @@ public class TutorialTrigger : MonoBehaviour {
             GameManager.Instance.SetStage(GameStage.Intro_TutorialTrapped);
             TrapPlayerInArena();
             SpawnSlimes();
+            tutorialProgress.StartTutorial();
         }
     }
 
