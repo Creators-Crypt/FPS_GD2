@@ -58,6 +58,13 @@ public class EquipmentData : ScriptableObject
                 stats.increaseHealthRegen(healthRegenBonus);
                 break;
 
+            case EquipmentManager.EquipmentSlot.Armor:
+                stats.decreaseTeleportCooldown(teleportCooldownReduction);
+                stats.increaseTeleportDistance(teleportDistanceBonus);
+                stats.decreaseDodgeCooldown(dodgeCooldownReduction);
+                stats.increaseDodgeSpeed(dodgeSpeedBonus);
+                break;
+
             case EquipmentManager.EquipmentSlot.Boots:
                 stats.addJumps(bonusJumps);
                 stats.addSpeed(speedBonus);
@@ -82,6 +89,13 @@ public class EquipmentData : ScriptableObject
                 stats.normalStaminaRegen(staminaRegenBonus);
                 stats.normalConcentrationSpeedMult(concentrationTimeReduction);
                 stats.normalHealthRegen(healthRegenBonus);
+                break;
+
+            case EquipmentManager.EquipmentSlot.Armor:
+                stats.normalTeleportCooldown(teleportCooldownReduction);
+                stats.normalTeleportDistance(teleportDistanceBonus);
+                stats.normalDodgeCooldown(dodgeCooldownReduction);
+                stats.normalDodgeSpeed(dodgeSpeedBonus);
                 break;
 
             case EquipmentManager.EquipmentSlot.Boots:
