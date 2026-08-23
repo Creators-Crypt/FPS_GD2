@@ -1,7 +1,9 @@
-using System;
 using UnityEngine;
 
 public class TutorialTrigger : MonoBehaviour {
+
+    [SerializeField] private Spawner tutorialSpawner;
+    [SerializeField] private GameObject tutorialCage;
 
     private void OnTriggerEnter(Collider other) {
         
@@ -14,10 +16,13 @@ public class TutorialTrigger : MonoBehaviour {
     }
 
     private void TrapPlayerInArena() {
-        throw new NotImplementedException();
+        tutorialCage.SetActive(true);
     }
 
     private void SpawnSlimes() {
-        throw new NotImplementedException();
+        if(tutorialSpawner != null) {
+            tutorialSpawner.gameObject.SetActive(true);
+        }
+        
     }
 }
