@@ -310,7 +310,6 @@ GameObject:
   - component: {fileID: 3008289139750706588}
   - component: {fileID: 9159737729615350152}
   - component: {fileID: 7761638068522542706}
-  - component: {fileID: 658035891976646642}
   - component: {fileID: 6673412563084392932}
   - component: {fileID: 9127910612194883331}
   - component: {fileID: 1874060393386750794}
@@ -416,15 +415,15 @@ MonoBehaviour:
   concentrationLight: {fileID: 516907137128402063}
   teleportTrail: {fileID: 3919352187849786472}
   equipmentLookDistance: 30
-  jumpSpeed: 10
+  jumpSpeed: 5
   jumpMax: 1
-  gravity: 6
+  gravity: 8
   armPivot: {fileID: 8616454463657622074}
   armRotateSpeed: 30
   currentState: 0
   teleportTrailTime: 0.2
-  teleportCooldown: 0.24
-  teleportDistance: 83.9
+  teleportCooldown: 2
+  teleportDistance: 20
   currentSpeed: 0
   isPlayerSprinting: 0
   staminaTimer: 0
@@ -433,20 +432,6 @@ MonoBehaviour:
   ignoreLayer:
     serializedVersion: 2
     m_Bits: 64
---- !u!114 &658035891976646642
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1818594594264804547}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e7a65a2d100d632438a076cda9ae02b9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ConcentrationController
-  stats: {fileID: 11400000, guid: dfe4fb052dce893488008b0512ccee0f, type: 2}
-  currentConcentration: 0
 --- !u!114 &6673412563084392932
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -676,12 +661,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EquipStatsMods
   playerController: {fileID: 7761638068522542706}
   staminaController: {fileID: 6673412563084392932}
+  concentrationController: {fileID: 4167275286118533494}
   healthMaxBonus: 0
   concentrationMaxBonus: 0
   staminaMaxBonus: 0
   staminaRegenMult: 1
   concentrationSpeedMult: 1
   healthRegenMult: 1
+  teleportCooldownReduction: 0
+  teleportDistanceBonus: 0
+  dodgeCooldownReduction: 0
+  dodgeSpeedBonus: 0
   bonusJumps: 0
   speedMult: 1
   gravityMult: 1
@@ -2595,7 +2585,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 5978
+  m_VersionIndex: 6071
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []

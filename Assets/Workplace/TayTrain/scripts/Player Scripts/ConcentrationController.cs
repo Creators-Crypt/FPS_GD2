@@ -4,15 +4,21 @@ public class ConcentrationController : MonoBehaviour ,IConcentration
 {
     [SerializeField] private PlayerStats stats;
     [SerializeField] private float currentConcentration;
+    private float maxConcentrationBonus = 0f;
     public float Current => currentConcentration;
-    public float Ratio => stats ? currentConcentration / stats.maxConcentration : 0f;
+    private float MaxConcentration => stats.maxConcentration + maxConcentrationBonus;
+
+    public float MaxConcentrationBonus
+    { get { return maxConcentrationBonus; } }
+    
+    public float Ratio => stats ? currentConcentration / MaxConcentration : 0f;
     private void Awake()
     {
-        currentConcentration = stats.maxConcentration;
+        currentConcentration = MaxConcentration;
     }
     public void spend(float cost)
     {
-        currentConcentration = Mathf.Clamp(currentConcentration -  cost, 0f, stats.maxConcentration);
+        currentConcentration = Mathf.Clamp(currentConcentration -  cost, 0f, MaxConcentration);
         //currentConcentration -= Spell.concentrationCost;
     }
     public float getDamageMultiplier()
@@ -30,34 +36,17 @@ public class ConcentrationController : MonoBehaviour ,IConcentration
     }
     public void refill()
     {
-        currentConcentration = stats.maxConcentration;
+        currentConcentration = MaxConcentration;
     }
-    //public void spendConcentration(cost)
-    //{
-    //    stats.currentConcentration -= cost;
-    //    if (currentConcentration > 400f)
-    //    {
-            
-    //    }
-    void Start()
-    {
-        
-    }
+  
+    public void SetMaxBonus(float amount)
 
-    // Update is called once per frame
-    private void Update()
     {
-      //if(Input.GetKeyDown(KeyCode.V))
-      //  {
-      //      Spend(50f);
+        maxConcentrationBonus = amount;
 
-      //      Debug.Log("Concentration " + currentConcentration +
-      //          " | Damage Multiplier: " + GetDamageMultipler());
-      //  }
-      //if(Input.GetKeyDown(KeyCode.B))
-      //  {
-      //      refill();
-      //      Debug.Log("Concentration Refilled: " + currentConcentration);
-      //  }
+        if(currentConcentration > MaxConcentration)
+        {
+            currentConcentration = MaxConcentration;
+        }
     }
 }

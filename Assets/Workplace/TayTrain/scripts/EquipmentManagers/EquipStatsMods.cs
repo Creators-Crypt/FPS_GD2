@@ -6,20 +6,27 @@ public class EquipStatsMods : MonoBehaviour
     [Header("References")]
     [SerializeField] PlayerController playerController;
     [SerializeField] StaminaController staminaController;
+    [SerializeField] ConcentrationController concentrationController;
 
     [Header("Equipment Bonuses")]
 
-    //Helmet
+    [Header("Helmet")]
     [SerializeField] float healthMaxBonus;
     [SerializeField] float concentrationMaxBonus;
     [SerializeField] float staminaMaxBonus;
 
-    //Amulets
+    [Header("Amulets")]
     [SerializeField] float staminaRegenMult = 1f;
     [SerializeField] float concentrationSpeedMult = 1f;
     [SerializeField] float healthRegenMult = 1f;
-   
-    //Boots
+
+    [Header("Armor")]
+    [SerializeField] float teleportCooldownReduction;
+    [SerializeField] float teleportDistanceBonus;
+    [SerializeField] float dodgeCooldownReduction;
+    [SerializeField] float dodgeSpeedBonus;
+
+    [Header("Boots")]
     [SerializeField] int bonusJumps;
     [SerializeField] float speedMult = 1f;
     [SerializeField] float gravityMult = 1f;
@@ -41,7 +48,7 @@ public class EquipStatsMods : MonoBehaviour
     {
         healthMaxBonus += amount;
 
-      playerController.setHealthMaxBonus(healthMaxBonus);
+      // connect to health system
     }
     public void normalHealthMax(float amount)
     {
@@ -52,13 +59,13 @@ public class EquipStatsMods : MonoBehaviour
             healthMaxBonus = 0;
         }
 
-        playerController.setHealthMaxBonus(healthMaxBonus);
+        // will connect to health system
     }
     public void addConcentrationMax(float amount)
     {
         concentrationMaxBonus += amount;
 
-        playerController.setConcentrationMaxBonus(concentrationMaxBonus);
+        concentrationController.SetMaxBonus(concentrationMaxBonus);
     }
     public void normalConcentrationMax(float amount)
     {
@@ -69,12 +76,12 @@ public class EquipStatsMods : MonoBehaviour
             concentrationMaxBonus = 0;
         }
 
-        playerController.setConcentrationMaxBonus(concentrationMaxBonus);
+       concentrationController.SetMaxBonus(concentrationMaxBonus);
     }
     public void addStaminaMax(float amount)
     {
         staminaMaxBonus += amount;
-        playerController.setStaminaMaxBonus(staminaMaxBonus);
+       // will connect to stamina system
     }
     public void normalStaminaMax(float amount)
     {
@@ -84,7 +91,7 @@ public class EquipStatsMods : MonoBehaviour
         {
             staminaMaxBonus = 0;
         }
-        playerController.setStaminaMaxBonus(staminaMaxBonus);
+        // will connect to stamina system
     }
     //Amulets
     public float StaminaRegenMult
@@ -143,6 +150,82 @@ public class EquipStatsMods : MonoBehaviour
         playerController.setHealthRegenMult(healthRegenMult);
     }
 
+    //Armor
+    public float TeleportCooldownReduction
+    {
+        get { return teleportCooldownReduction; }
+    }
+    public float TeleportDistanceBonus
+    {
+        get { return teleportDistanceBonus; }
+    }
+    public float DodgeCooldownReduction
+    {
+        get { return dodgeCooldownReduction; }
+    }
+    public float DodgeSpeedBonus
+    {
+        get { return dodgeSpeedBonus; }
+    }
+    public void decreaseTeleportCooldown(float amount)
+    {
+        teleportCooldownReduction += amount;
+        playerController.setTeleportCooldownReduction(teleportCooldownReduction);
+    }
+    public void normalTeleportCooldown(float amount)
+    {
+        teleportCooldownReduction -= amount;
+
+        if(teleportCooldownReduction < 0f)
+        {
+            teleportCooldownReduction = 0f;
+        }
+        playerController.setTeleportCooldownReduction(teleportCooldownReduction);
+    }
+
+    public void increaseTeleportDistance(float amount)
+    {
+        teleportDistanceBonus += amount;
+        playerController.setTeleportDistanceBonus(teleportDistanceBonus);
+    }
+    public void normalTeleportDistance(float amount)
+    {
+        teleportDistanceBonus -= amount;
+
+        if (teleportDistanceBonus < 0f)
+        {
+            teleportDistanceBonus = 0f;
+        }
+        playerController.setTeleportDistanceBonus(teleportDistanceBonus);
+    }
+    public void decreaseDodgeCooldown(float amount)
+    {
+        dodgeCooldownReduction += amount;
+        playerController.setDodgeCooldownReduction(dodgeCooldownReduction);
+    }
+    public void normalDodgeCooldown(float amount)
+    {
+        dodgeCooldownReduction -= amount;
+        if(dodgeCooldownReduction < 0f)
+        {
+            dodgeCooldownReduction = 0f;
+        }
+        playerController.setDodgeCooldownReduction(dodgeCooldownReduction);
+    }
+    public void increaseDodgeSpeed(float amount)
+    {
+        dodgeSpeedBonus += amount;
+        playerController.setDodgeSpeedBonus(dodgeSpeedBonus);
+    }
+    public void normalDodgeSpeed(float amount)
+    {
+        dodgeSpeedBonus -= amount;
+        if(dodgeSpeedBonus < 0f)
+        {
+            dodgeSpeedBonus = 0f;
+        }
+        playerController.setDodgeSpeedBonus(dodgeSpeedBonus);
+    }
     //Boots
     public int BonusJumps
     {
