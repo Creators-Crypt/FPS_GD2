@@ -5,8 +5,14 @@ public class PlayerSpawnManager : MonoBehaviour
     [SerializeField] private Transform player;
     [SerializeField] private Transform spawnPoint;
 
+    private HealthSystem healthSystem;
+
     private void Start()
     {
+        if(player != null)
+        {
+            healthSystem = player.GetComponent<HealthSystem>();
+        }
         spawnPlayer();
     }
 
@@ -28,6 +34,26 @@ public class PlayerSpawnManager : MonoBehaviour
         if(controller != null)
         {
             controller.enabled = true;
+        }
+    }
+
+    public void respawnPlayer()
+    {
+        spawnPlayer();
+
+        if(healthSystem != null)
+        {
+            healthSystem.ResetHealth();
+        }
+
+        GameManager.Instance.RespawnGame();
+    }
+
+    public void setSpawnPoint(Transform newSpawnPoint)
+    {
+        if(newSpawnPoint != null)
+        {
+            spawnPoint = newSpawnPoint;
         }
     }
 }
