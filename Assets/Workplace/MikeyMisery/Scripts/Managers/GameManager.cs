@@ -130,4 +130,15 @@ public class GameManager : Singleton<GameManager>
 
         OnPlayerAction?.Invoke(actionKey);
     }
+    public void RespawnGame()
+    {
+        currentState = GameState.Playing;
+
+        lossMenu.SetActive(false);
+        hud.SetActive(true);
+        cameraController.enabled = true;
+
+        HideCursor();
+        Time.timeScale = 1f;
+    }
 }

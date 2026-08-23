@@ -245,8 +245,9 @@ public class EnemyAI : MonoBehaviour, IDamageable
         if(stats.splitPrefab != null && UnityEngine.Random.value <= stats.splitChance)
         {
             SplitSlime();
-        } 
+        }
 
+        GameManager.Instance.PlayerPerformAction("SlimeKilled");
         Destroy(gameObject, .01f);
     }
 

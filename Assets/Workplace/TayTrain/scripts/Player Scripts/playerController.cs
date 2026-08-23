@@ -214,6 +214,8 @@ public class PlayerController : MonoBehaviour
             float heightDifference = originalControllerHeight - dodgeControllerHeight;
 
             controller.center = originalControllerCenter - new Vector3(0f, heightDifference / 2f, 0f);
+
+            GameManager.Instance.PlayerPerformAction("Dodge");
         }
 
         if (isDodging) {
@@ -292,6 +294,7 @@ public class PlayerController : MonoBehaviour
             transform.position = teleportPoint;
             controller.enabled = true;
 
+            GameManager.Instance.PlayerPerformAction("Teleport");
             //playerVel.y = 0f;
 
             if (teleportTrail != null)
@@ -317,6 +320,8 @@ public class PlayerController : MonoBehaviour
         if (Input.GetButtonDown("Jump") && jumpCount < jumpMax + bonusJumps) {
             jumpCount++;
             playerVel.y = jumpSpeed;
+
+            GameManager.Instance.PlayerPerformAction("Jump");
         }
     }
 
@@ -385,6 +390,8 @@ public class PlayerController : MonoBehaviour
             if(concentrationTimer <= 0f)
             {
                 concentrationController.refill();
+
+                GameManager.Instance.PlayerPerformAction("Concentrate");
 
                 isConcentrating = false;
                 concentrationTimer = 0f;

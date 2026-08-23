@@ -35,6 +35,12 @@ public class HealthSystem : MonoBehaviour, IHealth, IDamageable {
         currentHealth = MaxHealth;
         OnHealthChangedUI?.Invoke(CurrentHealth, MaxHealth);
     }
+    public void ResetHealth() {
+        currentHealth = MaxHealth;
+        IsDead = false;
+
+        OnHealthChangedUI?.Invoke(CurrentHealth, MaxHealth);
+    }
     public IEnumerator HealOverTime(float duration) {
         throw new NotImplementedException();
     }
