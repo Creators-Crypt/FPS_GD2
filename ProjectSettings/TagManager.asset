@@ -8,6 +8,7 @@ TagManager:
   - Enemy Projectile
   - Light
   - Player Spawn Position
+  - Equipment
   layers:
   - Default
   - TransparentFX
