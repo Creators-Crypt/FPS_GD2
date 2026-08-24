@@ -11,7 +11,7 @@ public class EnemyAI : MonoBehaviour, IDamageable
     [SerializeField] public EnemyStatsSO stats;
     
 
-    [SerializeField] private Transform firePoint;
+    [SerializeField] public Transform firePoint;
     [SerializeField] public NavMeshAgent agent;
     [SerializeField] public Transform playerTarget;
     [SerializeField] public Renderer model;
@@ -33,7 +33,7 @@ public class EnemyAI : MonoBehaviour, IDamageable
     public EnemyAttackState attackState;
 
 
-    private void Awake()
+    public virtual void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
         GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
@@ -60,14 +60,14 @@ public class EnemyAI : MonoBehaviour, IDamageable
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public virtual void Start()
     {
         stateMachine.Initialize(patrolState);
 
     }
 
     // Update is called once per frame
-    void Update()
+   public virtual void Update()
     {
         stateMachine.Tick();
     }
@@ -116,7 +116,7 @@ public class EnemyAI : MonoBehaviour, IDamageable
         return Time.time - lastAttackTime >= stats.attackCooldown;
     }
 
-    public void PreformAttack()
+    public virtual void PreformAttack()
     {
         Debug.Log("Enter Perform Attack");
         lastAttackTime = Time.time;
@@ -137,7 +137,7 @@ public class EnemyAI : MonoBehaviour, IDamageable
         }
     }
 
-    private void PreformRangedAttack()
+    public virtual void PreformRangedAttack()
     {
         if(playerTarget == null || stats.projectilePrefab == null) return;
 
@@ -157,7 +157,7 @@ public class EnemyAI : MonoBehaviour, IDamageable
         }
        
     }
-    private void PreforeBomberAttack()
+    public virtual void PreforeBomberAttack()
     {
         Debug.Log("Enter the attack");
         Collider[] hits = Physics.OverlapSphere(transform.position, stats.explosionRadius, playerLayer);
@@ -180,9 +180,8 @@ public class EnemyAI : MonoBehaviour, IDamageable
         }
 
         Die();
-
     }
-    private void PerformMeleeAttack()
+    public virtual void PerformMeleeAttack()
     {
         if (playerTarget == null) {
             Debug.LogError($"[{gameObject.name}] Melee Attack failed: playerTarget is NULL!");
@@ -200,7 +199,7 @@ public class EnemyAI : MonoBehaviour, IDamageable
         }
     }
 
-    public void OnDamage(float amount)
+    public virtual void OnDamage(float amount)
     {
 
         currentHealth -= amount;
@@ -239,7 +238,7 @@ public class EnemyAI : MonoBehaviour, IDamageable
 
         }
     }
-    public void Die()
+    public virtual void Die()
     {
         //GameManager.instance.EnemyAIKilled();
         if(stats.splitPrefab != null && UnityEngine.Random.value <= stats.splitChance)
@@ -252,7 +251,7 @@ public class EnemyAI : MonoBehaviour, IDamageable
     }
 
 
-    IEnumerator FlashRed()
+    public virtual IEnumerator FlashRed()
     {
         model.material.color = Color.red;
         yield return new WaitForSeconds(0.1f);
