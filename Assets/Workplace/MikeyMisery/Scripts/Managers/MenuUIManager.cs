@@ -11,6 +11,10 @@ public class MenuUIManager : MonoBehaviour
     [SerializeField] private GameObject loadingPanel;
     [SerializeField] private GameObject settingsPanel;
     [SerializeField] private GameObject creditsPanel;
+    [SerializeField] private GameObject audioPanel;
+    [SerializeField] private GameObject videoPanel;
+    [SerializeField] private GameObject interfacePanel;
+    [SerializeField] private GameObject accessibilityPanel;
 
     [Header("Loading")]
     [SerializeField] private Slider loadingBar;
@@ -20,21 +24,21 @@ public class MenuUIManager : MonoBehaviour
 
     public void ShowMainMenu()
     {
-        HideAllPanels();
+        HideAllMenus();
         mainMenuPanel.SetActive(true);
     }
 
     public void ShowSettings()
     {
         settingsOpenFromPause = false;
-        HideAllPanels();
+        HideAllMenus();
         settingsPanel.SetActive(true);
     }
 
     public void ShowSettingsFromPause()
     {
         settingsOpenFromPause = true;
-        HideAllPanels();
+        HideAllMenus();
         settingsPanel.SetActive(true);
     }
 
@@ -42,7 +46,7 @@ public class MenuUIManager : MonoBehaviour
     {
         if (settingsOpenFromPause)
         {
-            HideAllPanels();
+            HideAllMenus();
 
         }
         else
@@ -53,17 +57,41 @@ public class MenuUIManager : MonoBehaviour
 
     public void ShowCredits()
     {
-        HideAllPanels();
+        HideAllMenus();
         creditsPanel.SetActive(true);
     }
 
     public void ShowLoading()
     {
-        HideAllPanels();
+        HideAllMenus();
         loadingPanel.SetActive(true);
     }
 
-    public void HideAllPanels()
+    public void ShowAudio()
+    {
+        HideSettingsPanels();
+        audioPanel.SetActive(true);
+    }
+
+    public void ShowVideo()
+    {
+        HideSettingsPanels();
+        videoPanel.SetActive(true);
+    }
+
+    public void ShowInterface()
+    {
+        HideSettingsPanels();
+        interfacePanel.SetActive(true);
+    }
+
+    public void ShowAccessibility()
+    {
+        HideSettingsPanels();
+        accessibilityPanel.SetActive(true);
+    }
+
+    public void HideAllMenus()
     {
         mainMenuPanel.SetActive(false);
         loadingPanel.SetActive(false);
@@ -71,10 +99,27 @@ public class MenuUIManager : MonoBehaviour
         creditsPanel.SetActive(false);
     }
 
+    public void HideSettingsPanels()
+    {
+        audioPanel.SetActive(false);
+        videoPanel.SetActive(false);
+        interfacePanel.SetActive(false);
+        accessibilityPanel.SetActive(false);
+    }
+
     public void StartGame()
     {
         ShowLoading();
         StartCoroutine(LoadGameAsync());
+    }
+
+    public void QuitGame()
+    {
+        Application.Quit();
+
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#endif
     }
 
     private IEnumerator LoadGameAsync()
