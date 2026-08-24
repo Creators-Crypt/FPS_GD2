@@ -51,6 +51,10 @@ public class PlayerController : MonoBehaviour
     float concentrationSpeedMult = 1f;
     float healthRegenMult = 1f;
     float healthRegenTimer;
+    float teleportCooldownReduction = 0f;
+    float teleportDistanceBonus = 0f;
+    float dodgeCooldownReduction = 0f;
+    float dodgeSpeedBonus = 0f;
   
     //Movement
     Vector3 moveDir;
@@ -85,9 +89,6 @@ public class PlayerController : MonoBehaviour
 
     //LayerMask
     [SerializeField] LayerMask ignoreLayer;
-
-    // Animation for arm
-    //Quaternion armBaseRotation;
 
     // PlayerState
     public enum PlayerState {
@@ -201,7 +202,7 @@ public class PlayerController : MonoBehaviour
             isDodging = true;
 
             dodgeTimer = stats.dodgeDuration;
-            dodgeCooldownTimer = stats.dodgeCooldown;
+            dodgeCooldownTimer = Mathf.Max(0f, stats.dodgeCooldown - dodgeCooldownTimer);
 
             dodgeDirection = moveDir.normalized;
 
@@ -225,8 +226,7 @@ public class PlayerController : MonoBehaviour
 
             controller.Move(dodgeDirection *
                 stats.walkSpeed *
-                stats.dodgeSpeedMultiplier *
-                Time.deltaTime);
+                (stats.dodgeSpeedMultiplier + dodgeSpeedBonus) * Time.deltaTime);
 
             dodgeTimer -= Time.deltaTime;
 
@@ -251,7 +251,7 @@ public class PlayerController : MonoBehaviour
         {
             isTeleporting = true;
 
-            teleportCooldownTimer = teleportCooldown;
+            teleportCooldownTimer = Mathf.Max(0f, teleportCooldown - teleportCooldownReduction);
 
             RaycastHit hit;
 
@@ -259,14 +259,14 @@ public class PlayerController : MonoBehaviour
             Vector3 teleportPoint;
 
             if (Physics.Raycast(Camera.main.transform.position,
-                teleportDirection, out hit, teleportDistance, ~ignoreLayer))
+                teleportDirection, out hit, teleportDistance + teleportDistanceBonus, ~ignoreLayer))
             {
                 teleportPoint = hit.point - teleportDirection * 1.5f;
             }
 
             else
             {
-                teleportPoint = transform.position + teleportDirection * teleportDistance;
+                teleportPoint = transform.position + teleportDirection * (teleportDistance + teleportDistanceBonus);
             }
 
             RaycastHit groundHit;
@@ -325,18 +325,22 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    //Helmet stats
-    public void setHealthMaxBonus(float amount)
+    //Armor stats
+    public void setTeleportCooldownReduction(float amount)
     {
-        //will add info
+        teleportCooldownReduction = amount;
     }
-    public void setConcentrationMaxBonus(float amount)
+    public void setTeleportDistanceBonus(float amount)
     {
-        //will add info
+        teleportDistanceBonus = amount;
     }
-    public void setStaminaMaxBonus(float amount)
+    public void setDodgeSpeedBonus(float amount)
     {
-        //will add info
+        dodgeSpeedBonus = amount;
+    }
+    public void setDodgeCooldownReduction(float amount)
+    {
+        dodgeCooldownReduction = amount;
     }
     //Amulet stats
     public void setConcentrationSpeedMult(float amount)
@@ -438,24 +442,6 @@ public class PlayerController : MonoBehaviour
         );
     }
 
-    //Vector3 getAimPoint() {
-    //    Camera cam = Camera.main;
-
-    //    if (cam == null)
-    //        return transform.position + transform.forward * 100f;
-
-    //    Ray ray = new Ray(cam.transform.position, cam.transform.forward);
-
-    //    if (Physics.Raycast(ray, out RaycastHit hit, 100f)) {
-    //        return hit.point;
-    //    }
-    //    return ray.GetPoint(100f);
-    //}
-    //void updateAimTarget() {
-    //    if (armAimTarget == null)
-    //        return;
-    //    armAimTarget.position = getAimPoint();
-    //}
     void updateState() {
         if (healthSystem.IsDead) 
         {
@@ -498,13 +484,6 @@ public class PlayerController : MonoBehaviour
         currentState = PlayerState.Idle;
     }
 
-    //void updateAnimator() {
-    //    animator.SetFloat("Speed", moveDir.magnitude);
-    //    animator.SetBool("Sprint", isPlayerSprinting);
-    //    animator.SetBool("Grounded", controller.isGrounded);
-    //    animator.SetFloat("VerticalSpeed", playerVel.y);
-    //}
-    
     void lookAtEquipment()
     {
         RaycastHit hit;
