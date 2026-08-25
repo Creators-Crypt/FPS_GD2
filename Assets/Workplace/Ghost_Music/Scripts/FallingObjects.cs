@@ -43,11 +43,11 @@ public class FallingObjects : MonoBehaviour
         {
             hasHitPlayer = true;
 
-            PlayerController player = collision.gameObject.GetComponent<PlayerController>();
+            HealthSystem healthSystem = collision.gameObject.GetComponent<HealthSystem>();
 
-            if (player != null)
+            if (healthSystem != null)
             {
-                // Take damage
+                healthSystem.OnDamage(damage);
             }
 
             Invoke(nameof(ResetObject), resetDelay);
@@ -60,5 +60,8 @@ public class FallingObjects : MonoBehaviour
 
         isFalling = false;
         hasHitPlayer = false;
+
+        rb.linearVelocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero; 
     }
 }
