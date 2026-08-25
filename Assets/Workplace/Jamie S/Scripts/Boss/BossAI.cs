@@ -196,6 +196,33 @@ public class BossAI : EnemyAI
 
     }  
 
+    public void ApplyZoneDamage(float _amount,float _zoneMultiplier, bool _isWeakPoint)
+    {
+        if (currentPhase == BossPhase.Dead) return;
+
+        if (isInvulnerable) return;
+        float finalDamage = _amount * _zoneMultiplier;
+
+        if (isStunned)
+        {
+            finalDamage = finalDamage * bossStats.stunDamageMultiplier;
+        }
+    }
+
+    private float GetPhaseHealthBottom()
+    {
+        if(currentPhase == BossPhase.Phase1)
+        {
+            return GetMaxHealth() * bossStats.phase2HealthPercent;
+        }
+
+        if(currentPhase == BossPhase.Phase2 || currentPhase == BossPhase.Stunned)
+        {
+            return GetMaxHealth() * bossStats.phase3HealthPercent;
+        } 
+        return 0f;
+    }
+
     public void DealRadialDamage(Vector3 _center, float _radius, float _damage, LayerMask _whoCanBeHit)
     {
         Collider[] hits = Physics.OverlapSphere(_center, _radius, _whoCanBeHit);

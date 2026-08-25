@@ -556,14 +556,106 @@ public class BossPhase3State : IEnemyState
     }
     public void Enter()
     {
+        stats = boss.bossStats;
 
+        boss.isInvulnerable = true;
+        boss.SetMovementEnabled(false);
+        boss.SetPhaseColor(stats.phase3Material);
+
+        timer = stats.detonationTime;
+        boss.detonationTimeLeft = timer; 
+
+        if(stats.detonationTelegraphPrefab != null)
+        {
+            telegraph = Object.Instantiate(stats.detonationTelegraphPrefab, boss.transform.position,Quaternion.identity);
+            telegraph.transform.SetParent(boss.transform);
+
+            BossTelegraph marker = telegraph.GetComponent<BossTelegraph>();
+
+            if(marker != null)
+            {
+                marker.Play(stats.detonationKillRad, stats.detonationTime);
+            }
+        }
+        routine = boss.StartCoroutine(Countdow());
     }
     public void Tick()
     {
+       if(boss.playerTarget == null) return;
 
+        boss.FacePlayer();
+        PullPlayerIn();
     }
     public void Exit()
     {
+        if(routine != null)
+        {
+            boss.StopCoroutine(routine);
+            routine = null;
+        }
+        if(telegraph != null)
+        {
+            Object.Destroy(telegraph);
+            telegraph = null;
+        }
+    }
+    private void PullPlayerIn()
+    {
+        Transform player = boss.playerTarget;
 
+        Vector3 towardBoss = boss.transform.position - player.position;
+        towardBoss.y = 0f;
+        float dist = towardBoss.magnitude;
+
+        if (dist > stats.p3PullRadius) return;
+        if (dist < pullMinDist) return;
+
+        float howClose = dist / stats.p3PullRadius;
+        float force = Mathf.Lerp(stats.p3PullForce, stats.p3PullForce, howClose); 
+
+        Vector3 pull = towardBoss.normalized * force * Time.deltaTime;
+
+        CharacterController controller = player.GetComponent<CharacterController>();
+        if (controller != null)
+        {
+            controller.Move(pull);
+        }
+
+        PlayerSlimedEffect slime = player.GetComponent<PlayerSlimedEffect>();
+        if(slime != null)
+        {
+            slime.ApplySlime(stats.slimedSlowAmount, stats.slimedTime);
+        }
+        
+    }
+
+    private IEnumerator Countdow()
+    {
+        while(timer > 0f)
+        {
+            timer -= Time.deltaTime;
+
+            boss.detonationTimeLeft = timer;
+            if(boss.detonationTimeLeft < 0f) boss.detonationTimeLeft = 0f;
+
+            yield return null;
+        }
+        Detonate();
+    }
+
+    private void Detonate()
+    {
+        Vector3 center = boss.transform.position;
+
+        if(stats.detonationVFXPrefab != null )
+        {
+            GameObject vfx = Object.Instantiate(stats.detonationVFXPrefab, center, Quaternion.identity);
+            Object.Destroy(vfx, 8f);
+        }
+
+        LayerMask blastHits = boss.GetAttackMask(boss.detonationFriendlyFire);
+        boss.DealRadialDamage(center, stats.detonationKillRad, stats.detonationDmg, blastHits);
+
+        boss.Die();
     }
 }
