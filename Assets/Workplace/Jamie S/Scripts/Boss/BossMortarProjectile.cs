@@ -13,8 +13,8 @@ public class BossMortarProjectile : Projectile
     [Header("Mortar")]
     [SerializeField] public float arcHeight = 6f;
     [SerializeField] public float splachRadius = 4f;
-    private LayerMask groundMask;
-    private LayerMask damagebleMask;
+    [SerializeField] private LayerMask groundMask;
+    [SerializeField] private LayerMask damagebleMask;
 
     private Vector3 startPos;
     private Vector3 targetPos;

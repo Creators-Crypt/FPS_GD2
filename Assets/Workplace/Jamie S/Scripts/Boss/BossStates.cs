@@ -28,14 +28,14 @@ public class BossPhase1State : IEnemyState
 
     public void Tick()
     {
-        if(boss.playerTarget != null)
+        if (boss.playerTarget != null)
         {
             boss.FacePlayer();
         }
     }
     public void Exit()
     {
-        if(attackRoutine != null)
+        if (attackRoutine != null)
         {
             boss.StopCoroutine(attackRoutine);
             attackRoutine = null;
@@ -93,12 +93,12 @@ public class BossPhase1State : IEnemyState
                 aimPoint = aimPoint + boss.playerVelocity * (travelTime * stats.bulletAimAheadOfPlayer);
 
                 Vector3 dir = (aimPoint - muzzle.position).normalized;
-                dir = AddSpread(dir,stats.p1SpreadDegrees);
+                dir = AddSpread(dir, stats.p1SpreadDegrees);
 
                 GameObject shot = Object.Instantiate(stats.projectilePrefab, muzzle.position, Quaternion.LookRotation(dir));
                 Projectile bullet = shot.GetComponent<Projectile>();
 
-                if(bullet != null)
+                if (bullet != null)
                 {
                     bullet.Fire(dir, stats.p1ProjectileSpeed, stats.p1ProjectileDamage);
                 }
@@ -119,7 +119,7 @@ public class BossPhase1State : IEnemyState
         float randomX = Random.Range(-_degrees, _degrees);
         float randomY = Random.Range(-_degrees, _degrees);
 
-        return Quaternion.Euler(randomX, randomY,0)*_dir;
+        return Quaternion.Euler(randomX, randomY, 0) * _dir;
     }
 
     private IEnumerator MortarAttack()
@@ -127,7 +127,7 @@ public class BossPhase1State : IEnemyState
         Transform muzzle = boss.mortarFirePoint;
         if (muzzle == null) muzzle = boss.transform;
 
-        for(int i = 0;i<stats.mortarShellsPreSalvo; i++)
+        for (int i = 0; i < stats.mortarShellsPreSalvo; i++)
         {
             if (boss.playerTarget == null) break;
 
@@ -139,10 +139,10 @@ public class BossPhase1State : IEnemyState
 
             SpawnTelegraph(impactPoint, flightTime);
 
-            GameObject mortarShellObj = Object.Instantiate(stats.mortarPrefab,muzzle.position,Quaternion.identity);
+            GameObject mortarShellObj = Object.Instantiate(stats.mortarPrefab, muzzle.position, Quaternion.identity);
 
             BossMortarProjectile mortarShell = mortarShellObj.GetComponent<BossMortarProjectile>();
-            if(mortarShell != null)
+            if (mortarShell != null)
             {
                 LayerMask splashHits = boss.GetAttackMask(boss.mortarFriendlyFire);
 
@@ -163,7 +163,7 @@ public class BossPhase1State : IEnemyState
     {
         Vector3 aimPoint = boss.playerTarget.position + boss.playerVelocity * stats.mortarAimAheadOfPlayer;
 
-        if(_shellNumber > 0)
+        if (_shellNumber > 0)
         {
             Vector2 randomCircle = Random.insideUnitCircle * stats.mortarScatter;
             aimPoint = aimPoint + new Vector3(randomCircle.x, 0f, randomCircle.y);
@@ -174,7 +174,7 @@ public class BossPhase1State : IEnemyState
         NavMeshHit hit;
         if (NavMesh.SamplePosition(groundPoint, out hit, 3f, NavMesh.AllAreas))
         {
-            groundPoint = hit.position
+            groundPoint = hit.position;
         }
         return groundPoint;
     }
@@ -184,7 +184,7 @@ public class BossPhase1State : IEnemyState
         Vector3 start = _point + Vector3.up * 5f;
 
         RaycastHit hit;
-        if(Physics.Raycast(start, Vector3.down, out hit, 35f, boss.groundMask, QueryTriggerInteraction.Ignore))
+        if (Physics.Raycast(start, Vector3.down, out hit, 35f, boss.groundMask, QueryTriggerInteraction.Ignore))
         {
             return hit.point;
         }
@@ -197,16 +197,16 @@ public class BossPhase1State : IEnemyState
 
         Vector3 spawnPoint = _impactPoint + Vector3.up * .05f;
 
-        GameObject marker = Object.Instantiate(stats.mortarHitPosDisplayPrefab, spawnPoint, Quaternion.Euler(90f,0f,0f));
+        GameObject marker = Object.Instantiate(stats.mortarHitPosDisplayPrefab, spawnPoint, Quaternion.Euler(90f, 0f, 0f));
 
         BossTelegraph telegraph = marker.GetComponent<BossTelegraph>();
-        if(telegraph != null)
+        if (telegraph != null)
         {
-            telegraph.Play(stats.mortarSplashRadius,_flightTime);
+            telegraph.Play(stats.mortarSplashRadius, _flightTime);
         }
         else
         {
-            Object.Destroy(marker, _flightTime +.5f);
+            Object.Destroy(marker, _flightTime + .5f);
         }
     }
 }
@@ -231,20 +231,339 @@ public class BossTransitionState : IEnemyState
         boss.isInvulnerable = true;
         boss.SetMovementEnabled(false);
 
-        Material nextMaterial = stats.phase2Material;
-
-        if(targetPhase == BossPhase.Phase3 )
+        switch (targetPhase)
         {
-            nextMaterial = stats.phase3Material;
-        }
+            case BossPhase.Phase2:
+                boss.SetPhaseColor(stats.phase2Material);
+                routine = boss.StartCoroutine(LeapDownToPlayer());
+                break;
+            case BossPhase.Phase3:
+                boss.SetPhaseColor(stats.phase3Material);
+                routine = boss.StartCoroutine(Transition());
+                break;
 
-        boss.SetPhaseColor(nextMaterial);
-
-        if(targetPhase == BossPhase.Phase2 )
-        {
-            routine = boss.StartCoroutine(LeapDownToPlayer());
+            default:
+                boss.SetPhaseColor(stats.phase2Material);
+                routine = boss.StartCoroutine(Transition());
+                break;
         }
 
     }
+
+    public void Tick()
+    {
+        if (boss.playerTarget != null)
+        {
+            boss.FacePlayer();
+        }
+    }
+
+    public void Exit()
+    {
+        if (routine != null)
+        {
+            boss.StopCoroutine(routine);
+            routine = null;
+        }
+    }
+
+    private IEnumerator LeapDownToPlayer()
+    {
+        yield return new WaitForSeconds(stats.transitionWindup);
+
+        Vector3 startPos = boss.transform.position;
+        Vector3 landingPos = PickLandingSpot();
+
+        if (boss.agent != null)
+        {
+            boss.agent.enabled = false;
+        }
+
+        float timer = 0f;
+        float jumpTime = stats.leapTime;
+
+        while (timer < jumpTime)
+        {
+            timer += Time.deltaTime;
+
+            float amout = timer / jumpTime;
+
+            Vector3 newPos = Vector3.Lerp(startPos, landingPos, amout);
+
+            newPos.y = newPos.y + stats.leapHeight * Mathf.Sin(amout * Mathf.PI);
+
+            boss.transform.position = newPos;
+
+            yield return null;
+        }
+
+        boss.transform.position = landingPos;
+        boss.WarpToNavMesh(landingPos);
+
+        LayerMask shotHits = boss.GetAttackMask(boss.landingShockFriendlyFire);
+        boss.DealRadialDamage(boss.transform.position, stats.landingShockRad, stats.landingShockDmg, shotHits);
+
+        if (stats.landingShockVfxPrefab != null)
+        {
+            GameObject vfx = Object.Instantiate(stats.landingShockVfxPrefab, boss.transform.position, Quaternion.identity);
+            Object.Destroy(vfx, 5f);
+        }
+
+        yield return new WaitForSeconds(.75f);
+
+        boss.isInvulnerable = false;
+        boss.FinishTransition(targetPhase);
+    }
+    private IEnumerator Transition()
+    {
+        yield return new WaitForSeconds(stats.transitionWindup);
+
+        boss.FinishTransition(targetPhase);
+    }
+    private Vector3 PickLandingSpot()
+    {
+        if (boss.playerTarget == null) return boss.transform.position;
+
+        Vector3 playerPos = boss.playerTarget.position;
+
+        Vector3 randomPosAwayFromPlayer = boss.transform.position - playerPos;
+        randomPosAwayFromPlayer.y = 0f;
+
+        Vector3 spot = playerPos + randomPosAwayFromPlayer.normalized * stats.leapLandingDist;
+
+        NavMeshHit hit;
+        if (NavMesh.SamplePosition(spot, out hit, 6f, NavMesh.AllAreas))
+        {
+            return hit.position;
+        }
+
+        if (NavMesh.SamplePosition(playerPos, out hit, 6f, NavMesh.AllAreas))
+        {
+            return hit.position;
+        }
+        return spot;
+    }
 }
-    
+
+
+public class BossPhase2State : IEnemyState
+{
+    private BossAI boss;
+    private BossStatsSO stats;
+    private Coroutine routine;
+
+    private float nextMeleeTime;
+    private float nextWaveTime;
+    private bool busy;
+
+    public BossPhase2State(BossAI _boss)
+    {
+        boss = _boss;
+    }
+
+    public void Enter()
+    {
+        stats = boss.bossStats;
+
+        boss.isInvulnerable = false;
+        boss.SetPhaseColor(stats.phase2Material);
+
+        if (boss.agent != null && boss.agent.enabled)
+        {
+            boss.agent.speed = stats.p2ChaseSpeed;
+            boss.agent.stoppingDistance = stats.p2MeleeRange;
+
+            boss.SetMovementEnabled(true);
+
+            busy = false;
+            nextWaveTime = Time.time + stats.aoeWaveCooldown;
+            nextMeleeTime = Time.time + .5f;
+        }
+    }
+
+    public void Tick()
+    {
+        if (boss.playerTarget == null) return;
+        if (busy)
+        {
+            boss.FacePlayer();
+            return;
+        }
+
+        float distance = Vector3.Distance(boss.transform.position, boss.playerTarget.position);
+
+        if(Time.time >= nextWaveTime)
+        {
+            StartRoutine(AoEWave());
+            return;
+        }
+        if(distance <= stats.p2MeleeRange && Time.time >= nextMeleeTime)
+        {
+            StartRoutine(MeleeAttack());
+            return;
+        }
+
+        boss.SetMovementEnabled(true );
+        boss.MoveTo(boss.playerTarget.position);
+
+        if(distance <= stats.p2MeleeRange)
+        {
+            boss.FacePlayer();
+        }
+
+    }
+    public void Exit()
+    {
+        if(routine != null)
+        {
+            boss.StopCoroutine(routine);
+            routine = null;
+        }
+        busy = false;
+    }
+
+    private void StartRoutine (IEnumerator _routineToRun)
+    {
+        if(routine != null)
+        {
+            boss.StopCoroutine(routine);
+        }
+        routine = boss.StartCoroutine(_routineToRun);
+    }
+
+    private IEnumerator MeleeAttack()
+    {
+        busy = true;
+        boss.SetMovementEnabled(false);
+
+        float timer = 0f;
+        while(timer < stats.p2MeleeWindup)
+        {
+            timer += Time.deltaTime;
+            boss.FacePlayer();
+            yield return null;
+        }
+    }
+
+    private void HitAllInFront()
+    {
+        LayerMask meleeHits = boss.GetAttackMask(boss.meleeFriendlyFire);
+
+        Collider[] hits = Physics.OverlapSphere(boss.transform.position, stats.p2MeleeRange, meleeHits);
+        
+        List<IDamageable> alreadyHit = new List<IDamageable>();
+
+        foreach (Collider hit in hits)
+        {
+            if(hit  == null) continue;
+            if(hit.transform.IsChildOf(boss.transform)) continue;
+
+            Vector3 dist = hit.transform.position - boss.transform.position;
+
+            float angle = Vector3.Angle(boss.transform.forward, dist);
+            if (angle > stats.p2MeleeRange) continue;
+
+            IDamageable target = hit.GetComponent<IDamageable>();
+            if(target == null) continue;
+            if(alreadyHit.Contains(target)) continue;
+
+            alreadyHit.Add(target);
+            target.OnDamage(stats.p2MelleDmg);
+        }
+    }
+
+    private IEnumerator AoEWave()
+    {
+        busy = true;
+        boss.SetMovementEnabled(false);
+
+        yield return new WaitForSeconds(stats.aoeWaveWarnintTime);
+
+        Vector3 center = boss.transform.position;
+        LayerMask waveHits = boss.GetAttackMask(boss.aoeWaveFriendlyFire);
+
+        if(stats.aoeWavePrefab != null)
+        {
+            GameObject waveObject = Object.Instantiate(stats.aoeWavePrefab, center, Quaternion.identity);
+
+           
+        }
+    }
+
+
+
+
+
+
+}
+
+public class BossStunState : IEnemyState
+{
+    private BossAI boss;
+    private BossStatsSO stats;
+    private float timer;
+
+    public BossStunState(BossAI _bossAI)
+    {
+        boss = _bossAI;
+    }
+
+    public void Enter()
+    {
+        stats = boss.bossStats;
+
+        boss.isInvulnerable = false;
+        boss.isStunned = true;
+        boss.SetMovementEnabled(false);
+
+        timer = stats.stunDuration;
+        boss.stunTimeleft = timer;
+
+        boss.SetPhaseColor(stats.stunMaterial);
+    }
+    public void Tick()
+    {
+       timer -= Time.deltaTime;
+        boss.stunTimeleft = timer;
+
+        if(timer <= 0f)
+        {
+            boss.EndStun();
+        }
+    }
+    public void Exit()
+    {
+        boss.isStunned = false;
+        boss.stunTimeleft = 0f;
+        boss.SetPhaseColor(stats.phase2Material);
+        boss.SetMovementEnabled(true);
+    }
+}
+
+public class BossPhase3State : IEnemyState
+{
+    private BossAI boss;
+    private BossStatsSO stats;
+    private Coroutine routine;
+    private GameObject telegraph;
+    private float timer;
+
+    [SerializeField] private float pullMinDist = 3f;
+
+    public BossPhase3State(BossAI _bossAI)
+    {
+        boss = _bossAI;
+    }
+    public void Enter()
+    {
+
+    }
+    public void Tick()
+    {
+
+    }
+    public void Exit()
+    {
+
+    }
+}
