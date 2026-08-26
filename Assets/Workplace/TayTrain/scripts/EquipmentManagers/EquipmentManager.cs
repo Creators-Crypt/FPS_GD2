@@ -21,8 +21,6 @@ public class EquipmentManager : MonoBehaviour, IEquipmentPickup
         Boots
     }
 
-
-
     public EquipmentData GetEquipment(EquipmentData newEquipment)
     {
         if (newEquipment == null)
@@ -47,6 +45,11 @@ public class EquipmentManager : MonoBehaviour, IEquipmentPickup
             case EquipmentSlot.Boots:
                 oldEquipment = boots;
                 break;
+        }
+
+        if(oldEquipment == newEquipment)
+        {
+            return null;
         }
 
         if (oldEquipment != null)
