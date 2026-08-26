@@ -9,11 +9,23 @@ using UnityEngine;
 /// </summary>
 public static class SpellFactory {
 
-    private static readonly ProjectileDelivery projectile = new ProjectileDelivery();
-    private static readonly ArcProjectileDelivery arcProjectile = new ArcProjectileDelivery();
-    private static readonly RayDelivery ray = new RayDelivery();
-    private static readonly AoeDelivery aoe = new AoeDelivery();
-    private static readonly HandDelivery hand = new HandDelivery();
+    private static readonly ProjectileDelivery projectile = new();
+    private static readonly ArcProjectileDelivery arcProjectile = new();
+    private static readonly RayDelivery ray = new();
+    private static readonly AoeDelivery aoe = new();
+    private static readonly HandDelivery hand = new();
+
+    private static ElementalVfxDatabase vfxDatabase;
+
+    public static void Initialize(ElementalVfxDatabase database) { vfxDatabase = database; }
+
+    public static ElementVisualSettings GetVFX(SpellElement element) {
+
+        if (vfxDatabase == null) {
+            vfxDatabase = Resources.Load<ElementalVfxDatabase>("ElementalVfxDatabase");
+        }
+        return vfxDatabase != null ? vfxDatabase.GetSettings(element) : default;
+    }
 
     public static ISpellDeliveryStrategy GetDelivery(SpellDeliveryKind kind) {
 
@@ -73,11 +85,8 @@ public class SpellBuilder {
     public SpellBuilder WithSpawnCount(int count, float? spreadAngle = null, float? interval = null) {
 
         spawnCount = Mathf.Max(1, count);
-
         if (spreadAngle.HasValue) this.spreadAngle = spreadAngle.Value;
-
         if (interval.HasValue) spawnInterval = interval.Value;
-
         return this;
     }
 
@@ -90,21 +99,22 @@ public class SpellBuilder {
         }
 
         // Runtime copy so overrides never touch the shared SO asset.
-        var runtimeData = UnityEngine.Object.Instantiate(source);
-        runtimeData.name = source.name + " (Runtime)";
+        var runtimeDelivery = delivery ?? source.delivery;
+        var strategy = SpellFactory.GetDelivery(runtimeDelivery);
 
-        if (damage.HasValue)            runtimeData.damage = damage.Value;
-        if (staminaCost.HasValue)       runtimeData.staminaCost = staminaCost.Value;
-        if (concentrationCost.HasValue) runtimeData.concentrationCost = concentrationCost.Value;
-        if (cooldown.HasValue)          runtimeData.cooldown = cooldown.Value;
-        if (spawnCount.HasValue)        runtimeData.spawnCount = spawnCount.Value;
-        if (spreadAngle.HasValue)       runtimeData.spreadAngle = spreadAngle.Value;
-        if (spawnInterval.HasValue)     runtimeData.spawnInterval = spawnInterval.Value;
-        if (delivery.HasValue)          runtimeData.delivery = delivery.Value;
-        if (element.HasValue)           runtimeData.element = element.Value;
+        var spell = new Spell(source, strategy);
 
-        var strategy = SpellFactory.GetDelivery(runtimeData.delivery);
-        return new Spell(runtimeData, strategy);
+        if (damage.HasValue)            spell.DamageOverride = damage.Value;
+        if (staminaCost.HasValue)       spell.StaminaCostOverride = staminaCost.Value;
+        if (concentrationCost.HasValue) spell.ConcentrationCostOverride = concentrationCost.Value;
+        if (cooldown.HasValue)          spell.CooldownOverride = cooldown.Value;
+        if (spawnCount.HasValue)        spell.SpawnCountOverride = spawnCount.Value;
+        if (spreadAngle.HasValue)       spell.SpreadAngleOverride = spreadAngle.Value;
+        if (spawnInterval.HasValue)     spell.SpawnIntervalOverride = spawnInterval.Value;
+        if (delivery.HasValue)          spell.SetDelivery(delivery.Value);
+        if (element.HasValue)           spell.Element = element.Value;
+
+        return spell;
     }
 }
 
@@ -116,16 +126,33 @@ public class SpellBuilder {
 /// </summary>
 public class Spell {
 
-    public SpellData Data { get; }
+    public SpellData AssetData { get; }
     public ISpellDeliveryStrategy Delivery { get; private set; }
-    public SpellElement Element { get; private set; }
+    public SpellElement Element { get; set; }
     public float CooldownRemaining { get; private set; }
     public bool IsReady => CooldownRemaining <= 0f;
+
+    public float DamageOverride { get; set; }
+    public float StaminaCostOverride { get; set; }
+    public float ConcentrationCostOverride { get; set; }
+    public float CooldownOverride { get; set; }
+    public int SpawnCountOverride { get; set; }
+    public float SpreadAngleOverride { get; set; }
+    public float SpawnIntervalOverride { get; set; }
+
     public Spell(SpellData data, ISpellDeliveryStrategy delivery) {
 
-        Data = data;
+        AssetData = data;
         Delivery = delivery;
         Element = data.element;
+
+        DamageOverride = data.damage;
+        StaminaCostOverride = data.staminaCost;
+        ConcentrationCostOverride = data.concentrationCost;
+        CooldownOverride = data.cooldown;
+        SpawnCountOverride = data.spawnCount;
+        SpreadAngleOverride = data.spreadAngle;
+        SpawnIntervalOverride = data.spawnInterval;
     }
 
     /// <summary> Change the delivery shape at runtime (projectile -> ray, etc.). </summary>
@@ -146,26 +173,34 @@ public class Spell {
     /// Caller is responsible for paying stamina first (check Data.staminaCost).
     /// 
     /// </summary>
-    public bool Cast(MonoBehaviour runner, Transform caster, Vector3 origin, Vector3 direction, float multiplier)
+    public bool Cast(MonoBehaviour runner, SpellWeaponData weapon, Transform caster, Vector3 origin, Vector3 direction, float multiplier)
     {
-        if (!IsReady || Data == null || Delivery == null) return false;
+        if (!IsReady || AssetData == null) return false;
 
         if (direction.sqrMagnitude < 0.0001f) direction = Vector3.forward;
 
-        var context = new SpellCastContext
-        {
+        SpellDeliveryKind activeDelivery = (weapon != null) ? weapon.delivery : Delivery.Kind;
+        ISpellDeliveryStrategy activeStrategy = SpellFactory.GetDelivery(activeDelivery);
 
-            data = Data,
+        int finalSpawnCount = (weapon != null && weapon.overrideSpawnCount) ? weapon.weaponSpawnCount : SpawnCountOverride;
+        float finalSpreadAngle = (weapon != null && weapon.overrideSpawnCount) ? weapon.weaponSpreadAngle : SpreadAngleOverride;
+
+        var context = new SpellCastContext {
+            data = AssetData,
             element = Element,
             caster = caster,
             origin = origin,
             direction = direction.normalized,
             runner = runner,
-            multiplier = multiplier
+            multiplier = multiplier,
+
+            spawnCount = finalSpawnCount,
+            spreadAngle = finalSpreadAngle,
+            spawnInterval = SpawnIntervalOverride
         };
 
-        Delivery.Cast(context);
-        CooldownRemaining = Data.cooldown;
+        activeStrategy.Cast(context);
+        CooldownRemaining = CooldownOverride;
         return true;
     }
 }
