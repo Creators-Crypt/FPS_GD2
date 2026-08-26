@@ -392,21 +392,21 @@ public class BossPhase2State : IEnemyState
 
         float distance = Vector3.Distance(boss.transform.position, boss.playerTarget.position);
 
-        if(Time.time >= nextWaveTime)
+        if (Time.time >= nextWaveTime)
         {
             StartRoutine(AoEWave());
             return;
         }
-        if(distance <= stats.p2MeleeRange && Time.time >= nextMeleeTime)
+        if (distance <= stats.p2MeleeRange && Time.time >= nextMeleeTime)
         {
             StartRoutine(MeleeAttack());
             return;
         }
 
-        boss.SetMovementEnabled(true );
+        boss.SetMovementEnabled(true);
         boss.MoveTo(boss.playerTarget.position);
 
-        if(distance <= stats.p2MeleeRange)
+        if (distance <= stats.p2MeleeRange)
         {
             boss.FacePlayer();
         }
@@ -414,7 +414,7 @@ public class BossPhase2State : IEnemyState
     }
     public void Exit()
     {
-        if(routine != null)
+        if (routine != null)
         {
             boss.StopCoroutine(routine);
             routine = null;
@@ -422,9 +422,9 @@ public class BossPhase2State : IEnemyState
         busy = false;
     }
 
-    private void StartRoutine (IEnumerator _routineToRun)
+    private void StartRoutine(IEnumerator _routineToRun)
     {
-        if(routine != null)
+        if (routine != null)
         {
             boss.StopCoroutine(routine);
         }
@@ -437,7 +437,7 @@ public class BossPhase2State : IEnemyState
         boss.SetMovementEnabled(false);
 
         float timer = 0f;
-        while(timer < stats.p2MeleeWindup)
+        while (timer < stats.p2MeleeWindup)
         {
             timer += Time.deltaTime;
             boss.FacePlayer();
@@ -451,7 +451,7 @@ public class BossPhase2State : IEnemyState
 
         yield return new WaitForSeconds(.3f);
 
-        boss.SetMovementEnabled(true );
+        boss.SetMovementEnabled(true);
         busy = false;
         routine = null;
     }
@@ -461,13 +461,13 @@ public class BossPhase2State : IEnemyState
         LayerMask meleeHits = boss.GetAttackMask(boss.meleeFriendlyFire);
 
         Collider[] hits = Physics.OverlapSphere(boss.transform.position, stats.p2MeleeRange, meleeHits);
-        
+
         List<IDamageable> alreadyHit = new List<IDamageable>();
 
         foreach (Collider hit in hits)
         {
-            if(hit  == null) continue;
-            if(hit.transform.IsChildOf(boss.transform)) continue;
+            if (hit == null) continue;
+            if (hit.transform.IsChildOf(boss.transform)) continue;
 
             Vector3 dist = hit.transform.position - boss.transform.position;
 
@@ -475,8 +475,8 @@ public class BossPhase2State : IEnemyState
             if (angle > stats.p2MeleeRange) continue;
 
             IDamageable target = hit.GetComponent<IDamageable>();
-            if(target == null) continue;
-            if(alreadyHit.Contains(target)) continue;
+            if (target == null) continue;
+            if (alreadyHit.Contains(target)) continue;
 
             alreadyHit.Add(target);
             target.OnDamage(stats.p2MelleDmg);
@@ -493,20 +493,20 @@ public class BossPhase2State : IEnemyState
         Vector3 center = boss.transform.position;
         LayerMask waveHits = boss.GetAttackMask(boss.aoeWaveFriendlyFire);
 
-        if(stats.aoeWavePrefab != null)
+        if (stats.aoeWavePrefab != null)
         {
             GameObject waveObject = Object.Instantiate(stats.aoeWavePrefab, center, Quaternion.identity);
 
             BossAoEWave wave = waveObject.GetComponent<BossAoEWave>();
             if (wave != null)
             {
-                wave.Play(boss, stats.aoeWaveRadius, stats.aoeWaveSpeed,stats.aoeWaveDmg, waveHits);
-               
+                wave.Play(boss, stats.aoeWaveRadius, stats.aoeWaveSpeed, stats.aoeWaveDmg, waveHits);
+
             }
             else
             {
                 Debug.LogWarning("The AoE prefab is missing the BossAoEWave script please fill it in 'instant damage delt'");
-                boss.DealRadialDamage(center,stats.aoeWaveRadius,stats.aoeWaveDmg,waveHits);
+                boss.DealRadialDamage(center, stats.aoeWaveRadius, stats.aoeWaveDmg, waveHits);
                 Object.Destroy(waveObject, 3f);
             }
 
@@ -552,10 +552,10 @@ public class BossStunState : IEnemyState
     }
     public void Tick()
     {
-       timer -= Time.deltaTime;
+        timer -= Time.deltaTime;
         boss.stunTimeleft = timer;
 
-        if(timer <= 0f)
+        if (timer <= 0f)
         {
             boss.EndStun();
         }
@@ -576,6 +576,8 @@ public class BossPhase3State : IEnemyState
     private Coroutine routine;
     private GameObject telegraph;
     private float timer;
+    [SerializeField] private float pullEndTime;
+    [SerializeField] public float pullDuration = 1f;
 
     [SerializeField] private float pullMinDist = 3f;
 
@@ -592,38 +594,44 @@ public class BossPhase3State : IEnemyState
         boss.SetPhaseColor(stats.phase3Material);
 
         timer = stats.detonationTime;
-        boss.detonationTimeLeft = timer; 
+        boss.detonationTimeLeft = timer;
+        pullEndTime = Time.time + pullDuration;
 
-        if(stats.detonationTelegraphPrefab != null)
+        if (stats.detonationTelegraphPrefab != null)
         {
-            telegraph = Object.Instantiate(stats.detonationTelegraphPrefab, boss.transform.position,Quaternion.identity);
+            telegraph = Object.Instantiate(stats.detonationTelegraphPrefab, boss.transform.position, Quaternion.identity);
             telegraph.transform.SetParent(boss.transform);
 
             BossTelegraph marker = telegraph.GetComponent<BossTelegraph>();
 
-            if(marker != null)
+            if (marker != null)
             {
                 marker.Play(stats.detonationKillRad, stats.detonationTime);
             }
         }
-        PullPlayerIn();
+
         routine = boss.StartCoroutine(Countdow());
     }
     public void Tick()
     {
-       if(boss.playerTarget == null) return;
+        if (boss.playerTarget == null) return;
+
+        if (Time.time < pullEndTime)
+        {
+            PullPlayerIn();
+        }
 
         boss.FacePlayer();
-        
+
     }
     public void Exit()
     {
-        if(routine != null)
+        if (routine != null)
         {
             boss.StopCoroutine(routine);
             routine = null;
         }
-        if(telegraph != null)
+        if (telegraph != null)
         {
             Object.Destroy(telegraph);
             telegraph = null;
@@ -641,7 +649,7 @@ public class BossPhase3State : IEnemyState
         if (dist < pullMinDist) return;
 
         float howClose = dist / stats.p3PullRadius;
-        float force = Mathf.Lerp(stats.p3PullForce, stats.p3PullForce, howClose); 
+        float force = Mathf.Lerp(stats.p3PullForce, stats.p3PullForce, howClose);
 
         Vector3 pull = towardBoss.normalized * force * Time.deltaTime;
 
@@ -652,21 +660,21 @@ public class BossPhase3State : IEnemyState
         }
 
         PlayerSlimedEffect slime = player.GetComponent<PlayerSlimedEffect>();
-        if(slime != null)
+        if (slime != null)
         {
             slime.ApplySlime(stats.slimedSlowAmount, stats.slimedTime);
         }
-        
+
     }
 
     private IEnumerator Countdow()
     {
-        while(timer > 0f)
+        while (timer > 0f)
         {
             timer -= Time.deltaTime;
 
             boss.detonationTimeLeft = timer;
-            if(boss.detonationTimeLeft < 0f) boss.detonationTimeLeft = 0f;
+            if (boss.detonationTimeLeft < 0f) boss.detonationTimeLeft = 0f;
 
             yield return null;
         }
@@ -677,7 +685,7 @@ public class BossPhase3State : IEnemyState
     {
         Vector3 center = boss.transform.position;
 
-        if(stats.detonationVFXPrefab != null )
+        if (stats.detonationVFXPrefab != null)
         {
             GameObject vfx = Object.Instantiate(stats.detonationVFXPrefab, center, Quaternion.identity);
             Object.Destroy(vfx, 8f);
