@@ -74,4 +74,6 @@ public class SpellData : ScriptableObject {
     public float spreadAngle = 30f;
     [Tooltip("Seconds between successive spawns. 0 = all at once.")]
     public float spawnInterval = 0f;
+
+    public GameObject impactVfxPrefab;
 }

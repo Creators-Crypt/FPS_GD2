@@ -15,6 +15,18 @@ public static class SpellFactory {
     private static readonly AoeDelivery aoe = new();
     private static readonly HandDelivery hand = new();
 
+    private static ElementalVfxDatabase vfxDatabase;
+
+    public static void Initialize(ElementalVfxDatabase database) { vfxDatabase = database; }
+
+    public static ElementVisualSettings GetVFX(SpellElement element) {
+
+        if (vfxDatabase == null) {
+            vfxDatabase = Resources.Load<ElementalVfxDatabase>("ElementalVfxDatabase");
+        }
+        return vfxDatabase != null ? vfxDatabase.GetSettings(element) : default;
+    }
+
     public static ISpellDeliveryStrategy GetDelivery(SpellDeliveryKind kind) {
 
         switch (kind) {

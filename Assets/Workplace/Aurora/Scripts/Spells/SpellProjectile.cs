@@ -21,6 +21,8 @@ public class SpellProjectile : MonoBehaviour {
     private float custonGravityScale = 1f;
     private bool useCustomGravity = false;
 
+    private GameObject instantiatedTrail;
+
     private void Awake() {
 
         rb = GetComponent<Rigidbody>();
@@ -31,14 +33,27 @@ public class SpellProjectile : MonoBehaviour {
 
     /// <summary>Called by the delivery strategy right after Instantiate.</summary>
     public void Launch(SpellData spellData, SpellElement spellElement, Vector3 direction , float damageMultiplier) {
+
+        var vfxSettings = SpellFactory.GetVFX(spellElement);
         
         targetLayers = spellData.hitLayers;
         calculatedDamage = damageMultiplier;
         useCustomGravity = false;
-
         rb.useGravity = false;
-        rb.linearVelocity = direction.normalized * spellData.projectileSpeed;
 
+        if (vfxSettings.impactVfxOverride != null) { impactVfxPrefab = vfxSettings.impactVfxOverride; } 
+        else { impactVfxPrefab = spellData.impactVfxPrefab; }
+
+        if (TryGetComponent(out Renderer renderer)) {
+            renderer.material.SetColor("_Color", vfxSettings.primaryColor);
+            renderer.material.SetColor("_EmissionColor", vfxSettings.hdrGlowColor);
+        }
+        if (vfxSettings.projectileTrailPrefab != null) {
+            instantiatedTrail = Instantiate(vfxSettings.projectileTrailPrefab, transform);
+            instantiatedTrail.transform.localPosition = Vector3.zero;
+        }
+
+        rb.linearVelocity = direction.normalized * spellData.projectileSpeed;
         // Face travel direction; arcing shots keep re-facing in Update.
         FaceVelocity(rb.linearVelocity);
         Destroy(gameObject, spellData.projectileLifetime);

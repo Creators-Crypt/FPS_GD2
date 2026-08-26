@@ -15,7 +15,7 @@ public class SpellWeaponData : ScriptableObject {
     [Tooltip("The delivery shape this weapon forces onto any casted spell.")]
     public SpellDeliveryKind delivery;
 
-    public GameObject weapon;
+    public GameObject weaponModelPrefab;
 
     [Header("Power Scales")]
     [Tooltip("Global impact scaling modifier applied to spell parameters")]

@@ -148,6 +148,8 @@ public class RayDelivery : SpellDeliveryStrategyBase {
 
     protected override void Execute(SpellCastContext context, Vector3 direction) {
 
+        var vfxSettings = SpellFactory.GetVFX(context.element);
+        
         Vector3 endPosition = context.origin + direction * context.data.rayDistance;
 
         int hitCount = Physics.RaycastNonAlloc(
@@ -182,8 +184,8 @@ public class RayDelivery : SpellDeliveryStrategyBase {
             ? context.data.rayMaterial
             : new Material(Shader.Find("Sprites/Default"));
 
-        lineRenderer.startColor = context.data.rayColor;
-        lineRenderer.endColor = context.data.rayColor;
+        lineRenderer.startColor = vfxSettings.primaryColor;
+        lineRenderer.endColor = vfxSettings.primaryColor;
         lineRenderer.sortingOrder = 50;
 
         Object.Destroy(beam, Mathf.Max(0.02f, context.data.rayVisualDuration));

@@ -8,7 +8,7 @@ public class SpellWeaponManager : MonoBehaviour {
 
     [Header("Weapon Slots")]
     [Tooltip("Max amount of weapons is 2!")]
-    [SerializeField] private SpellWeaponData[] weaponSlots = new SpellWeaponData[2];
+    [SerializeField] private SpellWeaponData[] weaponSlots;
 
     [SerializeField] private Transform handAnchor;
     private GameObject spawnedModel;
@@ -32,7 +32,16 @@ public class SpellWeaponManager : MonoBehaviour {
     }
     private void OnEnable() { scrollAction.Enable(); }
     private void OnDisable() { scrollAction.Disable(); }
-    private void Start() { UpdateCasterWeapon(); }
+    private void Start() { 
+        
+        if (spellCaster != null && spellCaster.EquippedWeapon != null) {
+
+            weaponSlots[activeSlotIndex] = spellCaster.EquippedWeapon;
+        }
+        
+        UpdateCasterWeapon(); 
+        
+    }
     private void Update() { 
         
         if (swapTimer > 0f) {
@@ -68,9 +77,21 @@ public class SpellWeaponManager : MonoBehaviour {
         if (spawnedModel != null) Destroy(spawnedModel);
 
         SpellWeaponData currentWeapon = ActiveWeapon;
-        if (currentWeapon != null || currentWeapon.weapon == null) return;
+        //if (currentWeapon != null || currentWeapon.weaponPrefab == null) return;
 
-        spawnedModel = Instantiate(currentWeapon.weapon, handAnchor);
+        if (currentWeapon == null) {
+            Debug.LogWarning($"[WEAPON DEBUG] ActiveWeapon is NULL at slot index {activeSlotIndex}. Check your weaponSlots array assignment.");
+            return;
+        }
+        if (currentWeapon.weaponModelPrefab == null) {
+            Debug.LogError($"[SpellWeaponManager] Missing Visual Prefab! '{currentWeapon.weaponName}' has no weaponModelPrefab assigned in its ScriptableObject asset asset file.", currentWeapon);
+            return;
+        }
+        if (handAnchor == null) {
+            Debug.LogError($"[SpellWeaponManager] Hand Anchor transform is unassigned on the {gameObject.name} GameObject!", this);
+            return;
+        }
+        spawnedModel = Instantiate(currentWeapon.weaponModelPrefab, handAnchor);
 
         spawnedModel.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
         spawnedModel.transform.localScale = Vector3.one;
