@@ -92,15 +92,15 @@ public class SpellBuilder {
 
         var spell = new Spell(source, strategy);
 
-        if (damage.HasValue)            spell.AssetData.damage = damage.Value;
-        if (staminaCost.HasValue)       spell.AssetData.staminaCost = staminaCost.Value;
-        if (concentrationCost.HasValue) spell.AssetData.concentrationCost = concentrationCost.Value;
-        if (cooldown.HasValue)          spell.AssetData.cooldown = cooldown.Value;
-        if (spawnCount.HasValue)        spell.AssetData.spawnCount = spawnCount.Value;
-        if (spreadAngle.HasValue)       spell.AssetData.spreadAngle = spreadAngle.Value;
-        if (spawnInterval.HasValue)     spell.AssetData.spawnInterval = spawnInterval.Value;
-        if (delivery.HasValue)          spell.AssetData.delivery = delivery.Value;
-        if (element.HasValue)           spell.AssetData.element = element.Value;
+        if (damage.HasValue)            spell.DamageOverride = damage.Value;
+        if (staminaCost.HasValue)       spell.StaminaCostOverride = staminaCost.Value;
+        if (concentrationCost.HasValue) spell.ConcentrationCostOverride = concentrationCost.Value;
+        if (cooldown.HasValue)          spell.CooldownOverride = cooldown.Value;
+        if (spawnCount.HasValue)        spell.SpawnCountOverride = spawnCount.Value;
+        if (spreadAngle.HasValue)       spell.SpreadAngleOverride = spreadAngle.Value;
+        if (spawnInterval.HasValue)     spell.SpawnIntervalOverride = spawnInterval.Value;
+        if (delivery.HasValue)          spell.SetDelivery(delivery.Value);
+        if (element.HasValue)           spell.Element = element.Value;
 
         return spell;
     }
@@ -188,7 +188,7 @@ public class Spell {
         };
 
         activeStrategy.Cast(context);
-        CooldownRemaining = AssetData.cooldown;
+        CooldownRemaining = CooldownOverride;
         return true;
     }
 }

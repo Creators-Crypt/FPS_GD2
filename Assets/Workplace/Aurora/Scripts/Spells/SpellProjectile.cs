@@ -16,9 +16,11 @@ public class SpellProjectile : MonoBehaviour {
     [SerializeField] private bool destroyOnHit = true;
 
     private Rigidbody rb;
-    private SpellData data;
-    private SpellElement element;
-    private float multiplier = 1f;
+    private LayerMask targetLayers;
+    private float calculatedDamage;
+    private float custonGravityScale = 1f;
+    private bool useCustomGravity = false;
+
     private void Awake() {
 
         rb = GetComponent<Rigidbody>();
@@ -28,11 +30,11 @@ public class SpellProjectile : MonoBehaviour {
     }
 
     /// <summary>Called by the delivery strategy right after Instantiate.</summary>
-    public void Launch(SpellData spellData, SpellElement spellElement, Vector3 direction , float damageMultiplier)
-    {
-        data = spellData;
-        element = spellElement;
-        multiplier = damageMultiplier;
+    public void Launch(SpellData spellData, SpellElement spellElement, Vector3 direction , float damageMultiplier) {
+        
+        targetLayers = spellData.hitLayers;
+        calculatedDamage = damageMultiplier;
+        useCustomGravity = false;
 
         rb.useGravity = false;
         rb.linearVelocity = direction.normalized * spellData.projectileSpeed;
@@ -42,27 +44,26 @@ public class SpellProjectile : MonoBehaviour {
         Destroy(gameObject, spellData.projectileLifetime);
     }
     public void Launch(SpellData spellData, SpellElement spellElement, Vector3 direction, bool gravityState, float damageMultiplier) { 
-        data = spellData;
-        element = spellElement;
-        multiplier = damageMultiplier;
+        
+        targetLayers = spellData.hitLayers;
+        calculatedDamage = damageMultiplier;
 
-        rb.useGravity = gravityState;
+        if (gravityState) {
+            
+            useCustomGravity = true;
+            rb.useGravity = false;
+            custonGravityScale = spellData.arcGravityScale;
+        }
         rb.linearVelocity = direction.normalized * spellData.projectileSpeed;
-
         // Face travel direction; arcing shots keep re-facing in Update.
         FaceVelocity(rb.linearVelocity);
-
         Destroy(gameObject, spellData.projectileLifetime);
-    }
-
-    private void Update() {
-    
-        if (rb.linearVelocity.sqrMagnitude > 0f) {
-            if (rb.useGravity) FaceVelocity(rb.linearVelocity);
-        }
     }
     private void FixedUpdate() {
 
+        if (useCustomGravity) {
+            rb.linearVelocity += custonGravityScale * Time.fixedDeltaTime * Physics.gravity;
+        }
         if (rb.useGravity && rb.linearVelocity.sqrMagnitude > 0.001f) FaceVelocity(rb.linearVelocity);
     }
     private void FaceVelocity(Vector3 velocity) {
@@ -73,15 +74,13 @@ public class SpellProjectile : MonoBehaviour {
         }
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (data == null) return;
+    private void OnTriggerEnter(Collider other) {
 
         // Only react to layers this spell is allowed to hit.
-        if ((data.hitLayers.value & (1 << other.gameObject.layer)) == 0) return;
+        if ((targetLayers.value & (1 << other.gameObject.layer)) == 0) return;
 
         if (other.TryGetComponent(out IDamageable dmg))
-            dmg.OnDamage(data.damage * multiplier);
+            dmg.OnDamage(calculatedDamage);
 
         if (impactVfxPrefab != null)
         {

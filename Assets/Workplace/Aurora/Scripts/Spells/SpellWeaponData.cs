@@ -15,6 +15,13 @@ public class SpellWeaponData : ScriptableObject {
     [Tooltip("The delivery shape this weapon forces onto any casted spell.")]
     public SpellDeliveryKind delivery;
 
+    public GameObject weapon;
+
+    [Header("Power Scales")]
+    [Tooltip("Global impact scaling modifier applied to spell parameters")]
+    public float damageMultiplier = 1.0f;
+    public float cooldownMultiplier = 1.0f;
+
     [Tooltip("Optional: Modifies the spell's spawn count (Example: Wand now instantiates 3 projectiles)")]
     public bool overrideSpawnCount = false;
     public int weaponSpawnCount = 3;

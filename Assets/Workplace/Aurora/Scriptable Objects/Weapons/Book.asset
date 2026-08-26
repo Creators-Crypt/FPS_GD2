@@ -13,8 +13,11 @@ MonoBehaviour:
   m_Name: Book
   m_EditorClassIdentifier: Assembly-CSharp::SpellWeaponData
   weaponName: 
-  weaponKind: 0
+  weaponKind: 2
   delivery: 4
+  weapon: {fileID: 1030983134, guid: 970278b758588fd4299b335019d1a56b, type: 3}
+  damageMultiplier: 1
+  cooldownMultiplier: 1
   overrideSpawnCount: 0
   weaponSpawnCount: 3
   weaponSpreadAngle: 30

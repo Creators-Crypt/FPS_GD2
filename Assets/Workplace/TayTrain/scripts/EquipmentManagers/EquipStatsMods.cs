@@ -1,8 +1,10 @@
-using Unity.VisualScripting;
+using System;
 using UnityEngine;
 
 public class EquipStatsMods : MonoBehaviour
 {
+    public static event Action<float> OnHealthMaxChanged;
+
     [Header("References")]
     [SerializeField] PlayerController playerController;
     [SerializeField] StaminaController staminaController;
@@ -48,7 +50,7 @@ public class EquipStatsMods : MonoBehaviour
     {
         healthMaxBonus += amount;
 
-      // connect to health system
+        OnHealthMaxChanged?.Invoke(amount);
     }
     public void normalHealthMax(float amount)
     {
@@ -59,7 +61,7 @@ public class EquipStatsMods : MonoBehaviour
             healthMaxBonus = 0;
         }
 
-        // will connect to health system
+        OnHealthMaxChanged?.Invoke(amount);
     }
     public void addConcentrationMax(float amount)
     {

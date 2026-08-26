@@ -133,13 +133,11 @@ public class SpellCaster : MonoBehaviour {
         if(concentration != null)
         {
             multiplier = concentration.getDamageMultiplier();
-            concentration.spend(spell.AssetData.concentrationCost);
+            concentration.spend(spell.ConcentrationCostOverride);
         }
 
         Vector3 origin = castPoint.position;
         Vector3 aim = GetAimDirection(origin);
-
-        //Quaternion spawnRotation = Quaternion.LookRotation(aim); // TODO where in the builder should this be set?
 
         spell.Cast(this, EquippedWeapon, transform, origin, aim, multiplier);
 
@@ -156,9 +154,12 @@ public class SpellCaster : MonoBehaviour {
         Ray ray = cam.ScreenPointToRay(mouseScreenPosition);
         if (Physics.Raycast(ray, out RaycastHit hit)) {
             Vector3 direction = hit.point - origin;
-            return direction.normalized;
+            
+            direction.y = 0f;
+
+            if (direction.sqrMagnitude > 0.001f) return direction.normalized;
         }
         return transform.forward;
     }
-    public void SetWeapon(SpellWeaponData newWeapon) => equippedWeapon = newWeapon;
+    public void SetWeapon(SpellWeaponData newWeapon) { equippedWeapon = newWeapon; }
 }

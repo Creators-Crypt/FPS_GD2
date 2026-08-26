@@ -25,6 +25,12 @@ public class HealthSystem : MonoBehaviour, IHealth, IDamageable {
         invulnerable = GetComponent<IInvulnerable>();
         InitializeHealth();
     }
+    private void OnEnable() {
+        EquipStatsMods.OnHealthMaxChanged += EquipStatsMods_OnHealthMaxChanged;
+    }
+    private void OnDisable() {
+        EquipStatsMods.OnHealthMaxChanged -= EquipStatsMods_OnHealthMaxChanged;
+    }
     private void InitializeHealth() {
 
         currentHealth = MaxHealth;
@@ -62,6 +68,9 @@ public class HealthSystem : MonoBehaviour, IHealth, IDamageable {
         if (CurrentHealth > MaxHealth) currentHealth = MaxHealth;
 
         OnHealthChangedUI?.Invoke(CurrentHealth, MaxHealth);
+    }
+    private void EquipStatsMods_OnHealthMaxChanged(float amount) {
+        stats.maxHealth += amount;
     }
     public void OnDamage(float damage) {
         

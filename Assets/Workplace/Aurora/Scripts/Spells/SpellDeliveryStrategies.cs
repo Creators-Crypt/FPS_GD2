@@ -14,6 +14,7 @@ public struct SpellCastContext {
 
     public SpellData data;
     public SpellElement element;      // May differ from data.element (runtime override)
+    public float damage;
     public float multiplier;
     public Transform caster;
     public Vector3 origin;
@@ -48,7 +49,7 @@ public abstract class SpellDeliveryStrategyBase : ISpellDeliveryStrategy {
     public abstract SpellDeliveryKind Kind { get; }
     public void Cast(SpellCastContext context) {
 
-        int count = Mathf.Max(1, context.data.spawnCount);
+        int count = Mathf.Max(1, context.spawnCount);
 
         if (count == 1) {
 
@@ -66,7 +67,7 @@ public abstract class SpellDeliveryStrategyBase : ISpellDeliveryStrategy {
     
         for (int i = 0; i < count; i++) {
             Execute(context, FanDirection(context, i, count));
-            yield return new WaitForSeconds(context.data.spawnInterval);
+            yield return new WaitForSeconds(context.spawnInterval);
         }
     }
     private static Vector3 FanDirection(SpellCastContext context, int index, int count) {
@@ -87,7 +88,7 @@ public abstract class SpellDeliveryStrategyBase : ISpellDeliveryStrategy {
         var hits = Physics.OverlapSphere(center, radius, context.data.hitLayers);
         foreach (var hit in hits) {
             if (hit.TryGetComponent(out IDamageable dmg))
-                dmg.OnDamage(context.data.damage * context.multiplier);
+                dmg.OnDamage(context.damage * context.multiplier);
         }
     }
 }

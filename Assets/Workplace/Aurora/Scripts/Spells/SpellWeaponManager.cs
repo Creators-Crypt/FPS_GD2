@@ -1,11 +1,17 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class SpellWeaponManager : MonoBehaviour {
 
+    [SerializeField] private SpellCaster spellCaster;
+
     [Header("Weapon Slots")]
     [Tooltip("Max amount of weapons is 2!")]
     [SerializeField] private SpellWeaponData[] weaponSlots = new SpellWeaponData[2];
+
+    [SerializeField] private Transform handAnchor;
+    private GameObject spawnedModel;
 
     [Header("Swap Settings")]
     [Tooltip("How many seconds the Player needs to wait for swap.")]
@@ -16,14 +22,16 @@ public class SpellWeaponManager : MonoBehaviour {
 
     private int activeSlotIndex = 0;
     private float swapTimer = 0f;
-    private SpellCaster spellCaster;
 
     public SpellWeaponData ActiveWeapon => weaponSlots[activeSlotIndex];
     public bool CanSwap => swapTimer <= 0f;
 
     private void Awake() {
         spellCaster = GetComponent<SpellCaster>();
+        if (handAnchor == null) handAnchor = transform;
     }
+    private void OnEnable() { scrollAction.Enable(); }
+    private void OnDisable() { scrollAction.Disable(); }
     private void Start() { UpdateCasterWeapon(); }
     private void Update() { 
         
@@ -46,8 +54,26 @@ public class SpellWeaponManager : MonoBehaviour {
 
         activeSlotIndex = (activeSlotIndex == 1) ? 0 : 1;
 
-        UpdateCasterWeapon();
         swapTimer = swapCooldown;
+        UpdateCasterWeapon();
+    }
+
+    private void UpdateCasterWeapon() {
+        spellCaster.SetWeapon(ActiveWeapon);
+
+        UpdateWeaponVisuals();
+    }
+    private void UpdateWeaponVisuals() {
+
+        if (spawnedModel != null) Destroy(spawnedModel);
+
+        SpellWeaponData currentWeapon = ActiveWeapon;
+        if (currentWeapon != null || currentWeapon.weapon == null) return;
+
+        spawnedModel = Instantiate(currentWeapon.weapon, handAnchor);
+
+        spawnedModel.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
+        spawnedModel.transform.localScale = Vector3.one;
     }
     public void EquipWeapon(int slotIndex, SpellWeaponData newWeapon) {
 
@@ -56,8 +82,5 @@ public class SpellWeaponManager : MonoBehaviour {
         weaponSlots[slotIndex] = newWeapon;
 
         if (slotIndex == activeSlotIndex) UpdateCasterWeapon();
-    }
-    private void UpdateCasterWeapon() {
-        spellCaster.SetWeapon(ActiveWeapon);
     }
 }
