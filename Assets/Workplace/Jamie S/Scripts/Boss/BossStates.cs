@@ -60,7 +60,7 @@ public class BossPhase1State : IEnemyState
             if (Time.time >= nextMortarTime)
             {
                 yield return MortarAttack();
-                nextMortarTime = Time.time * stats.mortarCooldown;
+                nextMortarTime = Time.time + stats.mortarCooldown;
             }
             else
             {
@@ -197,9 +197,9 @@ public class BossPhase1State : IEnemyState
 
         Vector3 spawnPoint = _impactPoint + Vector3.up * .05f;
 
-        GameObject marker = Object.Instantiate(stats.mortarHitPosDisplayPrefab, spawnPoint, Quaternion.Euler(90f, 0f, 0f));
+        GameObject marker = Object.Instantiate(stats.mortarHitPosDisplayPrefab, spawnPoint, Quaternion.identity);
 
-        BossTelegraph telegraph = marker.GetComponent<BossTelegraph>();
+        BossTelegraph telegraph = marker.GetComponentInParent<BossTelegraph>();
         if (telegraph != null)
         {
             telegraph.Play(stats.mortarSplashRadius, _flightTime);
@@ -443,6 +443,17 @@ public class BossPhase2State : IEnemyState
             boss.FacePlayer();
             yield return null;
         }
+
+        HitAllInFront();
+
+        boss.lastAttackTime = Time.time;
+        nextMeleeTime = Time.time + stats.p2MeleeCooldown;
+
+        yield return new WaitForSeconds(.3f);
+
+        boss.SetMovementEnabled(true );
+        busy = false;
+        routine = null;
     }
 
     private void HitAllInFront()
@@ -486,15 +497,33 @@ public class BossPhase2State : IEnemyState
         {
             GameObject waveObject = Object.Instantiate(stats.aoeWavePrefab, center, Quaternion.identity);
 
-           
+            BossAoEWave wave = waveObject.GetComponent<BossAoEWave>();
+            if (wave != null)
+            {
+                wave.Play(boss, stats.aoeWaveRadius, stats.aoeWaveSpeed,stats.aoeWaveDmg, waveHits);
+               
+            }
+            else
+            {
+                Debug.LogWarning("The AoE prefab is missing the BossAoEWave script please fill it in 'instant damage delt'");
+                boss.DealRadialDamage(center,stats.aoeWaveRadius,stats.aoeWaveDmg,waveHits);
+                Object.Destroy(waveObject, 3f);
+            }
+
         }
+        else
+        {
+            Debug.LogWarning("The AoE prefab is empty on the BossStatsSO please fill it in 'instant damage delt'");
+            boss.DealRadialDamage(center, stats.aoeWaveRadius, stats.aoeWaveDmg, waveHits);
+        }
+
+        boss.lastAttackTime = Time.time;
+        nextWaveTime = Time.time + stats.aoeWaveCooldown;
+
+        yield return new WaitForSeconds(.5f);
+        busy = false;
+        routine = null;
     }
-
-
-
-
-
-
 }
 
 public class BossStunState : IEnemyState
@@ -577,6 +606,7 @@ public class BossPhase3State : IEnemyState
                 marker.Play(stats.detonationKillRad, stats.detonationTime);
             }
         }
+        PullPlayerIn();
         routine = boss.StartCoroutine(Countdow());
     }
     public void Tick()
@@ -584,7 +614,7 @@ public class BossPhase3State : IEnemyState
        if(boss.playerTarget == null) return;
 
         boss.FacePlayer();
-        PullPlayerIn();
+        
     }
     public void Exit()
     {

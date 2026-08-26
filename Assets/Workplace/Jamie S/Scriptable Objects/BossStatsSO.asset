@@ -37,10 +37,10 @@ MonoBehaviour:
   splitRadius: 0.75
   splitVFXPrefab: {fileID: 0}
   splitGrowthSpeed: 0
-  phase2HealthPercent: 0.75
-  phase3HealthPercent: 0.05
+  phase2HealthPercent: 0.5
+  phase3HealthPercent: 0.02
   phase1Material: {fileID: 2100000, guid: b83308c389b240e44bd537f596dc6501, type: 2}
-  phase2Material: {fileID: 0}
+  phase2Material: {fileID: 2100000, guid: 501bad688d6dd4dfd80cf405df51e849, type: 2}
   phase3Material: {fileID: 2100000, guid: 217152b783193b54dae650758dcefac2, type: 2}
   stunMaterial: {fileID: 2100000, guid: f2ba0e26bd5a8064da7c72101ad2eaf6, type: 2}
   colorBlendTime: 1.25
@@ -54,18 +54,18 @@ MonoBehaviour:
   p1TimeBetweenVolley: 1.5
   p1ShotsPerVolley: 3
   p1TimeBetweenShots: 0.25
-  p1SpreadDegrees: 4
-  p1ProjectileSpeed: 18
+  p1SpreadDegrees: 7
+  p1ProjectileSpeed: 20
   p1ProjectileDamage: 6
-  bulletAimAheadOfPlayer: 0.6
-  mortarPrefab: {fileID: 0}
-  mortarHitPosDisplayPrefab: {fileID: 0}
+  bulletAimAheadOfPlayer: 0.45
+  mortarPrefab: {fileID: 9088488918856700192, guid: 466ea04b990663b4fbbb7ac281251852, type: 3}
+  mortarHitPosDisplayPrefab: {fileID: 4962518280841777773, guid: 6194df4a2f503be4996a1de72e362c5c, type: 3}
   mortarCooldown: 6
   mortarShellsPreSalvo: 4
   mortarTimeBetweenShells: 0.35
-  mortarSpeed: 14
-  mortarArcHeight: 6
-  mortarSplashRadius: 4
+  mortarSpeed: 19.9
+  mortarArcHeight: 8
+  mortarSplashRadius: 8.48
   mortarDamage: 14
   mortarScatter: 3
   mortarAimAheadOfPlayer: 1
@@ -82,18 +82,18 @@ MonoBehaviour:
   p2MelleDmg: 10
   p2MeleeCooldown: 5
   p2MeleeWindup: 0.35
-  aoeWavePrefab: {fileID: 0}
+  aoeWavePrefab: {fileID: 3563498644967845075, guid: 90b365e0f2a425e4ba07ecf2baebf395, type: 3}
   aoeWaveCooldown: 7
   aoeWaveWarnintTime: 1
   aoeWaveRadius: 9
   aoeWaveSpeed: 11
   aoeWaveDmg: 7
-  p3PullRadius: 20
+  p3PullRadius: 54.4
   p3PullForce: 7.5
   slimedSlowAmount: 0.5
   slimedTime: 3
   detonationTime: 15
-  detonationKillRad: 20
+  detonationKillRad: 163.3
   detonationDmg: 100000000
   detonationVFXPrefab: {fileID: 0}
-  detonationTelegraphPrefab: {fileID: 0}
+  detonationTelegraphPrefab: {fileID: 6911871139904711538, guid: 581835e11040e274bbccb60a64dd7340, type: 3}

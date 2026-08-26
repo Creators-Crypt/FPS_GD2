@@ -359,6 +359,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 362496515598794001}
+  - component: {fileID: 7121954269549159635}
+  - component: {fileID: 1075124967853054468}
   - component: {fileID: 1732308838788976385}
   - component: {fileID: 5381804928126210787}
   - component: {fileID: 2631286863734658976}
@@ -392,6 +394,76 @@ Transform:
   - {fileID: 652725577148388152}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7121954269549159635
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6311920655075320742}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eddfe1ecb2e60d04d875796d11141a15, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BossAI
+  stats: {fileID: 0}
+  firePoint: {fileID: 8593816816623713062}
+  agent: {fileID: 5381804928126210787}
+  playerTarget: {fileID: 0}
+  model: {fileID: 2566930387724663771}
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 64
+  spawnPostion: {x: 0, y: 0, z: 0}
+  currentHealth: 0
+  faceTargetRotSpeed: 10
+  timeSinceLastSawPlayer: 0
+  lastAttackTime: 0
+  origColor: {r: 0, g: 0, b: 0, a: 0}
+  mortarFirePoint: {fileID: 652725577148388152}
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  damageableMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  otherEnemyMask:
+    serializedVersion: 2
+    m_Bits: 0
+  mortarFriendlyFire: 1
+  landingShockFriendlyFire: 0
+  meleeFriendlyFire: 0
+  aoeWaveFriendlyFire: 0
+  detonationFriendlyFire: 1
+  bossStats: {fileID: 11400000, guid: e6940a01c18a32f4f9aec47c94707908, type: 2}
+  currentPhase: 0
+  isInvulnerable: 0
+  isStunned: 0
+  stunTimeleft: 0
+  detonationTimeLeft: 0
+  eyeHitCount: 0
+  playerVelocity: {x: 0, y: 0, z: 0}
+  colorBlendSpeed: 0
+  eyeHitExpireTime: 0
+  stunLockout: 0
+--- !u!114 &1075124967853054468
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6311920655075320742}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26c2b7797c755c549ad1a7ccb1c35ee2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BossDamageZone
+  boss: {fileID: 0}
+  damageMultiplier: 1
+  isWeakPoint: 0
+  hitVFXPrefab: {fileID: 0}
+  hitSound: {fileID: 0}
+  nonHitSound: {fileID: 0}
 --- !u!95 &1732308838788976385
 Animator:
   serializedVersion: 7
@@ -516,7 +588,7 @@ Transform:
   m_GameObject: {fileID: 6634469865492874131}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.075, y: 0.386, z: 0.614}
+  m_LocalPosition: {x: 0.075, y: 0.296, z: 0.614}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -691,6 +763,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7165623731300981995}
+  - component: {fileID: 3915460280972401355}
   - component: {fileID: 2583618277588006695}
   - component: {fileID: 7928922274013844322}
   m_Layer: 0
@@ -715,6 +788,24 @@ Transform:
   m_Children: []
   m_Father: {fileID: 362496515598794001}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3915460280972401355
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8249302215746288127}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26c2b7797c755c549ad1a7ccb1c35ee2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BossDamageZone
+  boss: {fileID: 0}
+  damageMultiplier: 2
+  isWeakPoint: 1
+  hitVFXPrefab: {fileID: 0}
+  hitSound: {fileID: 0}
+  nonHitSound: {fileID: 0}
 --- !u!137 &2583618277588006695
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 0
