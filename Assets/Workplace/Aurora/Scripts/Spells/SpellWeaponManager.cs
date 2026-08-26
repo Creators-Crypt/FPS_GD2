@@ -8,7 +8,7 @@ public class SpellWeaponManager : MonoBehaviour {
 
     [Header("Weapon Slots")]
     [Tooltip("Max amount of weapons is 2!")]
-    [SerializeField] private SpellWeaponData[] weaponSlots;
+    [SerializeField] private SpellWeaponData[] weaponSlots = new SpellWeaponData[2];
 
     [SerializeField] private Transform handAnchor;
     private GameObject spawnedModel;
@@ -23,7 +23,7 @@ public class SpellWeaponManager : MonoBehaviour {
     private int activeSlotIndex = 0;
     private float swapTimer = 0f;
 
-    public SpellWeaponData ActiveWeapon => weaponSlots[activeSlotIndex];
+    public SpellWeaponData ActiveWeapon => (weaponSlots != null && activeSlotIndex < weaponSlots.Length) ? weaponSlots[activeSlotIndex] : null;
     public bool CanSwap => swapTimer <= 0f;
 
     private void Awake() {
@@ -34,9 +34,9 @@ public class SpellWeaponManager : MonoBehaviour {
     private void OnDisable() { scrollAction.Disable(); }
     private void Start() { 
         
-        if (spellCaster != null && spellCaster.EquippedWeapon != null) {
-
-            weaponSlots[activeSlotIndex] = spellCaster.EquippedWeapon;
+        if (ActiveWeapon == null) {
+            spellCaster.SetWeapon(null);
+            return;
         }
         
         UpdateCasterWeapon(); 
@@ -54,8 +54,15 @@ public class SpellWeaponManager : MonoBehaviour {
 
         Vector2 scrollValue = scrollAction.ReadValue<Vector2>();
 
-        if (Mathf.Abs(scrollValue.y) > 0.1f) CycleWeapon();
+        if (Mathf.Abs(scrollValue.y) <= 0.1f) return;
 
+        int validWeaponCount = 0;
+        foreach (var slot in weaponSlots) {
+            if (slot != null) validWeaponCount++;
+        }
+        if (validWeaponCount <= 1) return;
+
+        CycleWeapon();
     }
     private void CycleWeapon() {
 

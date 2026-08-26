@@ -114,15 +114,13 @@ public class SpellCaster : MonoBehaviour {
 
         if (spell == null || !spell.IsReady) return;
 
-        if (EquippedWeapon != null) {
-
+        if (EquippedWeapon != null)
+        {
+            spell.SetDelivery(spell.AssetData.delivery);
+        }
+        else
+        {
             spell.SetDelivery(EquippedWeapon.delivery);
-
-            if (EquippedWeapon.overrideSpawnCount) {
-
-                spell.AssetData.spawnCount = EquippedWeapon.weaponSpawnCount;
-                spell.AssetData.spreadAngle = EquippedWeapon.weaponSpreadAngle;
-            }
         }
 
         float requiredStamina = spell.StaminaCostOverride;
