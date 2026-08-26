@@ -22,6 +22,11 @@ public class FlashlightAim : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.F))
         {
             flashlight.enabled = !flashlight.enabled;
+
+            if(flashlight.enabled)
+            {
+                GameManager.Instance.PlayerPerformAction("Flashlight");
+            }
         }
     }
 }
