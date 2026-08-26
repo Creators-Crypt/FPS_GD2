@@ -9,11 +9,19 @@ public class TutorialProgress : MonoBehaviour
 
     [Header("Tutorial Progress")]
     private bool tutorialActive;
+    private int tutorialPhase = 1;
 
     private bool jumped;
     private bool dodged;
     private bool teleported;
     private bool concentrated;
+    private bool flashlightUsed;
+
+    //Uncomment once weapon/spell switching reports this action
+    //private bool attackChanged;
+
+    //Uncomment when Equipment UI reports this action
+    //private bool equipmentShown;
 
     private int slimeKills;
     private int slimeKillsNeeded = 9;
@@ -57,6 +65,20 @@ public class TutorialProgress : MonoBehaviour
                 concentrated = true;
                 break;
 
+            case "Flashlight":
+                flashlightUsed = true;
+                break;
+
+            //Uncomment once weapon/spell switching is connected
+            //case "weaponSpellSwitch":
+            //    attackChanged = true;
+            //    break;
+
+            //Uncomment when equipmentUi pull up is connected
+            //case "EquipmentUI":
+            //    equipmentShown = true;
+            //    break;
+
             case "SlimeKilled":
                 if(slimeKills < slimeKillsNeeded)
                 {
@@ -74,22 +96,50 @@ public class TutorialProgress : MonoBehaviour
     {
         string tutorialText = "TUTORIAL\n";
 
-        tutorialText += jumped ? " X Jump [SPACE] " : " Jump [SPACE] ";
-        tutorialText += dodged ? " X Dodge [L ALT] " : " Dodge [L ALT] ";
-        tutorialText += teleported ? " X Teleport [E]\n" : " Teleport [E]\n";
-        tutorialText += concentrated ? " X Concentrate [C] " : " Concentrate [C] ";
+        if (tutorialPhase == 1)
+        {
+            tutorialText += jumped ? " X Jump [SPACE] " : " Jump [SPACE] ";
+            tutorialText += dodged ? " X Dodge [L ALT] " : " Dodge [L ALT] ";
+            tutorialText += teleported ? " X Teleport [E]\n" : " Teleport [E]\n";
+            tutorialText += concentrated ? " X Concentrate [C] " : " Concentrate [C] ";
+        }
+        else if (tutorialPhase == 2)
+        { 
+            tutorialText += flashlightUsed ? " X Flashlight [F] " : " Flashlight [F] ";
 
+        //Uncomment when weapon/spell is connected
+        //tutorialText += attackSwitched ? " X Switch Attack [SCROLL]" : " Switch Attack [SCROLL}";
+
+        //Uncomment when Equipment UI is connected
+        //tutorailText += equipmentShown : " X Equipment [TAB] " : " Equipment [TAB] ";
         tutorialText += "Kill Slimes (" + slimeKills + "/" + slimeKillsNeeded + ")";
-
+        }   
         objectiveManager.SetObjective(tutorialText);
 
     }
 
     private void CheckTutorialComplete()
     {
-        if(jumped && dodged && teleported && concentrated && slimeKills >= slimeKillsNeeded)
+        //Phase 1 
+        if (tutorialPhase == 1)
         {
-            CompleteTutorial();
+            if (jumped && dodged && teleported && concentrated )
+            {
+                tutorialPhase = 2;
+                UpdateTutorialUI();
+            }
+            return;
+        }
+
+        //Phase 2
+        if(tutorialPhase ==2)
+        {
+            //When EquipmentUI and Attack Switch are done replace the if () with
+            //flashlightUsed && equipmentShown && attackSwitched && slimeKills >= slimeKillsNeeded
+            if (flashlightUsed && slimeKills >= slimeKillsNeeded)
+            {
+                CompleteTutorial();
+            }
         }
     }
 
