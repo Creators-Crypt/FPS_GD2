@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : Singleton<GameManager>
 {
@@ -96,6 +97,12 @@ public class GameManager : Singleton<GameManager>
 
         HideCursor();
         Time.timeScale = 1f;
+    }
+
+    public void QuitToMain()
+    {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene("Menus");
     }
 
     private void ShowCursor()

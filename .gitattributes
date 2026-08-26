@@ -147,4 +147,5 @@ Packages/packages-lock.json linguist-generated
 *.skel.bytes            lfs
 # Exceptions for .asset files such as lightning pre-baking
 LightingData.asset     binary
-
+TerrainData*.asset     binary
+"Assets/Workplace/TayTrain/GUI Sprites/**/*.png" -lfs -filter -diff -merge
