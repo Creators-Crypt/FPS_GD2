@@ -11,7 +11,7 @@ public enum SpellDeliveryKind {
 }
 
 /// <summary> Elemental/thematic school. Swap freely at runtime via Spell.SetElement. </summary>
-public enum SpellElement { None, Fire, Ice, Lightning, Spirit }
+public enum SpellElement { None, Fire, Ice, Void, Wind }
 
 /// <summary>
 /// 
@@ -25,7 +25,7 @@ public class SpellData : ScriptableObject {
     [Header("Identity")]
     public string spellName = "New Spell";
     public Sprite icon;
-    public SpellElement element = SpellElement.Spirit;
+    public SpellElement element = SpellElement.None;
 
     [Header("Delivery")]
     [Tooltip("Default delivery shape. Can be overridden at runtime through SpellBuilder or Spell.SetDelivery.")]
@@ -74,4 +74,6 @@ public class SpellData : ScriptableObject {
     public float spreadAngle = 30f;
     [Tooltip("Seconds between successive spawns. 0 = all at once.")]
     public float spawnInterval = 0f;
+
+    public GameObject impactVfxPrefab;
 }
