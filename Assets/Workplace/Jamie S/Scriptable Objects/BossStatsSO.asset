@@ -88,12 +88,12 @@ MonoBehaviour:
   aoeWaveRadius: 9
   aoeWaveSpeed: 11
   aoeWaveDmg: 7
-  p3PullRadius: 54.4
-  p3PullForce: 7.5
+  p3PullRadius: 100
+  p3PullForce: 30
   slimedSlowAmount: 0.5
   slimedTime: 3
-  detonationTime: 15
-  detonationKillRad: 163.3
+  detonationTime: 10
+  detonationKillRad: 50
   detonationDmg: 100000000
   detonationVFXPrefab: {fileID: 0}
   detonationTelegraphPrefab: {fileID: 6911871139904711538, guid: 581835e11040e274bbccb60a64dd7340, type: 3}

@@ -81,4 +81,10 @@ public class Spawner : MonoBehaviour
     {
         return maxTotalSpawned > 0 && totalSpawned >= maxTotalSpawned;
     }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(transform.position, triggerRadius);
+    }
 }

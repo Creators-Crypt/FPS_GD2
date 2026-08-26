@@ -31,6 +31,7 @@ MonoBehaviour:
   projectilePrefab: {fileID: 2002685277281540589, guid: 85faa578e3404a0469553bca229569c0, type: 3}
   projectileSpeed: 20
   explosionRadius: 3
+  explosionVFX: {fileID: 7670540331553907632, guid: 298375910fe563441b8d42194e10010c, type: 3}
   splitChance: 0
   splitPrefab: {fileID: 0}
   splitCount: 2

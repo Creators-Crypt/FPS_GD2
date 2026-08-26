@@ -178,7 +178,10 @@ public class EnemyAI : MonoBehaviour, IDamageable
             }
 
         }
-
+        if(stats.explosionVFX != null)
+        {
+            Instantiate(stats.explosionVFX, transform.position + new Vector3(0,.5f,0), Quaternion.identity);
+        }
         Die();
     }
     public virtual void PerformMeleeAttack()

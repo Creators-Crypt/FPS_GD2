@@ -423,13 +423,13 @@ MonoBehaviour:
   mortarFirePoint: {fileID: 652725577148388152}
   groundMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 8
   damageableMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 64
   otherEnemyMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 512
   mortarFriendlyFire: 1
   landingShockFriendlyFire: 0
   meleeFriendlyFire: 0
