@@ -4,7 +4,9 @@ using UnityEngine;
 public class CastleGate : MonoBehaviour, IInteractable {
 
     [SerializeField] private bool hasKey = false;
-    
+
+    public string InteractionPrompt => (hasKey) ? "Press E to Enter" : "Go find the key!";
+
     public void Interact() {
 
         if (!hasKey) {

@@ -24,6 +24,7 @@ public class SpellProjectile : MonoBehaviour {
         rb = GetComponent<Rigidbody>();
         // start the rb with dynamic
         rb.constraints = RigidbodyConstraints.FreezeRotation;
+        rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
     }
 
     /// <summary>Called by the delivery strategy right after Instantiate.</summary>
@@ -32,12 +33,12 @@ public class SpellProjectile : MonoBehaviour {
         data = spellData;
         element = spellElement;
         multiplier = damageMultiplier;
+
         rb.useGravity = false;
         rb.linearVelocity = direction.normalized * spellData.projectileSpeed;
 
         // Face travel direction; arcing shots keep re-facing in Update.
         FaceVelocity(rb.linearVelocity);
-
         Destroy(gameObject, spellData.projectileLifetime);
     }
     public void Launch(SpellData spellData, SpellElement spellElement, Vector3 direction, bool gravityState, float damageMultiplier) { 
@@ -60,11 +61,16 @@ public class SpellProjectile : MonoBehaviour {
             if (rb.useGravity) FaceVelocity(rb.linearVelocity);
         }
     }
+    private void FixedUpdate() {
 
+        if (rb.useGravity && rb.linearVelocity.sqrMagnitude > 0.001f) FaceVelocity(rb.linearVelocity);
+    }
     private void FaceVelocity(Vector3 velocity) {
 
-        if (velocity.sqrMagnitude > 0.001f)
-            transform.rotation = Quaternion.LookRotation(velocity, Vector3.up);
+        if (velocity.sqrMagnitude > 0.001f) {
+            Quaternion targetRotation = Quaternion.LookRotation(velocity, Vector3.up);
+            rb.MoveRotation(targetRotation);
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -82,7 +88,6 @@ public class SpellProjectile : MonoBehaviour {
             var vfx = Instantiate(impactVfxPrefab, transform.position, Quaternion.identity);
             Destroy(vfx, 2f);
         }
-
         if (destroyOnHit) Destroy(gameObject);
     }
 }

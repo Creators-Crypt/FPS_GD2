@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -18,6 +19,10 @@ public struct SpellCastContext {
     public Vector3 origin;
     public Vector3 direction;         // Normalized aim direction
     public MonoBehaviour runner;      // Coroutine host for staggered spawns / beam fade
+
+    public int spawnCount;
+    public float spreadAngle;
+    public float spawnInterval;
 }
 
 /// <summary>
@@ -51,7 +56,7 @@ public abstract class SpellDeliveryStrategyBase : ISpellDeliveryStrategy {
             return;
         }
 
-        if (context.data.spawnInterval > 0f && context.runner != null)
+        if (context.spawnInterval > 0f && context.runner != null)
             context.runner.StartCoroutine(StaggeredCast(context, count));
         else
             for (int i = 0; i < count; i++)
@@ -66,7 +71,7 @@ public abstract class SpellDeliveryStrategyBase : ISpellDeliveryStrategy {
     }
     private static Vector3 FanDirection(SpellCastContext context, int index, int count) {
     
-        float spread = context.data.spreadAngle;
+        float spread = context.spreadAngle;
         float t = count > 1 ? (float)index / (count - 1) : 0.5f;
         float angle = Mathf.Lerp(-spread * 0.5f, spread * 0.5f, t);
         Vector3 localRight = Vector3.Cross(context.direction, Vector3.up).normalized;
@@ -138,23 +143,34 @@ public class RayDelivery : SpellDeliveryStrategyBase {
 
     public override SpellDeliveryKind Kind => SpellDeliveryKind.Ray;
 
+    private static readonly RaycastHit[] hitBuffer = new RaycastHit[16];
+
     protected override void Execute(SpellCastContext context, Vector3 direction) {
 
         Vector3 endPosition = context.origin + direction * context.data.rayDistance;
 
-        RaycastHit[] hits = Physics.RaycastAll(context.origin, direction, context.data.rayDistance, context.data.hitLayers);
+        int hitCount = Physics.RaycastNonAlloc(
+            
+            context.origin,
+            direction,
+            hitBuffer,
+            context.data.rayDistance,
+            context.data.hitLayers
+            );
 
-        Array.Sort(hits, (a, b) => a.distance.CompareTo(b.distance));
+        if (hitCount > 0) {
+            
+            Array.Sort(hitBuffer, 0, hitCount, Comparer<RaycastHit>.Create((a, b) => a.distance.CompareTo(b.distance)));
 
-        if (hits.Length > 0) endPosition = hits[0].point;
+            endPosition = hitBuffer[0].point;
 
-        foreach (var hit in hits) {
-            if (hit.collider.TryGetComponent(out IDamageable dmg))
-                dmg.OnDamage(context.data.damage * context.multiplier);
+            for (int i = 0; i < hitCount; i++) {
+                if (hitBuffer[i].collider.TryGetComponent(out IDamageable dmg))
+                    dmg.OnDamage(context.data.damage * context.multiplier);
+            }
         }
-
         // Beam visual - short-lived LineRenderer.
-        var beam = new GameObject($"SpellBeam_{context.data.spellName}");
+        var beam = new GameObject();
         var lineRenderer = beam.AddComponent<LineRenderer>();
         lineRenderer.positionCount = 2;
         lineRenderer.SetPosition(0, context.origin);
@@ -163,7 +179,7 @@ public class RayDelivery : SpellDeliveryStrategyBase {
         lineRenderer.endWidth = context.data.rayWidth;
         lineRenderer.sharedMaterial = context.data.rayMaterial != null
             ? context.data.rayMaterial
-            : Canvas.GetDefaultCanvasMaterial();
+            : new Material(Shader.Find("Sprites/Default"));
 
         lineRenderer.startColor = context.data.rayColor;
         lineRenderer.endColor = context.data.rayColor;

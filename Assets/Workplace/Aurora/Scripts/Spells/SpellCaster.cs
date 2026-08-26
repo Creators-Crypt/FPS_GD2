@@ -21,10 +21,12 @@ public class SpellCaster : MonoBehaviour {
 
     private IStamina stamina;
     private IConcentration concentration;
+    private SpellWeaponManager weaponManager;
     private Spell[] spells;
     private int equippedIndex;
 
-    public SpellWeaponData EquippedWeapon { get; private set; }
+    [SerializeField] private SpellWeaponData equippedWeapon;
+    public SpellWeaponData EquippedWeapon => equippedWeapon;
 
     public Spell EquippedSpell =>
         (spells != null && spells.Length > 0) ? spells[equippedIndex] : null;
@@ -37,6 +39,7 @@ public class SpellCaster : MonoBehaviour {
         // Interface-typed, so swapping StaminaController for another system needs no code change here.
         stamina = GetComponent<IStamina>();
         concentration = GetComponent<IConcentration>();
+        weaponManager = GetComponent<SpellWeaponManager>();
 
         BuildLoadout();
     }
@@ -105,6 +108,8 @@ public class SpellCaster : MonoBehaviour {
     }
     public void TryCast() {
 
+        if (!weaponManager.CanSwap) return;
+
         var spell = EquippedSpell;
 
         if (spell == null || !spell.IsReady) return;
@@ -115,20 +120,20 @@ public class SpellCaster : MonoBehaviour {
 
             if (EquippedWeapon.overrideSpawnCount) {
 
-                spell.Data.spawnCount = EquippedWeapon.weaponSpawnCount;
-                spell.Data.spreadAngle = EquippedWeapon.weaponSpreadAngle;
+                spell.AssetData.spawnCount = EquippedWeapon.weaponSpawnCount;
+                spell.AssetData.spreadAngle = EquippedWeapon.weaponSpreadAngle;
             }
         }
 
-        // Pay stamina before firing.
-        if (stamina != null && !stamina.TrySpend(spell.Data.staminaCost)) return;
+        float requiredStamina = spell.StaminaCostOverride;
+        if (stamina != null && !stamina.TrySpend(requiredStamina)) return;
 
         float multiplier = 1f;
 
         if(concentration != null)
         {
             multiplier = concentration.getDamageMultiplier();
-            concentration.spend(spell.Data.concentrationCost);
+            concentration.spend(spell.AssetData.concentrationCost);
         }
 
         Vector3 origin = castPoint.position;
@@ -136,7 +141,7 @@ public class SpellCaster : MonoBehaviour {
 
         //Quaternion spawnRotation = Quaternion.LookRotation(aim); // TODO where in the builder should this be set?
 
-        spell.Cast(this, transform, origin, aim, multiplier);
+        spell.Cast(this, EquippedWeapon, transform, origin, aim, multiplier);
 
     }
     private Vector3 GetAimDirection(Vector3 origin) {
@@ -155,4 +160,5 @@ public class SpellCaster : MonoBehaviour {
         }
         return transform.forward;
     }
+    public void SetWeapon(SpellWeaponData newWeapon) => equippedWeapon = newWeapon;
 }
