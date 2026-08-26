@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: BossStatsSO
   m_EditorClassIdentifier: Assembly-CSharp::BossStatsSO
   enemyType: 0
-  maxHealth: 250
+  maxHealth: 500
   patrolSpeed: 3.5
   chaseSpeed: 6
   patrolRadius: 20
@@ -29,8 +29,9 @@ MonoBehaviour:
   attackCooldown: 1.2
   attackDamage: 5
   projectilePrefab: {fileID: 2002685277281540589, guid: 85faa578e3404a0469553bca229569c0, type: 3}
-  projectileSpeed: 20
+  projectileSpeed: 30
   explosionRadius: 15
+  explosionVFX: {fileID: 0}
   splitChance: 0
   splitPrefab: {fileID: 0}
   splitCount: 2
@@ -52,20 +53,20 @@ MonoBehaviour:
   stunCooldown: 3
   p1StartDelay: 1.5
   p1TimeBetweenVolley: 1.5
-  p1ShotsPerVolley: 3
+  p1ShotsPerVolley: 5
   p1TimeBetweenShots: 0.25
-  p1SpreadDegrees: 7
-  p1ProjectileSpeed: 20
+  p1SpreadDegrees: 10
+  p1ProjectileSpeed: 25
   p1ProjectileDamage: 6
   bulletAimAheadOfPlayer: 0.45
   mortarPrefab: {fileID: 9088488918856700192, guid: 466ea04b990663b4fbbb7ac281251852, type: 3}
   mortarHitPosDisplayPrefab: {fileID: 4962518280841777773, guid: 6194df4a2f503be4996a1de72e362c5c, type: 3}
-  mortarCooldown: 6
-  mortarShellsPreSalvo: 4
+  mortarCooldown: 5
+  mortarShellsPreSalvo: 5
   mortarTimeBetweenShells: 0.35
-  mortarSpeed: 19.9
-  mortarArcHeight: 8
-  mortarSplashRadius: 8.48
+  mortarSpeed: 20
+  mortarArcHeight: 15
+  mortarSplashRadius: 9
   mortarDamage: 14
   mortarScatter: 3
   mortarAimAheadOfPlayer: 1
