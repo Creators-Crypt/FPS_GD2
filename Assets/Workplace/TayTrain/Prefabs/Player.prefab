@@ -312,6 +312,7 @@ GameObject:
   - component: {fileID: 7761638068522542706}
   - component: {fileID: 6673412563084392932}
   - component: {fileID: 9127910612194883331}
+  - component: {fileID: 394638518700715224}
   - component: {fileID: 1874060393386750794}
   - component: {fileID: 1655807396318687533}
   - component: {fileID: 4167275286118533494}
@@ -462,7 +463,45 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SpellCaster
   spellLoadout:
   - {fileID: 11400000, guid: aac2b223b067c1e4db26bc6d9adb76a2, type: 2}
+  - {fileID: 11400000, guid: 6705a4d1ce4c91e4990f351f0df3f60b, type: 2}
+  - {fileID: 11400000, guid: f77c29dd1a08c7e4ba2018ff54b4a001, type: 2}
+  - {fileID: 11400000, guid: bd0ab04690f511742876baf5a35be8ed, type: 2}
   castPoint: {fileID: 1559729259802013399}
+  equippedWeapon: {fileID: 0}
+--- !u!114 &394638518700715224
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1818594594264804547}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 836e63e4a537f8e42a801ccb31aa010b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SpellWeaponManager
+  spellCaster: {fileID: 0}
+  weaponSlots:
+  - {fileID: 11400000, guid: c5559565a999c7e49a13c3c525c7ba05, type: 2}
+  handAnchor: {fileID: 1559729259802013399}
+  swapCooldown: 0.5
+  scrollAction:
+    m_Name: Scroll
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: d3667899-fa5f-4c64-bf41-44c7804b15fe
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: 31a16702-7d78-483f-957c-61b7b4f6b4ae
+      m_Path: <Mouse>/scroll
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Scroll
+      m_Flags: 0
+    m_Flags: 0
 --- !u!114 &1874060393386750794
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2585,7 +2624,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 5984
+  m_VersionIndex: 5987
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
