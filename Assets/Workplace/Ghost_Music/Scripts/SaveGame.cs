@@ -1,28 +1,15 @@
 using UnityEngine;
+using System; 
 
 public class SaveGame : MonoBehaviour
 {
-    public int playerScore = 100;
+    public float playerPosX;
+    public float playerPosY;
+    public float playerPosZ;
 
-    // Save function
-    public void SaveScore()
-    {
-        PlayerPrefs.SetInt("PlayerScore", playerScore);
-        PlayerPrefs.Save(); // Ensure data is written to disk
-        Debug.Log("Score saved!");
-    }
+    public float playerHealth;
 
-    // Load function
-    public void LoadScore()
-    {
-        if (PlayerPrefs.HasKey("PlayerScore"))
-        {
-            playerScore = PlayerPrefs.GetInt("PlayerScore");
-            Debug.Log("Score loaded: " + playerScore);
-        }
-        else
-        {
-            Debug.Log("No save found!");
-        }
-    }
+    public string sceneName; 
+
+    
 }
