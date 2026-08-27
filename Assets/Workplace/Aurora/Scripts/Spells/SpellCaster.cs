@@ -114,13 +114,16 @@ public class SpellCaster : MonoBehaviour {
 
         if (spell == null || !spell.IsReady) return;
 
-        if (EquippedWeapon != null) {
+        if (EquippedWeapon != null)
+        {
             spell.SetDelivery(spell.AssetData.delivery);
-        } else {
+        }
+        else
+        {
             spell.SetDelivery(EquippedWeapon.delivery);
         }
 
-            float requiredStamina = spell.StaminaCostOverride;
+        float requiredStamina = spell.StaminaCostOverride;
         if (stamina != null && !stamina.TrySpend(requiredStamina)) return;
 
         float multiplier = 1f;

@@ -18,6 +18,8 @@ public class MiniMapEnemyMarkers : MonoBehaviour
 
     private void Start()
     {
+        player = GameObject.FindGameObjectWithTag("Player").transform;
+
         GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
 
         foreach (GameObject enemy in enemies)
