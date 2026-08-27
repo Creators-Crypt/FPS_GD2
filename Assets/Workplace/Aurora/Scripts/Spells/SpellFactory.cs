@@ -132,10 +132,28 @@ public class Spell {
     public float CooldownRemaining { get; private set; }
     public bool IsReady => CooldownRemaining <= 0f;
 
-    public float DamageOverride { get; set; }
-    public float StaminaCostOverride { get; set; }
-    public float ConcentrationCostOverride { get; set; }
-    public float CooldownOverride { get; set; }
+    private float damageOverride;
+    public float DamageOverride {
+        get => damageOverride > 0f ? damageOverride : AssetData.damage;
+        set => damageOverride = value;
+    }
+    private float staminaCostOverride;
+    public float StaminaCostOverride {
+        get => staminaCostOverride > 0f ? staminaCostOverride : AssetData.staminaCost;
+        set => staminaCostOverride = value;
+    }
+
+    private float concentrationCostOverride;
+    public float ConcentrationCostOverride {
+        get => concentrationCostOverride > 0f ? concentrationCostOverride : AssetData.concentrationCost;
+        set => concentrationCostOverride = value;
+    }
+
+    private float cooldownOverride;
+    public float CooldownOverride {
+        get => cooldownOverride > 0f ? cooldownOverride : AssetData.cooldown;
+        set => cooldownOverride = value;
+    }
     public int SpawnCountOverride { get; set; }
     public float SpreadAngleOverride { get; set; }
     public float SpawnIntervalOverride { get; set; }
@@ -188,6 +206,7 @@ public class Spell {
         var context = new SpellCastContext {
             data = AssetData,
             element = Element,
+            damage = this.DamageOverride,
             caster = caster,
             origin = origin,
             direction = direction.normalized,

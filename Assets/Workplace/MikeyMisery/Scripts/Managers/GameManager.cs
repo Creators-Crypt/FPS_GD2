@@ -9,7 +9,7 @@ public class GameManager : Singleton<GameManager>
     public static event Action<string> OnPlayerAction;
 
     [SerializeField] private GameStage currentStage;
-
+    public GameStage GameStage { get { return currentStage; } }
     public enum GameState
     {
         Playing,
@@ -29,14 +29,18 @@ public class GameManager : Singleton<GameManager>
 
     [SerializeField] private CameraController cameraController;
 
-    protected override void Awake() { base.Awake(); }
+    protected override void Awake() { 
+        base.Awake();   
+    }
 
     private void Start()
     {
+
+        cameraController = Camera.main.GetComponent<CameraController>();
         Time.timeScale = 1f;
         currentState = GameState.Playing;
         currentStage = GameStage.Intro_Spawn;
-
+        hud.SetActive(true);
         HideCursor();
     }
 
@@ -139,13 +143,24 @@ public class GameManager : Singleton<GameManager>
     }
     public void RespawnGame()
     {
-        currentState = GameState.Playing;
+        /*currentState = GameState.Playing;
 
-        lossMenu.SetActive(false);
+        lossMenu.SetActive(false);*/
+
         hud.SetActive(true);
         cameraController.enabled = true;
 
         HideCursor();
         Time.timeScale = 1f;
+
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+    public void PlayAgain() {
+        hud.SetActive(true);
+        cameraController.enabled = true;
+
+        HideCursor();
+        Time.timeScale = 1f;
+        SceneManager.LoadScene("TheOriginalDeveloper");
     }
 }

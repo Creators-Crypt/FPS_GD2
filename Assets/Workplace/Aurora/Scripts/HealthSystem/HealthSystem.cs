@@ -5,8 +5,8 @@ using UnityEngine;
 public class HealthSystem : MonoBehaviour, IHealth, IDamageable {
 
     public event Action OnDeath;
+    public static event Action<float, float> OnHealthChangedUI;
     public event Action<float, float> OnHealthChanged;
-    public static Action<float, float> OnHealthChangedUI;
 
     [Header("Health Data")]
     [SerializeField] private PlayerStats stats;
@@ -79,9 +79,13 @@ public class HealthSystem : MonoBehaviour, IHealth, IDamageable {
         //if (invulnerable != null && invulnerable.IsInvulnerable) return;
 
         currentHealth = Mathf.Max(0, CurrentHealth - damage);
-        OnHealthChangedUI?.Invoke(CurrentHealth, MaxHealth);
+        
 
-        if (CurrentHealth <= 0) Death();
+        if (CurrentHealth <= 0) { 
+            Death();
+        } else {
+            OnHealthChangedUI?.Invoke(CurrentHealth, MaxHealth);
+        }
     }
     private void Death() {
 

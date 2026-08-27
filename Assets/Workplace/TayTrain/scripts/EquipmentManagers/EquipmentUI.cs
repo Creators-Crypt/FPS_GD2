@@ -27,6 +27,10 @@ public class EquipmentUI : MonoBehaviour
     [SerializeField] TMP_Text bootsName;
     [SerializeField] TMP_Text bootsStats;
 
+    private void Start() {
+        equipmentManager = GameObject.FindGameObjectWithTag("Player").GetComponent<EquipmentManager>();
+    }
+
     void Update()
     {
         EquipmentData helmet = equipmentManager.GetHelmet();
@@ -39,7 +43,29 @@ public class EquipmentUI : MonoBehaviour
         updateArmor();
         updateBoots();
     }
+/*    private void UpdateGear(EquipmentData equipment) {
+        
+        if (equipment != null) {
+            equipment.text = equipment.itemName;
 
+            if (equipment.icon != null) {
+                helmetIcon.sprite = helmet.icon;
+            }
+
+            string statsText = "";
+
+            if (equipment.healthMaxBonus != 0)
+                statsText += "Health Max: +" + helmet.healthMaxBonus + "\n";
+
+            if (equipment.concentrationMaxBonus != 0)
+                statsText += "Concentration Max: +" + equipment.concentrationMaxBonus + "\n";
+
+            if (helmet.staminaMaxBonus != 0)
+                statsText += "Stamina Max: +" + equipment.staminaMaxBonus + "\n";
+
+            helmetStats.text = statsText;
+        }
+    }*/
     void updateHelmet()
     {
         EquipmentData helmet = equipmentManager.GetHelmet();

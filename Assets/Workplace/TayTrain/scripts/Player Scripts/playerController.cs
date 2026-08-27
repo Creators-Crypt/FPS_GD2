@@ -128,7 +128,6 @@ public class PlayerController : MonoBehaviour
         {
             teleportTrail.emitting = false;
         }
-
     }
     // Update is called once per frame
     void Update() {

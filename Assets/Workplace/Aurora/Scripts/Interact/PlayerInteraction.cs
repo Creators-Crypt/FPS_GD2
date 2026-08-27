@@ -15,7 +15,8 @@ public class PlayerInteraction : MonoBehaviour {
     [SerializeField] private LayerMask interactableLayer;
     [SerializeField] private InputAction interact;
 
-    private IInteractable current;
+    [SerializeField] private IInteractable current;
+    private Collider lastCheckedCollider;
 
     private void OnEnable() => interact.Enable();
     private void OnDisable() => interact.Disable();
@@ -29,25 +30,32 @@ public class PlayerInteraction : MonoBehaviour {
         Ray ray = new(target.position, target.forward);
 
         if (Physics.Raycast(ray, out RaycastHit hit, interactionRange, interactableLayer)) {
-            if (hit.collider.TryGetComponent<IInteractable>(out var interactable)) {
 
-                if (current != interactable) {
+            if (hit.collider != lastCheckedCollider) {
+                
+                lastCheckedCollider = hit.collider;
+
+                if (hit.collider.TryGetComponent<IInteractable>(out var interactable)) {
 
                     current = interactable;
                     OnInteract?.Invoke(current.InteractionPrompt);
-                }
-            } else {
-                current = null;
-                OnHide?.Invoke();
+                } 
+                else { ClearCurrentTarget(); }
             }
         } else {
-            current = null;
-            OnHide?.Invoke();
+
+            if (lastCheckedCollider != null) ClearCurrentTarget();
         }
         if (interact.WasPressedThisFrame() && current != null) {
 
             current.Interact();
-            OnHide?.Invoke();
+
+            ClearCurrentTarget();
         }
+    }
+    private void ClearCurrentTarget() {
+        current = null;
+        lastCheckedCollider = null;
+        OnHide?.Invoke();
     }
 }

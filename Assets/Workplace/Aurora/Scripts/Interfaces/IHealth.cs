@@ -9,7 +9,7 @@ public interface IHealth {
 
     event Action OnDeath;
     event Action<float, float> OnHealthChanged;
-    
+
     public void OnHeal(float healAmount);
     public void HealMax();
     public IEnumerator HealOverTime(float duration);

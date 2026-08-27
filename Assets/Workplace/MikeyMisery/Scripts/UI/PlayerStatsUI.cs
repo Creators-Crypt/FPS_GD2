@@ -13,7 +13,9 @@ public class PlayerStatsUI : MonoBehaviour
     private void OnEnable() {
         HealthSystem.OnHealthChangedUI += UpdateHealthBar;
     }
-
+    private void OnDisable() {
+        HealthSystem.OnHealthChangedUI -= UpdateHealthBar;
+    }
     private void Start() {
 
         staminaController = GameObject.FindGameObjectWithTag("Player").GetComponent<StaminaController>();
@@ -32,6 +34,8 @@ public class PlayerStatsUI : MonoBehaviour
     }
     private void UpdateHealthBar(float currentHealth, float maxHealth) {
 
+        if (healthFill == null) return;
+        
         healthFill.fillAmount = currentHealth / maxHealth;
     }
 }

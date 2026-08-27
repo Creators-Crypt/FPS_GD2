@@ -9,6 +9,7 @@ TagManager:
   - Light
   - Player Spawn Position
   - Equipment
+  - MiniBoss
   layers:
   - Default
   - TransparentFX

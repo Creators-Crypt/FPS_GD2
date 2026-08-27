@@ -382,7 +382,8 @@ public class BossAI : EnemyAI
         StopAllCoroutines();
         SetMovementEnabled(false);
 
-        base.Die(); 
+        GameManager.Instance.SetWin();
+        base.Die();
     }
 }
 

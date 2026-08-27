@@ -3,7 +3,6 @@ using UnityEngine;
 public class TutorialProgress : MonoBehaviour
 {
     [Header("References")]
-    [SerializeField] private ObjectiveManager objectiveManager;
     [SerializeField] private GameObject tutorialCage;
     [SerializeField] private GameObject tutorialSpawner;
 
@@ -91,7 +90,6 @@ public class TutorialProgress : MonoBehaviour
         UpdateTutorialUI();
         CheckTutorialComplete();
     }
-
     private void UpdateTutorialUI()
     {
         string tutorialText = "TUTORIAL\n";
@@ -114,10 +112,9 @@ public class TutorialProgress : MonoBehaviour
         //tutorailText += equipmentShown : " X Equipment [TAB] " : " Equipment [TAB] ";
         tutorialText += "Kill Slimes (" + slimeKills + "/" + slimeKillsNeeded + ")";
         }   
-        objectiveManager.SetObjective(tutorialText);
+        ObjectiveManager.Instance.SetObjective(tutorialText);
 
     }
-
     private void CheckTutorialComplete()
     {
         //Phase 1 
@@ -142,7 +139,6 @@ public class TutorialProgress : MonoBehaviour
             }
         }
     }
-
     private void CompleteTutorial()
     {
         tutorialActive = false;
@@ -152,6 +148,6 @@ public class TutorialProgress : MonoBehaviour
 
         GameManager.Instance.SetStage(GameStage.Intro_SlimeShowcase);
 
-        objectiveManager.SetObjective("Continue through the forest");
+        ObjectiveManager.Instance.SetObjective("Continue through the forest");
     }
 }

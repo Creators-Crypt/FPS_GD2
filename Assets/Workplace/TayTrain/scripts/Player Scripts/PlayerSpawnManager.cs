@@ -9,14 +9,11 @@ public class PlayerSpawnManager : MonoBehaviour
 
     private void Start()
     {
-        if(player != null)
-        {
-            healthSystem = player.GetComponent<HealthSystem>();
-        }
-        spawnPlayer();
+        player = GameObject.FindGameObjectWithTag("Player").transform;
+        SpawnPlayer();
     }
 
-    public void spawnPlayer()
+    public void SpawnPlayer()
     {
         if (player == null || spawnPoint == null)
             return;
@@ -39,7 +36,7 @@ public class PlayerSpawnManager : MonoBehaviour
 
     public void respawnPlayer()
     {
-        spawnPlayer();
+        SpawnPlayer();
 
         if(healthSystem != null)
         {

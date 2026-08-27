@@ -1,7 +1,7 @@
 using UnityEngine;
 
-public class ObjectiveManager : MonoBehaviour
-{
+public class ObjectiveManager : Singleton<ObjectiveManager> {
+    
     [SerializeField] private MainObjectiveUI objectiveUI;
 
     private string currentObjective;

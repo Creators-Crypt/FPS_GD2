@@ -1,14 +1,11 @@
 using UnityEngine;
 using TMPro;
 
-public class MainObjectiveUI : MonoBehaviour
-{
-    [SerializeField] private TMP_Text objectiveText;
+public class MainObjectiveUI : Singleton<MainObjectiveUI> {
 
-    public void SetObjective(string newObjective)
-    {
+    [SerializeField] private TextMeshProUGUI objectiveText;
+
+    public void SetObjective(string newObjective) {
         objectiveText.text = newObjective;
     }
-
-
 }

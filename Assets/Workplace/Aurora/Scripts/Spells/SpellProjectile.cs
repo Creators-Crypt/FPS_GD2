@@ -17,6 +17,7 @@ public class SpellProjectile : MonoBehaviour {
 
     private Rigidbody rb;
     private LayerMask targetLayers;
+    private float baseDamage;
     private float calculatedDamage;
     private float custonGravityScale = 1f;
     private bool useCustomGravity = false;
@@ -37,6 +38,7 @@ public class SpellProjectile : MonoBehaviour {
         var vfxSettings = SpellFactory.GetVFX(spellElement);
         
         targetLayers = spellData.hitLayers;
+        baseDamage = spellData.damage;
         calculatedDamage = damageMultiplier;
         useCustomGravity = false;
         rb.useGravity = false;
@@ -94,8 +96,10 @@ public class SpellProjectile : MonoBehaviour {
         // Only react to layers this spell is allowed to hit.
         if ((targetLayers.value & (1 << other.gameObject.layer)) == 0) return;
 
-        if (other.TryGetComponent(out IDamageable dmg))
-            dmg.OnDamage(calculatedDamage);
+        if (other.TryGetComponent(out IDamageable dmg)) {
+            float totalDamage = baseDamage * calculatedDamage;
+            dmg.OnDamage(totalDamage);
+        }
 
         if (impactVfxPrefab != null)
         {

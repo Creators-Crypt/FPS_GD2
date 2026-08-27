@@ -24,7 +24,6 @@ public class TutorialTrigger : MonoBehaviour {
     private void SpawnSlimes() {
         if(tutorialSpawner != null) {
             tutorialSpawner.gameObject.SetActive(true);
-        }
-        
+        }   
     }
 }

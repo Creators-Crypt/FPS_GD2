@@ -124,7 +124,7 @@ public class MenuUIManager : MonoBehaviour
 
     private IEnumerator LoadGameAsync()
     {
-        AsyncOperation operation = SceneManager.LoadSceneAsync("main");
+        AsyncOperation operation = SceneManager.LoadSceneAsync("TheOriginalDeveloper");
 
         while (!operation.isDone)
         {

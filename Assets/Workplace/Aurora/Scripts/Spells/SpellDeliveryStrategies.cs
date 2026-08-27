@@ -64,14 +64,14 @@ public abstract class SpellDeliveryStrategyBase : ISpellDeliveryStrategy {
                 Execute(context, FanDirection(context, i, count));
     }
     private IEnumerator StaggeredCast(SpellCastContext context, int count) {
-    
+
         for (int i = 0; i < count; i++) {
             Execute(context, FanDirection(context, i, count));
             yield return new WaitForSeconds(context.spawnInterval);
         }
     }
     private static Vector3 FanDirection(SpellCastContext context, int index, int count) {
-    
+
         float spread = context.spreadAngle;
         float t = count > 1 ? (float)index / (count - 1) : 0.5f;
         float angle = Mathf.Lerp(-spread * 0.5f, spread * 0.5f, t);
@@ -87,8 +87,11 @@ public abstract class SpellDeliveryStrategyBase : ISpellDeliveryStrategy {
 
         var hits = Physics.OverlapSphere(center, radius, context.data.hitLayers);
         foreach (var hit in hits) {
-            if (hit.TryGetComponent(out IDamageable dmg))
+            var dmg = hit.GetComponentInParent<IDamageable>();
+            if (dmg != null) {
+                Debug.Log($"Enter here for damage, {context.damage}");
                 dmg.OnDamage(context.damage * context.multiplier);
+            }
         }
     }
 }
@@ -159,7 +162,7 @@ public class RayDelivery : SpellDeliveryStrategyBase {
             hitBuffer,
             context.data.rayDistance,
             context.data.hitLayers
-            );
+        );
 
         if (hitCount > 0) {
             
@@ -168,8 +171,10 @@ public class RayDelivery : SpellDeliveryStrategyBase {
             endPosition = hitBuffer[0].point;
 
             for (int i = 0; i < hitCount; i++) {
-                if (hitBuffer[i].collider.TryGetComponent(out IDamageable dmg))
-                    dmg.OnDamage(context.data.damage * context.multiplier);
+                var dmg = hitBuffer[i].collider.GetComponentInParent<IDamageable>();
+                if (dmg != null) {
+                    dmg.OnDamage(context.damage * context.multiplier);
+                }
             }
         }
         // Beam visual - short-lived LineRenderer.

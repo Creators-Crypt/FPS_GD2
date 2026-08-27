@@ -54,6 +54,8 @@ public class PuzzleRoomCompletion : MonoBehaviour
 
         if (bossPortal != null)
             bossPortal.SetActive(true);
+
+        ObjectiveManager.Instance.SetObjective("Proceed through the portal");
     }
 
    private void HideRewards()

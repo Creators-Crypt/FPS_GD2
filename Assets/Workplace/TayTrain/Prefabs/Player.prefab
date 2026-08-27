@@ -319,6 +319,7 @@ GameObject:
   - component: {fileID: 3919352187849786472}
   - component: {fileID: 6683432880067380384}
   - component: {fileID: 5648653540166664426}
+  - component: {fileID: 5733542144322329335}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -481,7 +482,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpellWeaponManager
   spellCaster: {fileID: 0}
-  weaponSlots:
+  carriedWeapons:
   - {fileID: 11400000, guid: c5559565a999c7e49a13c3c525c7ba05, type: 2}
   handAnchor: {fileID: 1559729259802013399}
   swapCooldown: 0.5
@@ -714,6 +715,40 @@ MonoBehaviour:
   bonusJumps: 0
   speedMult: 1
   gravityMult: 1
+--- !u!114 &5733542144322329335
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1818594594264804547}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c32d7a9f2cf28cc439ae460e75358d7e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerInteraction
+  target: {fileID: 0}
+  interactionRange: 3
+  interactableLayer:
+    serializedVersion: 2
+    m_Bits: 1024
+  interact:
+    m_Name: Interact
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 03bb0d67-8e4d-4c85-9b4b-1218b4423816
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: 4fd6ea01-0d62-4c18-9bee-936fd9713c3e
+      m_Path: <Keyboard>/z
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Interact
+      m_Flags: 0
+    m_Flags: 0
 --- !u!1 &1883817470414989196
 GameObject:
   m_ObjectHideFlags: 0
@@ -2624,7 +2659,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 5987
+  m_VersionIndex: 6008
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
